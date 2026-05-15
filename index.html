@@ -11,16 +11,16 @@
   <meta property="og:site_name" content="Practical AI Co." />
   <meta property="og:url" content="https://thepracticalai.co/" />
   <meta property="og:title" content="Stop Running Your Business From Your Memory." />
-  <meta property="og:description" content="We document your business, build your systems, and deploy AI agents to handle the repetitive work — so you can finally lead instead of just manage." />
+  <meta property="og:description" content="We document your business, build your systems, and deploy AI agents that handle the repetitive work. You finally lead instead of just manage." />
   <meta property="og:image" content="https://thepracticalai.co/og.png" />
   <meta property="og:image:width" content="1200" />
   <meta property="og:image:height" content="630" />
-  <meta property="og:image:alt" content="Practical AI Co. — Stop Running Your Business From Your Memory." />
+  <meta property="og:image:alt" content="Practical AI Co.: Stop Running Your Business From Your Memory." />
 
   <!-- Twitter -->
   <meta name="twitter:card" content="summary_large_image" />
   <meta name="twitter:title" content="Stop Running Your Business From Your Memory." />
-  <meta name="twitter:description" content="We document your business, build your systems, and deploy AI agents to handle the repetitive work — so you can finally lead instead of just manage." />
+  <meta name="twitter:description" content="We document your business, build your systems, and deploy AI agents that handle the repetitive work. You finally lead instead of just manage." />
   <meta name="twitter:image" content="https://thepracticalai.co/og.png" />
 
   <link rel="canonical" href="https://thepracticalai.co/" />
@@ -1873,7 +1873,7 @@
       .cta { padding: 84px 0 92px; }
     }
 
-    /* Hero — single column, calmer */
+    /* Hero: single column, calmer */
     .hero { padding: 110px 0 80px; }
     .hero-center {
       max-width: 760px;
@@ -1924,7 +1924,7 @@
     .hero .logo-floater { opacity: 0.05; }
     .hero .logo-floater.two, .hero .logo-floater.four { display: none; }
 
-    /* How we work — 3 steps */
+    /* How we work: 3 steps */
     .steps-grid {
       display: grid;
       grid-template-columns: repeat(3, 1fr);
@@ -2016,10 +2016,10 @@
     .faq-grid details.faq-item[open] summary::after { content: "−"; }
     .faq-grid details.faq-item p { color: var(--muted); margin: 14px 0 6px; line-height: 1.65; max-width: 70ch; }
 
-    /* About section — slightly tighter spacing */
+    /* About section: slightly tighter spacing */
     .about-panel p { margin-bottom: 18px; }
 
-    /* Pricing — more breathing room */
+    /* Pricing: more breathing room */
     .pricing { gap: 28px; }
     .price-card { padding: 40px 34px; }
     .price-card h3 { font-size: 24px; }
@@ -2028,6 +2028,125 @@
 
     /* Smaller library actions buttons */
     .library-actions .button { min-height: 44px; padding: 0 22px; }
+
+    /* Hero floaters: slow spin (rotation independent from the existing drift) */
+    .hero .logo-floater svg {
+      transform-origin: 50% 50%;
+      animation: spinSlow 38s linear infinite;
+    }
+    .hero .logo-floater.one svg { animation-duration: 42s; }
+    .hero .logo-floater.three svg { animation-duration: 56s; animation-direction: reverse; }
+
+    @keyframes spinSlow {
+      from { transform: rotate(0deg); }
+      to { transform: rotate(360deg); }
+    }
+
+    /* Quiet the spin on small phones to keep the hero calm */
+    @media (max-width: 640px) {
+      .hero .logo-floater svg { animation: none; }
+      .hero .logo-floater.three { display: none; }
+    }
+
+    /* Pricing journey (3 steps) */
+    .journey {
+      list-style: none;
+      padding: 0;
+      margin: 16px 0 0;
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 28px;
+      position: relative;
+    }
+    .journey-step {
+      background: var(--paper);
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      padding: 40px 32px 36px;
+      box-shadow: var(--shadow-soft);
+      display: flex;
+      flex-direction: column;
+      position: relative;
+    }
+    .journey-step.optional {
+      background: transparent;
+      border-style: dashed;
+      box-shadow: none;
+    }
+    .step-badge {
+      display: inline-block;
+      width: fit-content;
+      padding: 6px 12px;
+      border-radius: 999px;
+      background: rgba(36, 86, 255, 0.08);
+      color: var(--blue);
+      font-size: 11px;
+      font-weight: 900;
+      text-transform: uppercase;
+      letter-spacing: 0.16em;
+      margin-bottom: 22px;
+    }
+    .journey-step.optional .step-badge {
+      background: rgba(102, 112, 133, 0.10);
+      color: var(--muted);
+    }
+    .journey-step h3 {
+      font-family: Fraunces, Georgia, serif;
+      font-size: 26px;
+      letter-spacing: -0.025em;
+      color: var(--charcoal);
+      margin: 0 0 14px;
+      line-height: 1.2;
+    }
+    .step-price {
+      font-size: 28px;
+      font-weight: 900;
+      color: var(--charcoal);
+      letter-spacing: -0.025em;
+      line-height: 1;
+      margin-bottom: 8px;
+    }
+    .step-meta-inline {
+      font-size: 15px;
+      font-weight: 600;
+      color: var(--muted);
+      letter-spacing: 0;
+    }
+    .step-meta {
+      font-size: 13px;
+      font-weight: 700;
+      color: var(--muted);
+      margin-bottom: 22px;
+      letter-spacing: 0.01em;
+    }
+    .journey-step p {
+      color: var(--muted);
+      margin: 0 0 26px;
+      line-height: 1.6;
+      flex: 1;
+      max-width: 36ch;
+    }
+    .journey-step .button {
+      align-self: flex-start;
+    }
+
+    /* Subtle horizontal connector between cards (desktop) */
+    .journey-step:not(:last-child)::after {
+      content: "";
+      position: absolute;
+      top: 64px;
+      right: -22px;
+      width: 16px;
+      height: 0;
+      border-top: 2px dotted var(--line);
+      z-index: 2;
+    }
+
+    @media (max-width: 900px) {
+      .journey { grid-template-columns: 1fr; gap: 18px; margin-top: 8px; }
+      .journey-step::after { display: none; }
+      .journey-step { padding: 32px 26px; }
+    }
   </style>
 </head>
 <body>
@@ -2059,7 +2178,7 @@
 
         <nav class="nav-links" aria-label="Main navigation">
           <a href="#problem">Problem</a>
-          <a href="#how">How we work</a>
+          <a href="#how">Our approach</a>
           <a href="#pricing">Pricing</a>
           <a href="#about">About Joe</a>
         </nav>
@@ -2076,9 +2195,8 @@
         </div>
         <div class="container">
           <div class="hero-center">
-            <div class="kicker">Practical AI Co.</div>
             <h1>Stop running your business from memory.</h1>
-            <p class="hero-copy">We document how your business works, build the systems, and deploy the AI agents&mdash;so you can lead instead of just manage.</p>
+            <p class="hero-copy">We document how your business works, build the systems, and deploy the AI agents that handle the repetitive work, so you can lead instead of just manage.</p>
             <div class="hero-actions">
               <a class="button button-primary" href="https://calendar.app.google/SnmSbP7hZCprCZ9B7" target="_blank" rel="noopener">Book a free discovery call</a>
               <a class="button button-light" href="#how">See how it works</a>
@@ -2127,7 +2245,7 @@
       <section class="section alt reveal" id="how">
         <div class="container">
           <div class="section-head centered">
-            <div class="kicker">How we work</div>
+            <div class="kicker">Our approach</div>
             <h2>From mess in your head to systems that run.</h2>
             <p class="lede">Three steps. No jargon. No new software to learn.</p>
           </div>
@@ -2136,7 +2254,7 @@
             <article class="step-card">
               <div class="step-num">01</div>
               <h3>Capture</h3>
-              <p>We document how your business actually works &mdash; the standards, the judgment calls, the exceptions only you know.</p>
+              <p>We document how your business actually works: the standards, the judgment calls, the exceptions only you know.</p>
             </article>
             <article class="step-card">
               <div class="step-num">02</div>
@@ -2146,7 +2264,7 @@
             <article class="step-card">
               <div class="step-num">03</div>
               <h3>Automate</h3>
-              <p>AI agents take over the repeat work &mdash; emails, follow-ups, scheduling, reporting &mdash; quietly, in the background.</p>
+              <p>AI agents take over the repeat work (emails, follow-ups, scheduling, reporting). Quietly, in the background.</p>
             </article>
           </div>
         </div>
@@ -2180,36 +2298,37 @@
                   <section class="section alt reveal" id="pricing">
         <div class="container">
           <div class="section-head centered">
-            <div class="kicker">Pricing</div>
-            <h2>Start where you are.</h2>
-            <p class="lede">Choose the level of support that fits how you want to work.</p>
+            <div class="kicker">How we work together</div>
+            <h2>A simple path, not a pricing table.</h2>
+            <p class="lede">You do not need to know exactly what to build. We start with a conversation, map the work that is stuck in your head, build the first systems, then support them as needed.</p>
           </div>
 
-          <div class="pricing">
-            <article class="price-card">
-              <div class="tier-label">Start here</div>
+          <ol class="journey">
+            <li class="journey-step">
+              <div class="step-badge">Step 01</div>
               <h3>Discovery Call</h3>
-              <div class="price free-price">Free</div>
-              <p>A 30-minute call to find your biggest automation wins and leave with a clear next step.</p>
-              <a class="button button-light" href="https://calendar.app.google/SnmSbP7hZCprCZ9B7" target="_blank" rel="noopener">Book a free call</a>
-            </article>
+              <div class="step-price">Free</div>
+              <div class="step-meta">45-minute call</div>
+              <p>Understand the business, identify bottlenecks, and see whether Practical AI Co. can help. No commitment.</p>
+              <a class="button button-primary" href="https://calendar.app.google/SnmSbP7hZCprCZ9B7" target="_blank" rel="noopener">Book a 45-minute discovery call</a>
+            </li>
 
-            <article class="price-card featured">
-              <div class="tier-label">Recommended</div>
-              <h3>AI Audit</h3>
-              <div class="price">$997<small>One time</small></div>
-              <p>We map your business, find the high-leverage automations, and deliver a prioritized roadmap.</p>
-              <a class="button button-primary" href="https://calendar.app.google/SnmSbP7hZCprCZ9B7" target="_blank" rel="noopener">Start with an audit</a>
-            </article>
+            <li class="journey-step">
+              <div class="step-badge">Step 02</div>
+              <h3>AI Systems Map &amp; Buildout</h3>
+              <div class="step-price">$3,000 to $5,000</div>
+              <div class="step-meta">Strategy and implementation</div>
+              <p>We map how your business actually runs, identify the best automation opportunities, then build the first automations and AI agents that give you time back.</p>
+            </li>
 
-            <article class="price-card">
-              <div class="tier-label">Done for you</div>
-              <h3>AI Buildout</h3>
-              <div class="price">$3,000&ndash;$5,000<small>Project based</small></div>
-              <p>We design, build, and deploy your AI systems end to end &mdash; with full documentation and handoff.</p>
-              <a class="button button-light" href="https://calendar.app.google/SnmSbP7hZCprCZ9B7" target="_blank" rel="noopener">Build my system</a>
-            </article>
-          </div>
+            <li class="journey-step optional">
+              <div class="step-badge">Step 03</div>
+              <h3>Ongoing Support</h3>
+              <div class="step-price">$1,500<span class="step-meta-inline"> per month</span></div>
+              <div class="step-meta">Optional</div>
+              <p>Monthly support to maintain your automations, improve your workflows, support your team, and keep your systems running cleanly.</p>
+            </li>
+          </ol>
         </div>
       </section>
 
@@ -2226,7 +2345,7 @@
             </div>
 
             <div class="about-panel">
-              <p>Joe scaled companies from $10M to $100M before he ever installed an AI agent. He knows the tool doesn&rsquo;t matter if the underlying process is broken &mdash; so Practical AI Co. starts with the process, not the software.</p>
+              <p>Joe scaled companies from $10M to $100M before he ever installed an AI agent. He knows the tool does not matter if the underlying process is broken. Practical AI Co. starts with the process, not the software.</p>
 
               <div class="about-quote">
                 <p>&ldquo;Every business I&rsquo;ve scaled had one thing in common: someone sat down and wrote the process down. AI just makes that moment faster than it&rsquo;s ever been.&rdquo;</p>
@@ -2270,11 +2389,11 @@
             </details>
             <details class="faq-item">
               <summary>Will this fit my existing tools?</summary>
-              <p>Usually yes. We build around your process, your team, and your current stack whenever possible &mdash; rather than forcing a brand-new system on you.</p>
+              <p>Usually yes. We build around your process, your team, and your current stack whenever possible, rather than forcing a brand-new system on you.</p>
             </details>
             <details class="faq-item">
               <summary>What happens on the discovery call?</summary>
-              <p>20 minutes learning how your business works, 25 minutes showing you where AI can help. You leave with a clear picture of what&rsquo;s possible &mdash; whether we work together or not.</p>
+              <p>20 minutes learning how your business works, 25 minutes showing you where AI can help. You leave with a clear picture of what is possible, whether we work together or not.</p>
             </details>
           </div>
         </div>
@@ -2291,7 +2410,7 @@
           <div class="cta-inner">
             <div>
               <h2>Stop being the engine. Start being the pilot.</h2>
-              <p>In 45 minutes, we&rsquo;ll map out your first three automation wins. You&rsquo;ll leave with a blueprint for a business that runs without you &mdash; whether you work with us or not.</p>
+              <p>In 45 minutes we map out your first three automation wins. You leave with a blueprint for a business that runs without you, whether you work with us or not.</p>
             </div>
             <div class="cta-actions">
               <a class="button button-primary" href="https://calendar.app.google/SnmSbP7hZCprCZ9B7" target="_blank" rel="noopener">Claim Your Free 45-Minute Blueprint</a>
