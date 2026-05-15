@@ -1862,6 +1862,172 @@
     @media (max-width: 640px) {
       .ceiling-pull { padding: 40px 24px; border-radius: 28px; }
     }
+
+    /* ===== Refactor: spacing + new sections ===== */
+    .section { padding: 120px 0; }
+    .cta { padding: 120px 0 132px; }
+    .lede { max-width: 680px; }
+    .section-head.centered .lede { margin-left: auto; margin-right: auto; }
+    @media (max-width: 720px) {
+      .section { padding: 84px 0; }
+      .cta { padding: 84px 0 92px; }
+    }
+
+    /* Hero — single column, calmer */
+    .hero { padding: 110px 0 80px; }
+    .hero-center {
+      max-width: 760px;
+      margin: 0 auto;
+      text-align: center;
+    }
+    .hero-center .kicker { color: var(--blue); }
+    .hero-center h1 { font-size: clamp(40px, 6vw, 76px); margin-bottom: 22px; }
+    .hero-center .hero-copy {
+      max-width: 600px;
+      margin: 0 auto 30px;
+      color: var(--muted);
+      font-size: clamp(17px, 1.5vw, 20px);
+    }
+    .hero-center .hero-actions {
+      display: flex;
+      justify-content: center;
+      gap: 14px;
+      flex-wrap: wrap;
+      margin-bottom: 18px;
+    }
+    .hero-center .hero-note { color: var(--muted-2); font-size: 14px; font-weight: 600; }
+    .hero-side, .opening-proof { display: none; } /* legacy elements no longer rendered */
+
+    /* Trust strip under hero */
+    .trust-strip {
+      max-width: 920px;
+      margin: 72px auto 0;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 32px;
+    }
+    .trust-quote { margin: 0; padding: 0 8px; border-left: 2px solid var(--line); padding-left: 22px; }
+    .trust-quote blockquote {
+      margin: 0 0 10px;
+      font-family: Fraunces, Georgia, serif;
+      font-size: clamp(17px, 1.4vw, 20px);
+      line-height: 1.4;
+      color: var(--charcoal);
+      letter-spacing: -0.015em;
+    }
+    .trust-quote figcaption { color: var(--muted); font-size: 13px; font-weight: 800; letter-spacing: 0.02em; }
+    @media (max-width: 720px) {
+      .trust-strip { grid-template-columns: 1fr; gap: 24px; margin-top: 56px; }
+    }
+
+    /* Tame the floating logo decoration on the hero */
+    .hero .logo-floater { opacity: 0.05; }
+    .hero .logo-floater.two, .hero .logo-floater.four { display: none; }
+
+    /* How we work — 3 steps */
+    .steps-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 24px;
+      margin-top: 12px;
+    }
+    .step-card {
+      background: var(--paper);
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      padding: 40px 36px;
+      box-shadow: var(--shadow-soft);
+      transition: transform 220ms ease, box-shadow 220ms ease;
+    }
+    .step-card:hover { transform: translateY(-3px); box-shadow: var(--shadow); }
+    .step-num {
+      font-family: Fraunces, Georgia, serif;
+      font-size: 26px;
+      font-weight: 800;
+      color: var(--blue);
+      letter-spacing: -0.04em;
+      margin-bottom: 22px;
+    }
+    .step-card h3 {
+      font-family: Fraunces, Georgia, serif;
+      font-size: 28px;
+      letter-spacing: -0.025em;
+      color: var(--charcoal);
+      margin: 0 0 14px;
+    }
+    .step-card p { color: var(--muted); margin: 0; line-height: 1.6; max-width: 32ch; }
+    @media (max-width: 900px) {
+      .steps-grid { grid-template-columns: 1fr; gap: 16px; }
+      .step-card { padding: 32px 28px; }
+    }
+
+    /* Library: limit visible cards by default (collapsed state) */
+    .library-shell.collapsed .automation-lib-card:nth-child(n+7) { display: none; }
+    @media (max-width: 768px) {
+      .library-shell.collapsed .automation-lib-card:nth-child(n+4) { display: none; }
+    }
+    .library-shell { padding: 22px; }
+    .library-controls { margin-bottom: 22px; }
+    .library-actions { margin-top: 22px; text-align: center; }
+
+    /* Tighter automation card */
+    .automation-lib-card { padding: 22px; }
+    .automation-lib-card .tool-chips { display: none; } /* hide tool chips for calmer look */
+    .automation-lib-card .automation-num { display: none; }
+    .automation-lib-card .department-tag { font-size: 11px; }
+    .automation-lib-card h3 { font-size: 19px; margin-bottom: 10px; }
+    .automation-lib-card .automation-text { font-size: 14px; line-height: 1.55; margin-bottom: 8px; }
+    .automation-lib-card .automation-text strong { color: var(--charcoal); }
+
+    /* FAQ accordion (native <details>) */
+    .faq-grid details.faq-item {
+      background: var(--paper);
+      border: 1px solid var(--line);
+      border-radius: 20px;
+      padding: 22px 26px;
+      box-shadow: var(--shadow-soft);
+    }
+    .faq-grid details.faq-item + details.faq-item { margin-top: 14px; }
+    .faq-grid details.faq-item summary {
+      list-style: none;
+      cursor: pointer;
+      font-family: Fraunces, Georgia, serif;
+      font-size: 22px;
+      letter-spacing: -0.02em;
+      color: var(--charcoal);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+      padding: 4px 0;
+    }
+    .faq-grid details.faq-item summary::-webkit-details-marker { display: none; }
+    .faq-grid details.faq-item summary::after {
+      content: "+";
+      font-family: Inter, sans-serif;
+      font-weight: 700;
+      font-size: 26px;
+      color: var(--blue);
+      transition: transform 200ms ease;
+      width: 28px;
+      text-align: center;
+      line-height: 1;
+    }
+    .faq-grid details.faq-item[open] summary::after { content: "−"; }
+    .faq-grid details.faq-item p { color: var(--muted); margin: 14px 0 6px; line-height: 1.65; max-width: 70ch; }
+
+    /* About section — slightly tighter spacing */
+    .about-panel p { margin-bottom: 18px; }
+
+    /* Pricing — more breathing room */
+    .pricing { gap: 28px; }
+    .price-card { padding: 40px 34px; }
+    .price-card h3 { font-size: 24px; }
+    .price-card .tier-label { background: rgba(36, 86, 255, 0.08); }
+    .price-card.featured .tier-label { background: rgba(255, 255, 255, 0.10); }
+
+    /* Smaller library actions buttons */
+    .library-actions .button { min-height: 44px; padding: 0 22px; }
   </style>
 </head>
 <body>
@@ -1893,10 +2059,9 @@
 
         <nav class="nav-links" aria-label="Main navigation">
           <a href="#problem">Problem</a>
-          <a href="#work">What we do</a>
-          <a href="#ready">READY</a>
+          <a href="#how">How we work</a>
+          <a href="#pricing">Pricing</a>
           <a href="#about">About Joe</a>
-          <a href="#contact">Contact</a>
         </nav>
 
         <a class="button button-primary" href="https://calendar.app.google/SnmSbP7hZCprCZ9B7" target="_blank" rel="noopener">Book a Call</a>
@@ -1907,52 +2072,29 @@
       <section class="hero">
         <div class="logo-floaters" aria-hidden="true">
           <div class="logo-floater one"><svg class="repeat-logo" viewBox="0 0 64 64"><use href="#repeat-logo-symbol"></use></svg></div>
-          <div class="logo-floater two"><svg class="repeat-logo" viewBox="0 0 64 64"><use href="#repeat-logo-symbol"></use></svg></div>
           <div class="logo-floater three"><svg class="repeat-logo" viewBox="0 0 64 64"><use href="#repeat-logo-symbol"></use></svg></div>
-          <div class="logo-floater four"><svg class="repeat-logo" viewBox="0 0 64 64"><use href="#repeat-logo-symbol"></use></svg></div>
         </div>
-
         <div class="container">
-          <div class="hero-grid">
-            <div class="hero-copy-wrap">
-              <div class="kicker">Practical AI Co.</div>
-              <h1>Stop Running Your Business From Your Memory.</h1>
-              <p class="hero-copy">You've built a great company, but it only works because you're holding it all together. We document your &ldquo;brain,&rdquo; build your systems, and deploy AI agents to handle the repetitive work&mdash;so you can finally lead instead of just manage.</p>
-              <div class="hero-actions">
-                <a class="button button-primary" href="https://calendar.app.google/SnmSbP7hZCprCZ9B7" target="_blank" rel="noopener">Book Your Free Systems Audit</a>
-                <a class="button button-light" href="#work">See how it works</a>
-              </div>
-              <p class="hero-note">Franklin, TN and remote.</p>
+          <div class="hero-center">
+            <div class="kicker">Practical AI Co.</div>
+            <h1>Stop running your business from memory.</h1>
+            <p class="hero-copy">We document how your business works, build the systems, and deploy the AI agents&mdash;so you can lead instead of just manage.</p>
+            <div class="hero-actions">
+              <a class="button button-primary" href="https://calendar.app.google/SnmSbP7hZCprCZ9B7" target="_blank" rel="noopener">Book a free discovery call</a>
+              <a class="button button-light" href="#how">See how it works</a>
             </div>
-
-            <aside class="hero-side" aria-label="Practical AI Co. value summary">
-              <div class="hero-side-inner">
-                <div class="side-top">
-                  <div class="brand-mark dark" aria-hidden="true">
-                    <svg class="repeat-logo" viewBox="0 0 64 64"><use href="#repeat-logo-symbol"></use></svg>
-                  </div>
-                  <div class="side-tag">From memory → to system</div>
-                </div>
-                <h2>Turn the business in your head into a system that runs.</h2>
-                <p>We capture how your business works, document the logic, and build the automations and AI agents that take repetitive work off your plate.</p>
-                <ul class="check-list">
-                  <li><span class="check">✓</span><span>Detailed company wiki and SOPs</span></li>
-                  <li><span class="check">✓</span><span>Automations connected to your tools</span></li>
-                  <li><span class="check">✓</span><span>AI agents handling repetitive work</span></li>
-                </ul>
-              </div>
-            </aside>
+            <p class="hero-note">Franklin, TN &middot; Working remotely with owners across the U.S.</p>
           </div>
 
-          <div class="opening-proof reveal">
-            <blockquote class="quote-chip">
-              <p>"I just don't have the capacity. I don't have the time to sit and teach myself what I need to know."</p>
-              <cite>Sarah, staffing founder</cite>
-            </blockquote>
-            <blockquote class="quote-chip">
-              <p>"We've operated almost entirely without any type of system supporting us. It's all manual and it's all from memory."</p>
-              <cite>Steve, transportation founder</cite>
-            </blockquote>
+          <div class="trust-strip reveal" aria-label="What our clients say">
+            <figure class="trust-quote">
+              <blockquote>&ldquo;I just don&rsquo;t have the time to sit and teach myself what I need to know.&rdquo;</blockquote>
+              <figcaption>Sarah, staffing founder</figcaption>
+            </figure>
+            <figure class="trust-quote">
+              <blockquote>&ldquo;We&rsquo;ve operated almost entirely without a system. It&rsquo;s all manual, all from memory.&rdquo;</blockquote>
+              <figcaption>Steve, transportation founder</figcaption>
+            </figure>
           </div>
         </div>
       </section>
@@ -1960,57 +2102,52 @@
       <section class="section reveal" id="problem">
         <div class="container">
           <div class="section-head centered">
-            <div class="kicker">The Founder&rsquo;s Ceiling</div>
-            <h2>The &ldquo;Founder&rsquo;s Ceiling&rdquo; is real.</h2>
-            <p class="lede">Most small businesses don&rsquo;t fail because of bad products. They stall because the owner becomes the bottleneck.</p>
+            <div class="kicker">The Problem</div>
+            <h2>Your business is trapped in your head.</h2>
+            <p class="lede">Most small businesses don&rsquo;t stall because of the work. They stall because the owner is the only one who knows how it all fits together.</p>
           </div>
 
           <div class="ceiling-grid">
             <article class="ceiling-card">
-              <div class="ceiling-tag tag-blue">The Mental Load</div>
-              <p>You&rsquo;re the only one who knows &ldquo;how we do things here.&rdquo;</p>
+              <div class="ceiling-tag tag-blue">Mental Load</div>
+              <p>You&rsquo;re the only one who knows how we do things here.</p>
             </article>
             <article class="ceiling-card">
-              <div class="ceiling-tag tag-green">The Time Leak</div>
-              <p>You spend 4 hours a day on tasks a machine could do in 4 seconds.</p>
+              <div class="ceiling-tag tag-green">Time Leak</div>
+              <p>Hours a day go to tasks a system could do in seconds.</p>
             </article>
             <article class="ceiling-card">
-              <div class="ceiling-tag tag-amber">The Scale Gap</div>
-              <p>You can&rsquo;t hire fast enough because training takes too much of your time.</p>
+              <div class="ceiling-tag tag-amber">Scale Gap</div>
+              <p>Hiring stalls because training takes everything you have.</p>
             </article>
-          </div>
-
-          <div class="ceiling-pull">
-            If it&rsquo;s in your head, it&rsquo;s a liability.<br><span class="pull-accent">If it&rsquo;s in a system, it&rsquo;s an asset.</span>
           </div>
         </div>
       </section>
 
-      <section class="section alt reveal" id="work">
+      <section class="section alt reveal" id="how">
         <div class="container">
           <div class="section-head centered">
-            <div class="kicker">What we do</div>
-            <h2 class="what-display">
-              <span class="line">We turn the way you work into</span>
-              <span class="line">a system your business can run on.</span>
-            </h2>
-            <p class="lede">Before we automate anything, we capture how your business actually works. The workflows, the standards, the judgment calls, the exceptions, and the things that only you know.</p>
-            <div class="walkaway"><strong>What you walk away with:</strong> a detailed company wiki, documented SOPs for every core process, connected automations, and AI agents handling the repetitive work so you don't have to.</div>
+            <div class="kicker">How we work</div>
+            <h2>From mess in your head to systems that run.</h2>
+            <p class="lede">Three steps. No jargon. No new software to learn.</p>
           </div>
 
-          <div class="process-band">
-            <div class="process-grid">
-              <article class="process-card">
-                <div class="process-number">1</div>
-                <h3>Step 1: Process Documentation</h3>
-                <p>We capture everything that lives in your head. Your workflows, your judgment calls, your standards. Turned into a structured company wiki and SOPs your business can actually run on.</p>
-              </article>
-              <article class="process-card">
-                <div class="process-number">2</div>
-                <h3>Step 2: AI <span class="automated">Automation</span> and Agents</h3>
-                <p>Once your processes are documented, we automate the repetitive parts. From simple workflows to fully autonomous agents that monitor, decide, and act on your behalf.</p>
-              </article>
-            </div>
+          <div class="steps-grid">
+            <article class="step-card">
+              <div class="step-num">01</div>
+              <h3>Capture</h3>
+              <p>We document how your business actually works &mdash; the standards, the judgment calls, the exceptions only you know.</p>
+            </article>
+            <article class="step-card">
+              <div class="step-num">02</div>
+              <h3>Build</h3>
+              <p>We design the systems and wiki your business will run on, built around the tools you already use.</p>
+            </article>
+            <article class="step-card">
+              <div class="step-num">03</div>
+              <h3>Automate</h3>
+              <p>AI agents take over the repeat work &mdash; emails, follow-ups, scheduling, reporting &mdash; quietly, in the background.</p>
+            </article>
           </div>
         </div>
       </section>
@@ -2019,100 +2156,28 @@
         <div class="container">
           <div class="section-head centered">
             <div class="kicker">Automation &amp; Agent Library</div>
-            <h2>Every &ldquo;thief&rdquo; has a guard.</h2>
-            <p class="lede">If you spend your day chasing invoices, updating your CRM, sifting through your inbox, or rebuilding the same SOPs from scratch &mdash; there&rsquo;s an AI agent that can handle it. Below are the patterns we see most often. Search for yours.</p>
+            <h2>If it repeats, we can automate it.</h2>
+            <p class="lede">A few of the patterns we see most. Search for yours, or see more below.</p>
           </div>
 
-          <div class="library-shell">
+          <div class="library-shell collapsed" id="libraryShell">
             <div class="library-controls">
-              <input class="library-search" id="automationSearch" type="search" placeholder="Search by task, department, or tool" aria-label="Search automation library" />
-              <div class="filter-pills" role="list" aria-label="Department filters">
-                <button class="filter-pill active" data-filter="Popular">Popular</button>
-                <button class="filter-pill" data-filter="Sales & Leads">Sales & Leads</button>
-                <button class="filter-pill" data-filter="Customer Service">Customer Service</button>
-                <button class="filter-pill" data-filter="Marketing">Marketing</button>
-                <button class="filter-pill" data-filter="Finance & Admin">Finance & Admin</button>
-                <button class="filter-pill" data-filter="Operations">Operations</button>
-                <button class="filter-pill" data-filter="People & Hiring">People & Hiring</button>
-                <button class="filter-pill" data-filter="Owner / Leadership">Owner / Leadership</button>
-                <button class="filter-pill" data-filter="Systems & Knowledge">Systems & Knowledge</button>
-              </div>
+              <input class="library-search" id="automationSearch" type="search" placeholder="Search e.g. inbox, invoices, scheduling" aria-label="Search automation library" />
             </div>
 
             <div class="automation-library-grid" id="popularGrid"></div>
-            <div id="expandedLibrary"></div>
-            <div class="library-empty" id="libraryEmpty">No matching automations yet. Try a different task, department, or tool.</div>
+            <div id="expandedLibrary" hidden></div>
+            <div class="library-empty" id="libraryEmpty" hidden>No matches. Try a different word.</div>
 
             <div class="library-actions">
-              <button class="button button-primary" id="seeMoreBtn" type="button">See More Automation Ideas</button>
-              <button class="button button-light" id="showLessBtn" type="button" style="display:none;">Show Less</button>
-            </div>
-
-            <div class="library-callout">
-              <h3>This is not a fixed menu. It is a starting point.</h3>
-              <p>If your team repeats it, forgets it, copies it, chases it, summarizes it, or manually moves it from one system to another, there is probably a smarter way to handle it. We build practical AI agents around your actual process, your tools, and your business model.</p>
-            </div>
-
-            <div class="library-callout blue">
-              <h3>Almost anything repeatable can be automated.</h3>
-              <p>From your inbox to your calendar, CRM, bookkeeping, documents, customer communication, reporting, hiring, and operations, we can design agents that work the way your business already works.</p>
-            </div>
-
-            <div class="library-bottom-cta">
-              <div>
-                <h3>Not sure what to automate first?</h3>
-                <p>Most businesses do not need more software. They need the tools they already use to work together better.</p>
-              </div>
-              <a class="button button-primary" href="https://calendar.app.google/SnmSbP7hZCprCZ9B7" target="_blank" rel="noopener">Find my first automation</a>
+              <button class="button button-light" id="seeMoreBtn" type="button">See more examples</button>
+              <button class="button button-light" id="showLessBtn" type="button" hidden>Show less</button>
             </div>
           </div>
         </div>
       </section>
 
-      <section class="section dark reveal" id="ready">
-        <div class="container">
-          <div class="section-head">
-            <div class="kicker">The READY Framework</div>
-            <h2>From chaos to autopilot.</h2>
-            <p class="lede">We don&rsquo;t just &ldquo;install AI.&rdquo; We build a foundation that lasts.</p>
-          </div>
-
-          <div class="ready-timeline">
-            <article class="ready-item"><div class="ready-letter">R</div><h3>Record</h3><p>We capture the &ldquo;tribal knowledge&rdquo; living in your head.</p></article>
-            <article class="ready-item"><div class="ready-letter">E</div><h3>Extract</h3><p>We separate the high-value judgment calls from the low-value repetitive tasks.</p></article>
-            <article class="ready-item"><div class="ready-letter">A</div><h3>Architect</h3><p>We design a custom system using the tools you already love.</p></article>
-            <article class="ready-item"><div class="ready-letter">D</div><h3>Deploy</h3><p>Your AI agents go live&mdash;handling emails, scheduling, follow-ups, and more.</p></article>
-            <article class="ready-item"><div class="ready-letter">Y</div><h3>Yield</h3><p>You reclaim 10+ hours a week to focus on high-level growth.</p></article>
-          </div>
-        </div>
-      </section>
-
-      <section class="section reveal" id="paths">
-        <div class="container">
-          <div class="section-head">
-            <div class="kicker">How we work with you</div>
-            <h2>You can learn it, or we can build it.</h2>
-            <p class="lede">Either path gets you to the same place: less mental load, clearer systems, and practical AI doing useful work.</p>
-          </div>
-
-          <div class="paths">
-            <article class="path">
-              <div class="path-label">Path A</div>
-              <h3>We teach you.</h3>
-              <p>You want to understand it and own it. We give you the framework, tools, and skills to build it yourself. Ideal for operators who want to be capable, not dependent.</p>
-            </article>
-            <article class="path">
-              <div class="path-label">Path B</div>
-              <h3>We build it for you.</h3>
-              <p>You do not have time to learn. You need it done. We handle everything from documentation to deployment. Ideal for owners who want the result, not the work.</p>
-            </article>
-          </div>
-
-          <div class="callout">Either path gets you to the same result: less mental load, clearer systems, and practical AI doing useful work.</div>
-        </div>
-      </section>
-
-      <section class="section alt reveal" id="pricing">
+                  <section class="section alt reveal" id="pricing">
         <div class="container">
           <div class="section-head centered">
             <div class="kicker">Pricing</div>
@@ -2122,62 +2187,37 @@
 
           <div class="pricing">
             <article class="price-card">
-              <div class="tier-label">Free</div>
+              <div class="tier-label">Start here</div>
               <h3>Discovery Call</h3>
               <div class="price free-price">Free</div>
-              <p>A 30-minute call to walk through your business, find your biggest automation wins, and leave with a clear path forward. No commitment required.</p>
+              <p>A 30-minute call to find your biggest automation wins and leave with a clear next step.</p>
               <a class="button button-light" href="https://calendar.app.google/SnmSbP7hZCprCZ9B7" target="_blank" rel="noopener">Book a free call</a>
             </article>
 
             <article class="price-card featured">
-              <div class="tier-label">Most popular</div>
-              <h3>AI Build</h3>
-              <div class="price">$3,000 to $5,000<small>Project based</small></div>
-              <p>We design, build, and deploy your AI systems end to end. Automations, agents, integrations, documentation, and handoff.</p>
-              <a class="button button-primary" href="https://calendar.app.google/SnmSbP7hZCprCZ9B7" target="_blank" rel="noopener">Build my system</a>
+              <div class="tier-label">Recommended</div>
+              <h3>AI Audit</h3>
+              <div class="price">$997<small>One time</small></div>
+              <p>We map your business, find the high-leverage automations, and deliver a prioritized roadmap.</p>
+              <a class="button button-primary" href="https://calendar.app.google/SnmSbP7hZCprCZ9B7" target="_blank" rel="noopener">Start with an audit</a>
             </article>
 
             <article class="price-card">
-              <div class="tier-label">Ongoing</div>
-              <h3>AI Retainer</h3>
-              <div class="price">$750 to $1,500<small>Per month</small></div>
-              <p>Ongoing support, new automations as you grow, monthly strategy call, and priority improvements.</p>
-              <a class="button button-light" href="https://calendar.app.google/SnmSbP7hZCprCZ9B7" target="_blank" rel="noopener">Keep improving</a>
+              <div class="tier-label">Done for you</div>
+              <h3>AI Buildout</h3>
+              <div class="price">$3,000&ndash;$5,000<small>Project based</small></div>
+              <p>We design, build, and deploy your AI systems end to end &mdash; with full documentation and handoff.</p>
+              <a class="button button-light" href="https://calendar.app.google/SnmSbP7hZCprCZ9B7" target="_blank" rel="noopener">Build my system</a>
             </article>
           </div>
         </div>
       </section>
 
-      <section class="section reveal" id="who">
-        <div class="container">
-          <div class="who-box">
-            <div class="section-head">
-              <div class="kicker">Who it is for</div>
-              <h2>You're great at what you do. Let's build the rest.</h2>
-              <p class="lede">Practical AI Co. is built for small business owners who are serious about growth and honest about what's holding them back. You don't need to understand AI. You need to understand your business. We handle the rest.</p>
-            </div>
-
-            <div class="industry-grid">
-              <div class="industry">Service businesses</div>
-              <div class="industry">Recruiting and staffing firms</div>
-              <div class="industry">Consulting and coaching</div>
-              <div class="industry">Transportation and logistics</div>
-              <div class="industry">Home services</div>
-              <div class="industry">Health and wellness</div>
-              <div class="industry">Owner-led companies</div>
-              <div class="industry">Manual process heavy teams</div>
-              <div class="industry">Businesses running on memory</div>
-              <div class="industry">Operators ready to scale</div>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      <section class="section alt reveal" id="about">
+            <section class="section alt reveal" id="about">
         <div class="container">
           <div class="section-head">
             <div class="kicker">About Joe Robinson, Founder</div>
-            <h2>An operator, not a &ldquo;tech bro.&rdquo;</h2>
+            <h2>Built by an operator.</h2>
           </div>
 
           <div class="about-wrap">
@@ -2186,12 +2226,10 @@
             </div>
 
             <div class="about-panel">
-              <p>Joe Robinson didn&rsquo;t learn systems in a lab. He learned them while scaling companies from $10M to $100M &mdash; growing Big Bus Tours from 25% to 82% market share in three years and serving as President and CEO of smarTours.</p>
-
-              <p>He knows AI is useless if the underlying process is broken. So Practical AI Co. starts with the process, not the tool &mdash; building systems that actually show up for work on Monday morning.</p>
+              <p>Joe scaled companies from $10M to $100M before he ever installed an AI agent. He knows the tool doesn&rsquo;t matter if the underlying process is broken &mdash; so Practical AI Co. starts with the process, not the software.</p>
 
               <div class="about-quote">
-                <p>&ldquo;Every business I&rsquo;ve scaled had one thing in common: at some point, someone sat down and wrote the process down. AI just makes that moment faster and more powerful than it&rsquo;s ever been.&rdquo;</p>
+                <p>&ldquo;Every business I&rsquo;ve scaled had one thing in common: someone sat down and wrote the process down. AI just makes that moment faster than it&rsquo;s ever been.&rdquo;</p>
                 <cite>Joe Robinson, Founder</cite>
               </div>
 
@@ -2222,22 +2260,22 @@
           </div>
 
           <div class="faq-grid">
-            <div class="faq-item">
-              <h3>Do I need to understand AI first?</h3>
+            <details class="faq-item">
+              <summary>Do I need to understand AI first?</summary>
               <p>No. You need to understand your business. We handle the AI side and translate it into practical systems you can actually use.</p>
-            </div>
-            <div class="faq-item">
-              <h3>What if my business is messy and undocumented?</h3>
-              <p>That is exactly where this starts. Most small businesses come to us with tribal knowledge, inconsistent steps, and process gaps. That is normal.</p>
-            </div>
-            <div class="faq-item">
-              <h3>Will this fit my existing tools?</h3>
-              <p>Usually yes. We build around your process, your team, and your current stack whenever possible rather than forcing a brand-new system on you.</p>
-            </div>
-            <div class="faq-item">
-              <h3>What happens on the discovery call?</h3>
-              <p>We spend 20 minutes learning how your business works and 25 minutes showing you exactly where AI can help. You leave with a clear picture of what is possible whether you work with us or not.</p>
-            </div>
+            </details>
+            <details class="faq-item">
+              <summary>What if my business is messy and undocumented?</summary>
+              <p>That&rsquo;s exactly where this starts. Most small businesses come to us with tribal knowledge, inconsistent steps, and process gaps. That&rsquo;s normal.</p>
+            </details>
+            <details class="faq-item">
+              <summary>Will this fit my existing tools?</summary>
+              <p>Usually yes. We build around your process, your team, and your current stack whenever possible &mdash; rather than forcing a brand-new system on you.</p>
+            </details>
+            <details class="faq-item">
+              <summary>What happens on the discovery call?</summary>
+              <p>20 minutes learning how your business works, 25 minutes showing you where AI can help. You leave with a clear picture of what&rsquo;s possible &mdash; whether we work together or not.</p>
+            </details>
           </div>
         </div>
       </section>
@@ -2320,6 +2358,7 @@
 
     const popularGrid = document.getElementById('popularGrid');
     const expandedLibrary = document.getElementById('expandedLibrary');
+    const libraryShell = document.getElementById('libraryShell');
 
     if (popularGrid && expandedLibrary) {
       popularGrid.innerHTML = automationData.filter(x => x.f).map(card).join('');
@@ -2333,66 +2372,44 @@
     }
 
     const searchInput = document.getElementById('automationSearch');
-    const filterButtons = document.querySelectorAll('.filter-pill');
     const seeMoreBtn = document.getElementById('seeMoreBtn');
     const showLessBtn = document.getElementById('showLessBtn');
     const libraryEmpty = document.getElementById('libraryEmpty');
     let expanded = false;
-    let activeFilter = 'Popular';
 
-    function allCards() {
-      return Array.from(document.querySelectorAll('.automation-lib-card'));
-    }
-
-    function groups() {
-      return Array.from(document.querySelectorAll('.library-group'));
-    }
+    function allCards() { return Array.from(document.querySelectorAll('.automation-lib-card')); }
+    function groups() { return Array.from(document.querySelectorAll('.library-group')); }
 
     function applyLibraryState() {
       const query = (searchInput?.value || '').trim().toLowerCase();
-      const shouldExpand = expanded || query.length > 0 || activeFilter !== 'Popular';
+      const shouldExpand = expanded || query.length > 0;
+
+      if (libraryShell) libraryShell.classList.toggle('collapsed', !shouldExpand);
+      if (expandedLibrary) expandedLibrary.hidden = !shouldExpand;
+
       let visibleCount = 0;
-
-      groups().forEach(group => group.classList.toggle('visible', shouldExpand));
-
       allCards().forEach(card => {
-        const isFeatured = card.dataset.featured === 'true';
-        const dept = card.dataset.department || '';
         const haystack = card.dataset.search || '';
-        const matchesSearch = !query || haystack.includes(query);
-        const matchesFilter = activeFilter === 'Popular' ? (isFeatured || shouldExpand) : dept === activeFilter;
-        const show = matchesSearch && matchesFilter && (shouldExpand || isFeatured);
-        card.style.display = show ? '' : 'none';
-        if (show) visibleCount += 1;
+        const matches = !query || haystack.includes(query);
+        card.style.display = matches ? '' : 'none';
+        if (matches) visibleCount += 1;
       });
 
       groups().forEach(group => {
-        const visibleCards = Array.from(group.querySelectorAll('.automation-lib-card')).some(card => card.style.display !== 'none');
-        group.style.display = (shouldExpand && visibleCards) ? 'block' : 'none';
+        const anyVisible = Array.from(group.querySelectorAll('.automation-lib-card')).some(c => c.style.display !== 'none');
+        group.style.display = (shouldExpand && anyVisible) ? 'block' : 'none';
       });
 
-      if (libraryEmpty) libraryEmpty.style.display = visibleCount ? 'none' : 'block';
-      if (seeMoreBtn) seeMoreBtn.style.display = shouldExpand ? 'none' : 'inline-flex';
-      if (showLessBtn) showLessBtn.style.display = shouldExpand ? 'inline-flex' : 'none';
+      if (libraryEmpty) libraryEmpty.hidden = visibleCount > 0;
+      if (seeMoreBtn) seeMoreBtn.hidden = shouldExpand;
+      if (showLessBtn) showLessBtn.hidden = !shouldExpand;
     }
-
-    filterButtons.forEach(btn => {
-      btn.addEventListener('click', () => {
-        filterButtons.forEach(b => b.classList.remove('active'));
-        btn.classList.add('active');
-        activeFilter = btn.dataset.filter || 'Popular';
-        expanded = activeFilter !== 'Popular';
-        applyLibraryState();
-      });
-    });
 
     searchInput?.addEventListener('input', applyLibraryState);
     seeMoreBtn?.addEventListener('click', () => { expanded = true; applyLibraryState(); });
     showLessBtn?.addEventListener('click', () => {
       expanded = false;
-      activeFilter = 'Popular';
       if (searchInput) searchInput.value = '';
-      filterButtons.forEach(b => b.classList.toggle('active', b.dataset.filter === 'Popular'));
       applyLibraryState();
       document.getElementById('examples')?.scrollIntoView({ behavior: 'smooth', block: 'start' });
     });
