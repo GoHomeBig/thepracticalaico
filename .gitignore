@@ -1,0 +1,9 @@
+# Local-only preview server (not used in production)
+server.js
+
+# OS / editor cruft
+.DS_Store
+.vscode/
+.idea/
+*.swp
+*.swo
