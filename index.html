@@ -4,7 +4,26 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Practical AI Co. | Put AI to Work in Your Small Business</title>
-  <meta name="description" content="Practical AI Co. helps small business owners stop carrying everything in their heads and start running on systems. Based in Franklin, TN and serving businesses remotely." />
+  <meta name="description" content="Stop running your business from your memory. Practical AI Co. documents how your business works, then builds the AI agents that handle the repetitive work for you. Franklin, TN and remote." />
+
+  <!-- Open Graph -->
+  <meta property="og:type" content="website" />
+  <meta property="og:site_name" content="Practical AI Co." />
+  <meta property="og:url" content="https://thepracticalai.co/" />
+  <meta property="og:title" content="Stop Running Your Business From Your Memory." />
+  <meta property="og:description" content="We document your business, build your systems, and deploy AI agents to handle the repetitive work — so you can finally lead instead of just manage." />
+  <meta property="og:image" content="https://thepracticalai.co/og.png" />
+  <meta property="og:image:width" content="1200" />
+  <meta property="og:image:height" content="630" />
+  <meta property="og:image:alt" content="Practical AI Co. — Stop Running Your Business From Your Memory." />
+
+  <!-- Twitter -->
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content="Stop Running Your Business From Your Memory." />
+  <meta name="twitter:description" content="We document your business, build your systems, and deploy AI agents to handle the repetitive work — so you can finally lead instead of just manage." />
+  <meta name="twitter:image" content="https://thepracticalai.co/og.png" />
+
+  <link rel="canonical" href="https://thepracticalai.co/" />
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=Fraunces:opsz,wght@9..144,700;9..144,800&display=swap" rel="stylesheet">
@@ -1771,6 +1790,69 @@
       .library-shell { padding: 18px; border-radius: 28px; }
     }
 
+
+    .ceiling-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 22px;
+      margin: 8px 0 0;
+    }
+    .ceiling-card {
+      background: var(--paper);
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      padding: 32px;
+      box-shadow: var(--shadow-soft);
+      transition: transform 220ms ease, box-shadow 220ms ease;
+    }
+    .ceiling-card:hover {
+      transform: translateY(-4px);
+      box-shadow: var(--shadow);
+    }
+    .ceiling-tag {
+      display: inline-block;
+      padding: 7px 13px;
+      border-radius: 999px;
+      background: var(--cream);
+      font-size: 12px;
+      font-weight: 900;
+      text-transform: uppercase;
+      letter-spacing: 0.14em;
+      margin-bottom: 18px;
+    }
+    .tag-blue { color: var(--blue); }
+    .tag-green { color: var(--green); }
+    .tag-amber { color: #B45309; }
+    .ceiling-card p {
+      font-family: Fraunces, Georgia, serif;
+      color: var(--charcoal);
+      font-size: 24px;
+      line-height: 1.3;
+      letter-spacing: -0.025em;
+      margin: 0;
+    }
+    .ceiling-pull {
+      margin-top: 44px;
+      text-align: center;
+      font-family: Fraunces, Georgia, serif;
+      font-size: clamp(28px, 4vw, 46px);
+      line-height: 1.18;
+      letter-spacing: -0.03em;
+      padding: 56px 40px;
+      background: var(--charcoal);
+      color: var(--white);
+      border-radius: 38px;
+      box-shadow: var(--shadow);
+    }
+    .ceiling-pull .pull-accent {
+      color: #7FA9FF;
+    }
+    @media (max-width: 980px) {
+      .ceiling-grid { grid-template-columns: 1fr; }
+    }
+    @media (max-width: 640px) {
+      .ceiling-pull { padding: 40px 24px; border-radius: 28px; }
+    }
   </style>
 </head>
 <body>
@@ -1825,10 +1907,10 @@
           <div class="hero-grid">
             <div class="hero-copy-wrap">
               <div class="kicker">Practical AI Co.</div>
-              <h1>Your business runs on your memory.<br>That won't scale.</h1>
-              <p class="hero-copy">We help small business owners stop carrying everything in their heads and start running on systems. Practical AI Co. documents how your business works, then builds the AI around it.</p>
+              <h1>Stop Running Your Business From Your Memory.</h1>
+              <p class="hero-copy">You've built a great company, but it only works because you're holding it all together. We document your &ldquo;brain,&rdquo; build your systems, and deploy AI agents to handle the repetitive work&mdash;so you can finally lead instead of just manage.</p>
               <div class="hero-actions">
-                <a class="button button-primary" href="https://calendar.app.google/SnmSbP7hZCprCZ9B7" target="_blank" rel="noopener">Book a free 45-minute discovery call</a>
+                <a class="button button-primary" href="https://calendar.app.google/SnmSbP7hZCprCZ9B7" target="_blank" rel="noopener">Book Your Free Systems Audit</a>
                 <a class="button button-light" href="#work">See how it works</a>
               </div>
               <p class="hero-note">Franklin, TN and remote.</p>
@@ -1868,33 +1950,29 @@
 
       <section class="section reveal" id="problem">
         <div class="container">
-          <div class="section-head">
-            <div class="kicker">The real problem</div>
-            <h2>The business works because you remember everything.</h2>
-            <p class="lede">Most small businesses run on habit, memory, and one person holding it all together. That is not a failure. It is usually how good operators survive. But it is also what keeps the business from scaling.</p>
+          <div class="section-head centered">
+            <div class="kicker">The Founder&rsquo;s Ceiling</div>
+            <h2>The &ldquo;Founder&rsquo;s Ceiling&rdquo; is real.</h2>
+            <p class="lede">Most small businesses don&rsquo;t fail because of bad products. They stall because the owner becomes the bottleneck.</p>
           </div>
 
-          <div class="split">
-            <div class="card">
-              <h3>What we usually find</h3>
-              <ul class="bullet-list">
-                <li><span class="check">✓</span><span>The process lives in one person's head.</span></li>
-                <li><span class="check">✓</span><span>Time leaks into repetitive tasks that should not take as long as they do.</span></li>
-                <li><span class="check">✓</span><span>Important follow-ups depend on memory, not a system.</span></li>
-                <li><span class="check">✓</span><span>Competitors who automate first will scale faster.</span></li>
-              </ul>
-            </div>
+          <div class="ceiling-grid">
+            <article class="ceiling-card">
+              <div class="ceiling-tag tag-blue">The Mental Load</div>
+              <p>You&rsquo;re the only one who knows &ldquo;how we do things here.&rdquo;</p>
+            </article>
+            <article class="ceiling-card">
+              <div class="ceiling-tag tag-green">The Time Leak</div>
+              <p>You spend 4 hours a day on tasks a machine could do in 4 seconds.</p>
+            </article>
+            <article class="ceiling-card">
+              <div class="ceiling-tag tag-amber">The Scale Gap</div>
+              <p>You can&rsquo;t hire fast enough because training takes too much of your time.</p>
+            </article>
+          </div>
 
-            <div class="quotes-stack">
-              <blockquote class="quote-box">
-                <p>"We've operated almost entirely without any type of system supporting us. It's all manual and it's all from memory."</p>
-                <cite>Steve, transportation founder</cite>
-              </blockquote>
-              <blockquote class="quote-box">
-                <p>"The things that fall through the cracks when it's all in your head. Now I'm building systems that watch it for me."</p>
-                <cite>Steve, founder of a luxury transportation company in New York</cite>
-              </blockquote>
-            </div>
+          <div class="ceiling-pull">
+            If it&rsquo;s in your head, it&rsquo;s a liability.<br><span class="pull-accent">If it&rsquo;s in a system, it&rsquo;s an asset.</span>
           </div>
         </div>
       </section>
@@ -1931,9 +2009,9 @@
       <section class="section reveal" id="examples">
         <div class="container">
           <div class="section-head centered">
-            <div class="kicker">Automation & Agent Library</div>
-            <h2>If it repeats, it can be automated.</h2>
-            <p class="lede">These are just examples. Every business has repeat work hiding in plain sight: emails, invoices, follow-ups, scheduling, reporting, customer updates, and admin tasks that quietly eat the week. We help find those patterns and turn them into practical AI automations built around your tools, your process, and your business model.</p>
+            <div class="kicker">Automation &amp; Agent Library</div>
+            <h2>Every &ldquo;thief&rdquo; has a guard.</h2>
+            <p class="lede">If you spend your day chasing invoices, updating your CRM, sifting through your inbox, or rebuilding the same SOPs from scratch &mdash; there&rsquo;s an AI agent that can handle it. Below are the patterns we see most often. Search for yours.</p>
           </div>
 
           <div class="library-shell">
@@ -1986,16 +2064,16 @@
         <div class="container">
           <div class="section-head">
             <div class="kicker">The READY Framework</div>
-            <h2>Five stages. One transformation.</h2>
-            <p class="lede">READY is the shift from owner-dependent memory to documented processes, useful automation, and AI systems that create real leverage.</p>
+            <h2>From chaos to autopilot.</h2>
+            <p class="lede">We don&rsquo;t just &ldquo;install AI.&rdquo; We build a foundation that lasts.</p>
           </div>
 
           <div class="ready-timeline">
-            <article class="ready-item"><div class="ready-letter">R</div><h3>Record</h3><p>You stop carrying it all in your head. Everything about how your business works gets captured.</p></article>
-            <article class="ready-item"><div class="ready-letter">E</div><h3>Extract</h3><p>We find where your time is actually going. The repetitive tasks, the judgment calls, the things only you know how to do.</p></article>
-            <article class="ready-item"><div class="ready-letter">A</div><h3>Architect</h3><p>We design a system around how your business actually runs. Not a generic template. Yours.</p></article>
-            <article class="ready-item"><div class="ready-letter">D</div><h3>Deploy</h3><p>The automations and agents go live. Your business starts running without you holding every thread.</p></article>
-            <article class="ready-item"><div class="ready-letter">Y</div><h3>Yield</h3><p>You get your time back. You move faster. You make better decisions. You build something your competitors cannot copy.</p></article>
+            <article class="ready-item"><div class="ready-letter">R</div><h3>Record</h3><p>We capture the &ldquo;tribal knowledge&rdquo; living in your head.</p></article>
+            <article class="ready-item"><div class="ready-letter">E</div><h3>Extract</h3><p>We separate the high-value judgment calls from the low-value repetitive tasks.</p></article>
+            <article class="ready-item"><div class="ready-letter">A</div><h3>Architect</h3><p>We design a custom system using the tools you already love.</p></article>
+            <article class="ready-item"><div class="ready-letter">D</div><h3>Deploy</h3><p>Your AI agents go live&mdash;handling emails, scheduling, follow-ups, and more.</p></article>
+            <article class="ready-item"><div class="ready-letter">Y</div><h3>Yield</h3><p>You reclaim 10+ hours a week to focus on high-level growth.</p></article>
           </div>
         </div>
       </section>
@@ -2090,7 +2168,7 @@
         <div class="container">
           <div class="section-head">
             <div class="kicker">About Joe Robinson, Founder</div>
-            <h2>Built by an operator. For operators.</h2>
+            <h2>An operator, not a &ldquo;tech bro.&rdquo;</h2>
           </div>
 
           <div class="about-wrap">
@@ -2099,14 +2177,12 @@
             </div>
 
             <div class="about-panel">
-              <p>Joe Robinson spent 20 years scaling multi-site service businesses across four countries. He grew Big Bus Tours from 25% to 82% market share in New York and Chicago in three years. He scaled Indie Campers from $10M to over $100M in revenue across 25 markets in under 24 months. He served as President and CEO of smarTours, where he doubled online conversion in under 100 days.</p>
+              <p>Joe Robinson didn&rsquo;t learn systems in a lab. He learned them while scaling companies from $10M to $100M &mdash; growing Big Bus Tours from 25% to 82% market share in three years and serving as President and CEO of smarTours.</p>
 
-              <p>He is not a technologist. He is an operator who got serious about AI because he watched good businesses fail at scale for the same reason: everything lived in the founder's head and nothing was ever written down.</p>
-
-              <p>He started Practical AI Co. in Franklin, TN after six months of deep immersion in AI tools, building systems for founders in his own network. His first two clients were a luxury transportation company in New York and a nearshore staffing firm. Different businesses, identical root problem.</p>
+              <p>He knows AI is useless if the underlying process is broken. So Practical AI Co. starts with the process, not the tool &mdash; building systems that actually show up for work on Monday morning.</p>
 
               <div class="about-quote">
-                <p>"Every business I've scaled had one thing in common: at some point, someone sat down and wrote the process down. AI just makes that moment faster and more powerful than it's ever been."</p>
+                <p>&ldquo;Every business I&rsquo;ve scaled had one thing in common: at some point, someone sat down and wrote the process down. AI just makes that moment faster and more powerful than it&rsquo;s ever been.&rdquo;</p>
                 <cite>Joe Robinson, Founder</cite>
               </div>
 
@@ -2125,26 +2201,6 @@
                 </div>
               </div>
             </div>
-          </div>
-        </div>
-      </section>
-
-      <section class="section reveal" id="proof">
-        <div class="container">
-          <div class="section-head">
-            <div class="kicker">Social proof</div>
-            <h2>Real operators. Real problems solved.</h2>
-          </div>
-
-          <div class="proof-grid">
-            <blockquote class="proof">
-              <p>"Working through this process helped me see exactly where my time was going. The biz dev piece alone is going to save me hours every week."</p>
-              <cite>Sarah, founder of a nearshore staffing and recruiting firm</cite>
-            </blockquote>
-            <blockquote class="proof">
-              <p>"The things that fall through the cracks when it's all in your head. Now I'm building systems that watch it for me."</p>
-              <cite>Steve, founder of a luxury transportation company in New York</cite>
-            </blockquote>
           </div>
         </div>
       </section>
@@ -2187,11 +2243,11 @@
         <div class="container">
           <div class="cta-inner">
             <div>
-              <h2>Ready to stop running on memory?</h2>
-              <p>One conversation. No pitch, no pressure. We spend 20 minutes learning how your business works and 25 minutes showing you exactly where AI can help. You leave with a clear picture of what's possible, whether you work with us or not.</p>
+              <h2>Stop being the engine. Start being the pilot.</h2>
+              <p>In 45 minutes, we&rsquo;ll map out your first three automation wins. You&rsquo;ll leave with a blueprint for a business that runs without you &mdash; whether you work with us or not.</p>
             </div>
             <div class="cta-actions">
-              <a class="button button-primary" href="https://calendar.app.google/SnmSbP7hZCprCZ9B7" target="_blank" rel="noopener">Book a free 45-minute discovery call</a>
+              <a class="button button-primary" href="https://calendar.app.google/SnmSbP7hZCprCZ9B7" target="_blank" rel="noopener">Claim Your Free 45-Minute Blueprint</a>
               <span class="cta-note">Franklin, TN and remote.</span>
             </div>
           </div>
