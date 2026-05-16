@@ -435,6 +435,94 @@
       line-height: 1.55;
     }
 
+    /* Maturity dashboard */
+    .maturity {
+      border: 1px solid var(--line);
+      border-radius: 14px;
+      overflow: hidden;
+      margin: 24px 0;
+      background: rgba(36, 86, 255, 0.04);
+    }
+    .maturity-head {
+      padding: 12px 18px;
+      font-size: 11px;
+      font-weight: 900;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: var(--blue);
+      border-bottom: 1px solid var(--line);
+    }
+    .maturity-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 0;
+    }
+    .maturity-cell {
+      padding: 16px 12px;
+      text-align: center;
+      border-right: 1px solid var(--line);
+    }
+    .maturity-cell:last-child { border-right: 0; }
+    .maturity-label {
+      font-size: 10.5px;
+      font-weight: 900;
+      letter-spacing: 0.14em;
+      color: var(--muted-2);
+      text-transform: uppercase;
+      margin-bottom: 6px;
+    }
+    .maturity-score {
+      font-family: Fraunces, Georgia, serif;
+      font-size: 28px;
+      font-weight: 800;
+      color: var(--charcoal);
+      letter-spacing: -0.025em;
+      line-height: 1;
+    }
+    .maturity-score-denom {
+      font-size: 13px;
+      color: var(--muted-2);
+      font-weight: 600;
+    }
+    .maturity-explanation {
+      padding: 0 18px 16px;
+      font-size: 14px;
+      color: var(--charcoal);
+      line-height: 1.55;
+    }
+    @media (max-width: 640px) {
+      .maturity-grid { grid-template-columns: repeat(2, 1fr); }
+      .maturity-cell:nth-child(2) { border-right: 0; }
+      .maturity-cell:nth-child(1), .maturity-cell:nth-child(2) {
+        border-bottom: 1px solid var(--line);
+      }
+    }
+
+    /* Priority pill on opportunities */
+    .opp-priority {
+      display: inline-block;
+      padding: 4px 10px;
+      border-radius: 999px;
+      font-size: 10px;
+      font-weight: 900;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      margin-left: 8px;
+      vertical-align: middle;
+    }
+    .opp-priority.quick-win {
+      color: var(--green);
+      background: rgba(47, 143, 91, 0.10);
+    }
+    .opp-priority.strategic {
+      color: var(--blue);
+      background: rgba(36, 86, 255, 0.10);
+    }
+    .opp-priority.long-term {
+      color: #B45309;
+      background: rgba(180, 83, 9, 0.10);
+    }
+
     /* SOP document (shared) */
     .sop-document {
       background: var(--paper);
@@ -963,15 +1051,29 @@
         { lbl: 'Backup', val: sop.backup },
       ].filter((x) => x.val);
 
+      const priorityClass = (p) => {
+        if (!p) return '';
+        const k = String(p).toLowerCase();
+        if (k.includes('quick')) return 'quick-win';
+        if (k.includes('strategic')) return 'strategic';
+        if (k.includes('long')) return 'long-term';
+        return '';
+      };
+
       const oppsHtml = asArr(a.automationOpportunities).length
         ? asArr(a.automationOpportunities).map((o) => {
             const rank = String(o.rank || '').padStart(2, '0');
+            const priorityHtml = o.priority
+              ? '<span class="opp-priority ' + priorityClass(o.priority) + '">' + esc(o.priority) + '</span>'
+              : '';
             const facts = [];
             if (o.timeSavings) facts.push('<span><b>Time savings:</b> ' + esc(o.timeSavings) + '</span>');
+            if (o.estimatedDollarValue) facts.push('<span><b>Est. value:</b> ' + esc(o.estimatedDollarValue) + '</span>');
+            if (o.buildEffort) facts.push('<span><b>Build effort:</b> ' + esc(o.buildEffort) + '</span>');
             if (o.complexity) facts.push('<span><b>Complexity:</b> ' + esc(o.complexity) + '</span>');
             if (asArr(o.tools).length) facts.push('<span><b>Tools:</b> ' + esc(asArr(o.tools).join(', ')) + '</span>');
             return '<div class="opp-card">'
-              + '<div class="opp-rank">Opportunity ' + rank + '</div>'
+              + '<div class="opp-rank">Opportunity ' + rank + priorityHtml + '</div>'
               + '<div class="opp-name">' + esc(o.name || '') + '</div>'
               + (o.whatItDoes ? '<div class="opp-what">' + esc(o.whatItDoes) + '</div>' : '')
               + (facts.length ? '<div class="opp-facts">' + facts.join('') + '</div>' : '')
@@ -979,6 +1081,28 @@
               + (o.humanInLoop ? '<div class="opp-human"><b>Human in loop:</b> ' + esc(o.humanInLoop) + '</div>' : '')
               + '</div>';
           }).join('')
+        : '';
+
+      const maturityHtml = (a.maturity && typeof a.maturity === 'object')
+        ? (() => {
+            const m = a.maturity;
+            const cell = (label, score) =>
+              '<div class="maturity-cell">'
+              + '<div class="maturity-label">' + esc(label) + '</div>'
+              + '<div class="maturity-score">' + (score == null ? '?' : esc(score))
+              + '<span class="maturity-score-denom">/10</span></div>'
+              + '</div>';
+            return '<div class="maturity">'
+              + '<div class="maturity-head">Process maturity</div>'
+              + '<div class="maturity-grid">'
+              + cell('Overall', m.overall)
+              + cell('Documentation', m.documentation)
+              + cell('Automation Readiness', m.automationReadiness)
+              + cell('Resilience', m.resilience)
+              + '</div>'
+              + (m.explanation ? '<div class="maturity-explanation">' + esc(m.explanation) + '</div>' : '')
+              + '</div>';
+          })()
         : '';
 
       const nextHtml = asArr(a.suggestedNextMoves).length
@@ -991,6 +1115,8 @@
 
         ${a.executiveSummary ? '<div class="exec-summary">' + esc(a.executiveSummary) + '</div>' : ''}
         ${a.openingNote ? '<p class="opening-note">' + esc(a.openingNote) + '</p>' : ''}
+
+        ${maturityHtml}
 
         ${summary.length ? `<div class="sop-summary-grid">${summary.map(s => '<div><span class="lbl">' + esc(s.lbl) + '</span><span class="val">' + esc(s.val) + '</span></div>').join('')}</div>` : ''}
 

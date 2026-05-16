@@ -44,6 +44,13 @@ Output a single JSON block wrapped in <ANALYSIS></ANALYSIS> tags. Use this exact
 {
   "executiveSummary": "2-3 sharp sentences capturing the essence of this process AND Practical AI Co.'s POV on it. The owner should read this and feel understood.",
   "openingNote": "1 paragraph (3-5 sentences). Warm opener that acknowledges what we heard and frames what this document contains. Builds trust.",
+  "maturity": {
+    "overall": 6,
+    "documentation": 7,
+    "automationReadiness": 6,
+    "resilience": 4,
+    "explanation": "1 sentence tying the scores to specific things you observed in the interview."
+  },
   "currentStateNarrative": "1 flowing paragraph (4-6 sentences) describing how this process runs today. Storytelling, not bullets. Show you listened.",
   "stepsAnnotated": [
     {
@@ -67,10 +74,13 @@ Output a single JSON block wrapped in <ANALYSIS></ANALYSIS> tags. Use this exact
     {
       "rank": 1,
       "name": "Punchy 3-5 word name",
+      "priority": "Quick win | Strategic | Long-term",
       "whatItDoes": "1-2 sentences. What gets automated, in concrete terms.",
       "whyItMatters": "1-2 sentences. Why THIS business benefits specifically. Reference the interview.",
       "timeSavings": "Rough estimate like '2-3 hours/week' or 'reclaims your Monday morning' or 'roughly 1 hour per customer'",
+      "estimatedDollarValue": "Annual dollar impact of the savings or upside. GROUND in what the owner told you (headcount, hourly rates, deal sizes, customer counts) when possible. If you do not have grounding for a specific number, give a wide range and label it rough, like 'roughly $8K-$15K/year (rough estimate)'. NEVER fabricate specific numbers.",
       "complexity": "Low | Medium | High",
+      "buildEffort": "Realistic build estimate, like '1 week', '2-3 weeks', '1-2 months', or '2-3 months'. Multi-system integrations take longer than they look.",
       "tools": ["tool name", "tool name"],
       "humanInLoop": "What the owner still owns: judgment calls, approvals, edge cases that should NOT be automated"
     }
@@ -83,6 +93,17 @@ Output a single JSON block wrapped in <ANALYSIS></ANALYSIS> tags. Use this exact
   "closingNote": "1 paragraph (2-3 sentences). Motivate without being salesy. Reaffirm POV. Confident."
 }
 </ANALYSIS>
+
+Scoring guidance for maturity (1-10, where 10 is excellent, 1 is chaos):
+- documentation: How well is the process captured outside the owner's head? 10 = full SOP exists and is current. 1 = only one person knows.
+- automationReadiness: How mechanical vs. judgment-heavy is this process? 10 = mostly automatable rules. 1 = requires constant human judgment.
+- resilience: How well does the process survive if the owner is unavailable? 10 = runs without the owner for a week. 1 = halts in hours.
+- overall: Holistic read on the process maturity. Don't just average the three.
+
+Priority guidance for opportunities:
+- Quick win: under 2 weeks of build effort, fast obvious ROI, low risk.
+- Strategic: 2-8 weeks of build, important leverage, may need owner buy-in.
+- Long-term: 8+ weeks or foundational work that unlocks future automation.
 
 Rules:
 - 3 to 5 automation opportunities. Ranked by leverage. NOT 10. Be selective.
@@ -186,6 +207,15 @@ function buildNotionBlocks({ sop, analysis }) {
     blocks.push(paragraph(analysis.openingNote));
   }
 
+  // Process maturity scorecard
+  if (analysis.maturity && typeof analysis.maturity === "object") {
+    const m = analysis.maturity;
+    const fmt = (n) => (n == null ? "?" : `${n}/10`);
+    const line1 = `Overall ${fmt(m.overall)}  ·  Documentation ${fmt(m.documentation)}  ·  Automation readiness ${fmt(m.automationReadiness)}  ·  Resilience ${fmt(m.resilience)}`;
+    const explanation = m.explanation ? "\n" + m.explanation : "";
+    blocks.push(callout(line1 + explanation, { emoji: "📊", color: "purple_background" }));
+  }
+
   // Quick-facts strip
   const facts = [];
   if (sop.frequency) facts.push("Frequency: " + sop.frequency);
@@ -285,10 +315,13 @@ function buildNotionBlocks({ sop, analysis }) {
     ));
     asArr(analysis.automationOpportunities).forEach((opp) => {
       const rank = String(opp.rank || "").padStart(2, "0");
-      blocks.push(heading3(`${rank} · ${opp.name || "Opportunity"}`));
+      const priority = opp.priority ? `  ·  ${opp.priority}` : "";
+      blocks.push(heading3(`${rank} · ${opp.name || "Opportunity"}${priority}`));
       if (opp.whatItDoes) blocks.push(paragraph(opp.whatItDoes));
       const metaFacts = [];
       if (opp.timeSavings) metaFacts.push("Time savings: " + opp.timeSavings);
+      if (opp.estimatedDollarValue) metaFacts.push("Est. value: " + opp.estimatedDollarValue);
+      if (opp.buildEffort) metaFacts.push("Build effort: " + opp.buildEffort);
       if (opp.complexity) metaFacts.push("Complexity: " + opp.complexity);
       if (asArr(opp.tools).length) metaFacts.push("Tools: " + asArr(opp.tools).join(", "));
       if (metaFacts.length) blocks.push(paragraph(metaFacts.join("  ·  "), "gray"));
@@ -418,6 +451,17 @@ function renderEmailHtml({ sop, analysis, isJoe, businessName, firstName }) {
     }).join("");
   })();
 
+  const priorityPillEmail = (priority) => {
+    if (!priority) return "";
+    const colorMap = {
+      "Quick win": ["#2F8F5B", "rgba(47,143,91,0.10)"],
+      "Strategic": ["#2456FF", "rgba(36,86,255,0.10)"],
+      "Long-term": ["#B45309", "rgba(180,83,9,0.10)"],
+    };
+    const [color, bg] = colorMap[priority] || ["#172033", "rgba(23,32,51,0.08)"];
+    return `<span style="display:inline-block;padding:4px 10px;border-radius:999px;background:${bg};color:${color};font-size:10px;font-weight:900;letter-spacing:0.14em;text-transform:uppercase;margin-left:8px;vertical-align:middle;">${esc(priority)}</span>`;
+  };
+
   const opportunitiesHtml = (() => {
     const opps = asArr(analysis.automationOpportunities);
     if (!opps.length) return "";
@@ -425,13 +469,15 @@ function renderEmailHtml({ sop, analysis, isJoe, businessName, firstName }) {
       const rank = String(o.rank || "").padStart(2, "0");
       const facts = [];
       if (o.timeSavings) facts.push(["Time savings", o.timeSavings]);
+      if (o.estimatedDollarValue) facts.push(["Est. value", o.estimatedDollarValue]);
+      if (o.buildEffort) facts.push(["Build effort", o.buildEffort]);
       if (o.complexity) facts.push(["Complexity", o.complexity]);
       if (asArr(o.tools).length) facts.push(["Tools", asArr(o.tools).join(", ")]);
       const factsHtml = facts.length
-        ? `<div style="margin-top:8px;font-size:13px;color:#667085;">${facts.map(([l, v]) => `<b>${esc(l)}:</b> ${esc(v)}`).join("&nbsp; &middot; &nbsp;")}</div>`
+        ? `<div style="margin-top:8px;font-size:13px;color:#667085;line-height:1.7;">${facts.map(([l, v]) => `<b>${esc(l)}:</b> ${esc(v)}`).join("&nbsp; &middot; &nbsp;")}</div>`
         : "";
       return `<div style="padding:20px 22px;background:#FFFDF8;border:1px solid #E7DCCB;border-radius:14px;margin:14px 0;">
-        <div style="font-size:11px;font-weight:900;color:#2456FF;letter-spacing:0.18em;text-transform:uppercase;margin-bottom:8px;">Opportunity ${rank}</div>
+        <div style="font-size:11px;font-weight:900;color:#2456FF;letter-spacing:0.18em;text-transform:uppercase;margin-bottom:8px;">Opportunity ${rank}${priorityPillEmail(o.priority)}</div>
         <div style="font-family:Georgia,serif;font-size:20px;font-weight:800;color:#172033;letter-spacing:-0.022em;margin-bottom:10px;">${esc(o.name || "")}</div>
         ${o.whatItDoes ? P(o.whatItDoes) : ""}
         ${factsHtml}
@@ -439,6 +485,28 @@ function renderEmailHtml({ sop, analysis, isJoe, businessName, firstName }) {
         ${o.humanInLoop ? `<div style="margin-top:6px;font-size:14px;color:#667085;line-height:1.55;"><b>Human in loop:</b> ${esc(o.humanInLoop)}</div>` : ""}
       </div>`;
     }).join("");
+  })();
+
+  const maturityHtml = (() => {
+    const m = analysis.maturity;
+    if (!m) return "";
+    const cell = (label, score) => `
+      <td style="vertical-align:top;padding:10px;text-align:center;">
+        <div style="font-size:11px;font-weight:900;letter-spacing:0.14em;color:#8A93A5;text-transform:uppercase;margin-bottom:6px;">${esc(label)}</div>
+        <div style="font-family:Georgia,serif;font-size:24px;font-weight:800;color:#172033;letter-spacing:-0.025em;line-height:1;">${score == null ? "?" : score}<span style="font-size:13px;color:#8A93A5;font-weight:600;">/10</span></div>
+      </td>`;
+    return `<div style="margin:24px 0 8px;border:1px solid #E7DCCB;border-radius:14px;overflow:hidden;background:rgba(36,86,255,0.04);">
+      <div style="padding:12px 18px;font-size:11px;font-weight:900;letter-spacing:0.18em;text-transform:uppercase;color:#2456FF;border-bottom:1px solid #E7DCCB;">Process maturity</div>
+      <table cellpadding="0" cellspacing="0" style="width:100%;border-collapse:separate;">
+        <tr>
+          ${cell("Overall", m.overall)}
+          ${cell("Documentation", m.documentation)}
+          ${cell("Automation Readiness", m.automationReadiness)}
+          ${cell("Resilience", m.resilience)}
+        </tr>
+      </table>
+      ${m.explanation ? `<div style="padding:6px 18px 16px;font-size:14px;color:#172033;line-height:1.55;">${esc(m.explanation)}</div>` : ""}
+    </div>`;
   })();
 
   const greeting = isJoe
@@ -453,6 +521,7 @@ function renderEmailHtml({ sop, analysis, isJoe, businessName, firstName }) {
     ${greeting}
     ${analysis.executiveSummary ? calloutBlock(analysis.executiveSummary, { bg: "rgba(36,86,255,0.08)", border: "#2456FF" }) : ""}
     ${analysis.openingNote ? P(analysis.openingNote) : ""}
+    ${maturityHtml}
     ${factsCallout}
 
     ${analysis.currentStateNarrative ? H2("Current state") + P(analysis.currentStateNarrative) : ""}
@@ -534,6 +603,7 @@ function buildFallbackAnalysis(sop) {
       `Captured a working SOP for ${sop.processName || "this process"}. Below is the workflow as documented, ready to hand off.`,
     openingNote:
       "Here's the process as we captured it together. We weren't able to run our strategic analysis pass this round, but everything you walked through is recorded faithfully below.",
+    maturity: null,
     currentStateNarrative: sop.trigger || "",
     stepsAnnotated: asArr(sop.steps).map((s, i) => ({
       n: s.n || (i + 1),
