@@ -17,7 +17,7 @@ const SOP_LIBRARY_DB_ID = "362567cd-8712-8174-982d-ffa3a95e441c";
 const JOE_EMAIL = "joe@thepracticalai.co";
 const FROM = "Practical AI Co. <joe@thepracticalai.co>";
 const ANALYSIS_MODEL = "claude-sonnet-4-20250514";
-const ANALYSIS_MAX_TOKENS = 6000;
+const ANALYSIS_MAX_TOKENS = 8192;
 
 // ============================================================
 // Analysis pass — turns raw SOP into customer-ready deliverable
@@ -231,7 +231,7 @@ function buildNotionBlocks({ sop, analysis }) {
         blocks.push(paragraph(metaParts.join("  ·  "), "gray"));
       }
       if (s.observation && s.observation.trim()) {
-        blocks.push(callout("💡 " + s.observation, { emoji: "💡", color: "yellow_background" }));
+        blocks.push(callout(s.observation, { emoji: "💡", color: "yellow_background" }));
       }
       asArr(s.branches).forEach((b) => {
         blocks.push(bullet("If " + (b.if || "") + "  →  " + (b.then || "")));
