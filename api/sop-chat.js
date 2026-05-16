@@ -9,7 +9,7 @@ const Anthropic = require("@anthropic-ai/sdk");
 const { Client: NotionClient } = require("@notionhq/client");
 
 const MODEL = "claude-sonnet-4-20250514";
-const MAX_TOKENS = 1024;
+const MAX_TOKENS = 8192;
 
 // Discovery DB (PAIC Service Lab) — for pulling prior context
 const DISCOVERY_DB_ID = "41707d89-4890-4670-b59c-fafc78d3f1e2";
@@ -56,6 +56,8 @@ RULES:
 - Keep responses to 2-3 sentences. No bullet lists in chat (those come in the final output).
 - Signal section transitions clearly: "Great. Now let's map the actual steps."
 - When all five sections are complete, say exactly: SOP_COMPLETE then output a JSON block wrapped in <SOP></SOP> tags.
+- Use the date provided in the session-start message for the "date" field. Do NOT use your training cutoff date.
+- The JSON output may be long. Output it in FULL. Do not abbreviate or truncate. Always include the closing </SOP> tag.
 
 JSON OUTPUT FORMAT:
 <SOP>

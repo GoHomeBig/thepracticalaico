@@ -6,7 +6,7 @@
 const Anthropic = require("@anthropic-ai/sdk");
 
 const MODEL = "claude-sonnet-4-20250514";
-const MAX_TOKENS = 1024;
+const MAX_TOKENS = 8192;
 
 const SYSTEM_PROMPT = `You are the READY Record Tool, built by Practical AI Co. You interview small business owners to extract a complete picture of how their business works. You are warm, sharp, and conversational, not clinical or robotic. You sound like a smart operator, not a chatbot.
 
@@ -28,6 +28,8 @@ RULES:
 - Signal zone transitions clearly: "Great, I have a solid picture of your customer journey. Let's move to Zone 2..."
 - Keep responses to 2-4 sentences. Conversational only, no bullet lists in chat.
 - When Zone 3 is complete, say exactly: EXTRACTION_COMPLETE then output a JSON block wrapped in <DOC></DOC> tags.
+- Use the date provided in the session-start message for the "date" field. Do NOT use your training cutoff date.
+- The JSON output may be long. Output it in FULL. Do not abbreviate or truncate. Always include the closing </DOC> tag.
 
 JSON OUTPUT FORMAT:
 <DOC>
