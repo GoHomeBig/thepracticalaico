@@ -8,7 +8,7 @@
 const { Client: NotionClient } = require("@notionhq/client");
 const { Resend } = require("resend");
 
-const NOTION_DB_ID = "63b6e99a-8f0b-4066-8bb0-c1637440da0e";
+const NOTION_DB_ID = "41707d89-4890-4670-b59c-fafc78d3f1e2";
 const JOE_EMAIL = "joe@thepracticalai.co";
 const FROM = "Practical AI Co. <joe@thepracticalai.co>";
 
