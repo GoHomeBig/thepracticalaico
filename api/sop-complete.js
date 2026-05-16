@@ -1,18 +1,122 @@
 // Vercel Serverless Function — on SOP completion:
-//   1) Create a structured Notion page in the SOP Library DB
-//      (metadata as properties + a beautifully-formatted body of blocks)
-//   2) Email the SOP to the client
-//   3) Email the SOP to Joe
+//   1) Run an "analysis pass" through Anthropic that turns the raw structured
+//      SOP into a polished customer-ready deliverable: executive summary,
+//      narrative, annotated steps, observations, ranked automation
+//      opportunities, suggested next moves.
+//   2) Create a structured Notion page in the SOP Library DB
+//      (rich blocks rendered from the analysis output).
+//   3) Email the polished SOP to the client and to Joe.
 //
-// Env: NOTION_API_KEY, RESEND_API_KEY
+// Env: ANTHROPIC_API_KEY, NOTION_API_KEY, RESEND_API_KEY
 
+const Anthropic = require("@anthropic-ai/sdk");
 const { Client: NotionClient } = require("@notionhq/client");
 const { Resend } = require("resend");
 
 const SOP_LIBRARY_DB_ID = "362567cd-8712-8174-982d-ffa3a95e441c";
-
 const JOE_EMAIL = "joe@thepracticalai.co";
 const FROM = "Practical AI Co. <joe@thepracticalai.co>";
+const ANALYSIS_MODEL = "claude-sonnet-4-20250514";
+const ANALYSIS_MAX_TOKENS = 6000;
+
+// ============================================================
+// Analysis pass — turns raw SOP into customer-ready deliverable
+// ============================================================
+const ANALYSIS_SYSTEM_PROMPT = `You are a senior consultant at Practical AI Co., a small business AI consultancy in Franklin, TN. We help small business owners turn the knowledge in their heads into systems that run without them.
+
+A small business owner just completed a structured interview where they walked us through ONE of their processes in detail. Your job: turn that raw data into a polished, customer-ready document that demonstrates DEEP understanding of their business and identifies the highest-value automation opportunities.
+
+This document is the artifact of the conversation. It's what the client sees. It needs to feel like a $5,000 strategy deliverable: insightful, specific, actionable, beautifully written. Not generic. Not surface-level. Not consultant-speak.
+
+Think hard. Read carefully. Consider:
+- What's clever or counterintuitive about how this team runs this process?
+- Where is the owner spending mental cycles they don't realize?
+- Which steps are mechanical (ripe for automation) versus judgment-based (keep human)?
+- What's brittle? What only happens because someone is paying attention?
+- Which automation has the highest ROI for THIS specific business — not the obvious one?
+- What can we say about this process that shows we actually understood it?
+
+The client will be impressed by SPECIFICITY. Reference details from the interview. Quote them when it strengthens the point. Avoid generic statements that could apply to any business.
+
+Output a single JSON block wrapped in <ANALYSIS></ANALYSIS> tags. Use this exact structure (all string fields must be present):
+
+<ANALYSIS>
+{
+  "executiveSummary": "2-3 sharp sentences capturing the essence of this process AND Practical AI Co.'s POV on it. The owner should read this and feel understood.",
+  "openingNote": "1 paragraph (3-5 sentences). Warm opener that acknowledges what we heard and frames what this document contains. Builds trust.",
+  "currentStateNarrative": "1 flowing paragraph (4-6 sentences) describing how this process runs today. Storytelling, not bullets. Show you listened.",
+  "stepsAnnotated": [
+    {
+      "n": 1,
+      "action": "the step, cleaned up if needed",
+      "tool": "tool or system",
+      "owner": "who does it",
+      "output": "what this step produces, or empty string",
+      "observation": "Optional 1-line strategic note specific to this step. Only include if there's something insightful to say. Most steps will have empty string here."
+    }
+  ],
+  "whatsWorking": [
+    "1-line SPECIFIC observation about something this team does well. Reference a detail.",
+    "another (2-4 total)"
+  ],
+  "whatsBrittle": [
+    "1-line SPECIFIC observation about a fragile point. Reference a detail.",
+    "another (2-4 total)"
+  ],
+  "automationOpportunities": [
+    {
+      "rank": 1,
+      "name": "Punchy 3-5 word name",
+      "whatItDoes": "1-2 sentences. What gets automated, in concrete terms.",
+      "whyItMatters": "1-2 sentences. Why THIS business benefits specifically. Reference the interview.",
+      "timeSavings": "Rough estimate like '2-3 hours/week' or 'reclaims your Monday morning' or 'roughly 1 hour per customer'",
+      "complexity": "Low | Medium | High",
+      "tools": ["tool name", "tool name"],
+      "humanInLoop": "What the owner still owns: judgment calls, approvals, edge cases that should NOT be automated"
+    }
+  ],
+  "suggestedNextMoves": [
+    "A concrete, specific action the owner could take THIS WEEK (not 'consider' or 'evaluate' — a real action)",
+    "Second action",
+    "Third action (3 total max)"
+  ],
+  "closingNote": "1 paragraph (2-3 sentences). Motivate without being salesy. Reaffirm POV. Confident."
+}
+</ANALYSIS>
+
+Rules:
+- 3 to 5 automation opportunities. Ranked by leverage. NOT 10. Be selective.
+- Each opportunity must reference specific details from this process.
+- Avoid consulting jargon. Be sharp, direct, specific.
+- Tone: smart operator, warm, confident.
+- Every sentence earns its place. Cut what doesn't.
+- Output ONLY the JSON in tags. No other text.`;
+
+async function runAnalysisPass(anthropic, sop) {
+  const userMessage =
+    "Here is the structured SOP we just captured in an interview with this business owner.\n\n" +
+    "```json\n" +
+    JSON.stringify(sop, null, 2) +
+    "\n```\n\n" +
+    "Produce the polished analysis document per the format in your system prompt. Think carefully — this is going to the client.";
+
+  const response = await anthropic.messages.create({
+    model: ANALYSIS_MODEL,
+    max_tokens: ANALYSIS_MAX_TOKENS,
+    system: ANALYSIS_SYSTEM_PROMPT,
+    messages: [{ role: "user", content: userMessage }],
+  });
+
+  const text = (response.content || [])
+    .filter((b) => b.type === "text")
+    .map((b) => b.text)
+    .join("");
+  const match = text.match(/<ANALYSIS>([\s\S]*?)<\/ANALYSIS>/);
+  if (!match) {
+    throw new Error("Analysis output did not include <ANALYSIS> tags");
+  }
+  return JSON.parse(match[1].trim());
+}
 
 // ============================================================
 // Helpers
@@ -23,181 +127,190 @@ function esc(s) {
   );
 }
 
-function asList(arr) {
-  if (!Array.isArray(arr) || !arr.length) return [];
-  return arr.map(String);
-}
-
 function asArr(x) { return Array.isArray(x) ? x : []; }
 
-// ------- Plain-text rendering (email fallback) -----
-function renderSopText(sop) {
-  const lines = [];
-  lines.push("SOP: " + (sop.processName || ""));
-  lines.push((sop.client && sop.client.businessName) || "");
-  lines.push((sop.client && sop.client.firstName) || "");
-  lines.push("Date: " + (sop.date || ""));
-  lines.push("");
-  if (sop.frequency) lines.push("Frequency: " + sop.frequency);
-  if (sop.estimatedTime) lines.push("Estimated time: " + sop.estimatedTime);
-  if (sop.owner) lines.push("Owner: " + sop.owner);
-  if (sop.backup) lines.push("Backup: " + sop.backup);
-  lines.push("");
-  lines.push("TRIGGER");
-  lines.push(sop.trigger || "(none captured)");
-  lines.push("");
-  lines.push("DEPENDENCIES");
-  asList(sop.dependencies).forEach((d) => lines.push("  • " + d));
-  if (!asList(sop.dependencies).length) lines.push("  (none captured)");
-  lines.push("");
-  lines.push("STEPS");
-  asArr(sop.steps).forEach((s, i) => {
-    const n = s.n || (i + 1);
-    lines.push(`  ${n}. ${s.action || ""}`);
-    const meta = [];
-    if (s.tool) meta.push("Tool: " + s.tool);
-    if (s.owner) meta.push("Owner: " + s.owner);
-    if (s.output) meta.push("Output: " + s.output);
-    if (meta.length) lines.push("       " + meta.join(" | "));
-    asArr(s.branches).forEach((b) => lines.push("       If " + (b.if || "") + " -> " + (b.then || "")));
+function richText(content) {
+  const s = String(content || "");
+  // Notion rich_text rejects strings > 2000 chars per text run
+  if (s.length <= 1900) return [{ type: "text", text: { content: s } }];
+  const out = [];
+  for (let i = 0; i < s.length; i += 1900) {
+    out.push({ type: "text", text: { content: s.slice(i, i + 1900) } });
+  }
+  return out;
+}
+
+// ============================================================
+// Notion block builder — renders the analysis as a polished doc
+// ============================================================
+function buildNotionBlocks({ sop, analysis }) {
+  const blocks = [];
+
+  const heading2 = (t) => ({
+    object: "block", type: "heading_2",
+    heading_2: { rich_text: richText(t) },
   });
-  lines.push("");
-  lines.push("DECISIONS");
-  asArr(sop.decisions).forEach((d) => lines.push("  • If " + (d.if || "") + " -> " + (d.then || "")));
-  if (!asArr(sop.decisions).length) lines.push("  (none captured)");
-  lines.push("");
-  lines.push("FAILURE MODES");
-  asArr(sop.failureModes).forEach((f) => lines.push("  • " + (f.issue || "") + " -> " + (f.recovery || "")));
-  if (!asArr(sop.failureModes).length) lines.push("  (none captured)");
-  lines.push("");
-  lines.push("DEFINITION OF DONE");
-  lines.push(sop.definitionOfDone || "(none captured)");
-  return lines.join("\n");
-}
+  const heading3 = (t) => ({
+    object: "block", type: "heading_3",
+    heading_3: { rich_text: richText(t) },
+  });
+  const paragraph = (t, color) => ({
+    object: "block", type: "paragraph",
+    paragraph: { rich_text: richText(t || ""), ...(color ? { color } : {}) },
+  });
+  const bullet = (t) => ({
+    object: "block", type: "bulleted_list_item",
+    bulleted_list_item: { rich_text: richText(t) },
+  });
+  const numbered = (t) => ({
+    object: "block", type: "numbered_list_item",
+    numbered_list_item: { rich_text: richText(t) },
+  });
+  const callout = (t, opts = {}) => ({
+    object: "block", type: "callout",
+    callout: {
+      icon: opts.emoji ? { type: "emoji", emoji: opts.emoji } : { type: "emoji", emoji: "💡" },
+      color: opts.color || "blue_background",
+      rich_text: richText(t),
+    },
+  });
+  const divider = () => ({ object: "block", type: "divider", divider: {} });
 
-// ------- HTML email rendering -----
-function renderEmailHtml(sop, isJoe) {
-  const ulHtml = (arr) =>
-    asList(arr).length
-      ? "<ul style=\"margin:6px 0 14px;padding-left:20px;color:#172033;\">" +
-        asList(arr).map((x) => "<li style=\"margin:4px 0;\">" + esc(x) + "</li>").join("") +
-        "</ul>"
-      : "<p style=\"margin:6px 0 14px;color:#8A93A5;font-style:italic;\">(none captured)</p>";
+  // Executive summary (callout, top of page)
+  if (analysis.executiveSummary) {
+    blocks.push(callout(analysis.executiveSummary, { emoji: "🎯", color: "blue_background" }));
+  }
 
-  const paraHtml = (s) =>
-    "<p style=\"margin:6px 0 14px;color:#172033;\">" + esc(s || "(none captured)") + "</p>";
+  // Opening note
+  if (analysis.openingNote) {
+    blocks.push(paragraph(analysis.openingNote));
+  }
 
-  const stepsHtml = asArr(sop.steps).length
-    ? asArr(sop.steps).map((s, i) => {
-        const n = s.n || (i + 1);
-        const meta = [];
-        if (s.tool) meta.push("<b>Tool:</b> " + esc(s.tool));
-        if (s.owner) meta.push("<b>Owner:</b> " + esc(s.owner));
-        if (s.output) meta.push("<b>Output:</b> " + esc(s.output));
-        const metaLine = meta.length
-          ? `<div style="font-size:13px;color:#667085;margin-top:4px;">${meta.join("&nbsp; &middot; &nbsp;")}</div>`
-          : "";
-        const branches = asArr(s.branches).length
-          ? `<ul style="margin:6px 0 0;padding-left:18px;font-size:13px;color:#667085;">` +
-            asArr(s.branches).map((b) => `<li><b>If</b> ${esc(b.if || "")} &rarr; ${esc(b.then || "")}</li>`).join("") +
-            "</ul>"
-          : "";
-        return `<div style="padding:14px 16px;background:#FBF5EA;border:1px solid #E7DCCB;border-radius:12px;margin:10px 0;">
-          <div style="display:flex;gap:12px;align-items:baseline;">
-            <div style="font-family:Georgia,serif;font-weight:800;color:#2456FF;font-size:17px;min-width:22px;">${n}.</div>
-            <div style="font-size:15px;font-weight:700;color:#172033;line-height:1.4;">${esc(s.action || "")}</div>
-          </div>
-          ${metaLine}${branches}
-        </div>`;
-      }).join("")
-    : "<p style=\"color:#8A93A5;font-style:italic;\">(no steps captured)</p>";
+  // Quick-facts strip
+  const facts = [];
+  if (sop.frequency) facts.push("Frequency: " + sop.frequency);
+  if (sop.estimatedTime) facts.push("Est. time: " + sop.estimatedTime);
+  if (sop.owner) facts.push("Owner: " + sop.owner);
+  if (sop.backup) facts.push("Backup: " + sop.backup);
+  if (facts.length) {
+    blocks.push(callout(facts.join("  ·  "), { emoji: "📋", color: "gray_background" }));
+  }
 
-  const decisionsHtml = asArr(sop.decisions).length
-    ? `<ul style="margin:6px 0 14px;padding-left:20px;color:#172033;">` +
-      asArr(sop.decisions).map((d) => `<li><b>If</b> ${esc(d.if || "")} &rarr; ${esc(d.then || "")}</li>`).join("") +
-      "</ul>"
-    : "<p style=\"color:#8A93A5;font-style:italic;\">(none captured)</p>";
+  // Current State
+  if (analysis.currentStateNarrative) {
+    blocks.push(heading2("Current state"));
+    blocks.push(paragraph(analysis.currentStateNarrative));
+  }
 
-  const failuresHtml = asArr(sop.failureModes).length
-    ? `<ul style="margin:6px 0 14px;padding-left:20px;color:#172033;">` +
-      asArr(sop.failureModes).map((f) => `<li><b>${esc(f.issue || "")}</b> &rarr; ${esc(f.recovery || "")}</li>`).join("") +
-      "</ul>"
-    : "<p style=\"color:#8A93A5;font-style:italic;\">(none captured)</p>";
+  // Trigger
+  if (sop.trigger) {
+    blocks.push(heading2("Trigger"));
+    blocks.push(paragraph(sop.trigger));
+  }
 
-  const summaryGrid = [
-    { lbl: "Frequency", val: sop.frequency },
-    { lbl: "Est. time", val: sop.estimatedTime },
-    { lbl: "Owner", val: sop.owner },
-    { lbl: "Backup", val: sop.backup },
-  ].filter((x) => x.val);
+  // Dependencies
+  if (asArr(sop.dependencies).length) {
+    blocks.push(heading2("Dependencies"));
+    asArr(sop.dependencies).forEach((d) => blocks.push(bullet(d)));
+  }
 
-  const summaryHtml = summaryGrid.length
-    ? `<table cellpadding="10" cellspacing="0" style="margin:18px 0 24px;background:#FBF5EA;border:1px solid #E7DCCB;border-radius:12px;width:100%;border-collapse:separate;">
-        <tr>${summaryGrid.map((x) => `
-          <td style="font-size:13px;color:#172033;vertical-align:top;">
-            <div style="font-size:10px;font-weight:900;color:#667085;letter-spacing:0.14em;text-transform:uppercase;margin-bottom:2px;">${esc(x.lbl)}</div>
-            <div style="font-weight:700;">${esc(x.val)}</div>
-          </td>`).join("")}
-        </tr>
-      </table>`
-    : "";
+  // Workflow (annotated steps)
+  const annotatedSteps = asArr(analysis.stepsAnnotated).length
+    ? asArr(analysis.stepsAnnotated)
+    : asArr(sop.steps);
+  if (annotatedSteps.length) {
+    blocks.push(heading2("Workflow"));
+    annotatedSteps.forEach((s) => {
+      const action = s.action || "";
+      blocks.push(numbered(action));
+      const metaParts = [];
+      if (s.tool) metaParts.push("Tool: " + s.tool);
+      if (s.owner) metaParts.push("Owner: " + s.owner);
+      if (s.output) metaParts.push("Output: " + s.output);
+      if (metaParts.length) {
+        blocks.push(paragraph(metaParts.join("  ·  "), "gray"));
+      }
+      if (s.observation && s.observation.trim()) {
+        blocks.push(callout("💡 " + s.observation, { emoji: "💡", color: "yellow_background" }));
+      }
+      asArr(s.branches).forEach((b) => {
+        blocks.push(bullet("If " + (b.if || "") + "  →  " + (b.then || "")));
+      });
+    });
+  }
 
-  const greeting = isJoe
-    ? `<p style="margin:0 0 18px;">A new SOP just got captured. Full document below, also synced to the SOP Library in Notion.</p>`
-    : `<p style="margin:0 0 18px;">Here's the SOP we just captured together. It's also saved to your SOP Library in Notion. Print, share, or hand it to your next hire.</p>`;
+  // Decisions
+  if (asArr(sop.decisions).length) {
+    blocks.push(heading2("Decision points"));
+    asArr(sop.decisions).forEach((d) =>
+      blocks.push(bullet("If " + (d.if || "") + "  →  " + (d.then || "")))
+    );
+  }
 
-  return `<!DOCTYPE html>
-<html><body style="margin:0;padding:0;background:#FBF5EA;font-family:Helvetica,Arial,sans-serif;color:#172033;">
-  <div style="max-width:680px;margin:0 auto;padding:32px 24px;">
-    <div style="font-family:Georgia,serif;font-weight:800;color:#172033;font-size:24px;letter-spacing:-0.02em;margin-bottom:4px;">
-      Practical <span style="color:#2456FF;">AI</span> Co.
-    </div>
-    <div style="font-size:10px;font-weight:900;letter-spacing:0.26em;color:#667085;text-transform:uppercase;margin-bottom:28px;">
-      Systems that run so you can lead
-    </div>
+  // Failure modes
+  if (asArr(sop.failureModes).length) {
+    blocks.push(heading2("Failure modes & recovery"));
+    asArr(sop.failureModes).forEach((f) =>
+      blocks.push(bullet((f.issue || "") + "  →  " + (f.recovery || "")))
+    );
+  }
 
-    <h1 style="font-family:Georgia,serif;font-size:30px;letter-spacing:-0.025em;color:#172033;margin:0 0 6px;line-height:1.15;">
-      ${esc(sop.processName || "Process")}
-    </h1>
-    <div style="color:#667085;font-size:13px;font-weight:700;margin-bottom:18px;">
-      ${esc((sop.client && sop.client.businessName) || "")} &middot;
-      ${esc((sop.client && sop.client.firstName) || "")} &middot;
-      ${esc(sop.date || "")}
-    </div>
-    ${greeting}
-    ${summaryHtml}
+  // Definition of done
+  if (sop.definitionOfDone) {
+    blocks.push(heading2("Definition of done"));
+    blocks.push(paragraph(sop.definitionOfDone));
+  }
 
-    <hr style="border:0;border-top:1px solid #E7DCCB;margin:20px 0;" />
-    <h3 style="font-family:Georgia,serif;font-size:18px;margin:14px 0 4px;">Trigger</h3>
-    ${paraHtml(sop.trigger)}
+  // Strategic analysis — what's working / brittle
+  if (asArr(analysis.whatsWorking).length || asArr(analysis.whatsBrittle).length) {
+    blocks.push(divider());
+    blocks.push(heading2("Strategic observations"));
+  }
+  if (asArr(analysis.whatsWorking).length) {
+    blocks.push(heading3("What's working"));
+    asArr(analysis.whatsWorking).forEach((x) => blocks.push(bullet(x)));
+  }
+  if (asArr(analysis.whatsBrittle).length) {
+    blocks.push(heading3("What's brittle"));
+    asArr(analysis.whatsBrittle).forEach((x) => blocks.push(bullet(x)));
+  }
 
-    <h3 style="font-family:Georgia,serif;font-size:18px;margin:18px 0 4px;">Dependencies</h3>
-    ${ulHtml(sop.dependencies)}
+  // Automation opportunities (the headline deliverable)
+  if (asArr(analysis.automationOpportunities).length) {
+    blocks.push(divider());
+    blocks.push(heading2("Automation opportunities"));
+    blocks.push(paragraph(
+      "Ranked by leverage for this business. Each one references specifics we heard in the interview.",
+      "gray"
+    ));
+    asArr(analysis.automationOpportunities).forEach((opp) => {
+      const rank = String(opp.rank || "").padStart(2, "0");
+      blocks.push(heading3(`${rank} · ${opp.name || "Opportunity"}`));
+      if (opp.whatItDoes) blocks.push(paragraph(opp.whatItDoes));
+      const metaFacts = [];
+      if (opp.timeSavings) metaFacts.push("Time savings: " + opp.timeSavings);
+      if (opp.complexity) metaFacts.push("Complexity: " + opp.complexity);
+      if (asArr(opp.tools).length) metaFacts.push("Tools: " + asArr(opp.tools).join(", "));
+      if (metaFacts.length) blocks.push(paragraph(metaFacts.join("  ·  "), "gray"));
+      if (opp.whyItMatters) blocks.push(paragraph("Why it matters: " + opp.whyItMatters));
+      if (opp.humanInLoop) blocks.push(paragraph("Human in loop: " + opp.humanInLoop));
+    });
+  }
 
-    <h3 style="font-family:Georgia,serif;font-size:18px;margin:18px 0 4px;">Steps</h3>
-    ${stepsHtml}
+  // Suggested next moves
+  if (asArr(analysis.suggestedNextMoves).length) {
+    blocks.push(divider());
+    blocks.push(heading2("Suggested next moves"));
+    asArr(analysis.suggestedNextMoves).forEach((m) => blocks.push(numbered(m)));
+  }
 
-    <h3 style="font-family:Georgia,serif;font-size:18px;margin:18px 0 4px;">Decisions</h3>
-    ${decisionsHtml}
+  // Closing
+  if (analysis.closingNote) {
+    blocks.push(callout(analysis.closingNote, { emoji: "🤝", color: "blue_background" }));
+  }
 
-    <h3 style="font-family:Georgia,serif;font-size:18px;margin:18px 0 4px;">Failure modes</h3>
-    ${failuresHtml}
-
-    <h3 style="font-family:Georgia,serif;font-size:18px;margin:18px 0 4px;">Definition of done</h3>
-    ${paraHtml(sop.definitionOfDone)}
-
-    <div style="margin-top:36px;padding-top:18px;border-top:1px solid #E7DCCB;font-size:12px;color:#8A93A5;">
-      Practical AI Co. &middot; Franklin, TN &middot; <a href="mailto:joe@thepracticalai.co" style="color:#2456FF;text-decoration:none;">joe@thepracticalai.co</a>
-    </div>
-  </div>
-</body></html>`;
-}
-
-// ============================================================
-// Notion: properties + body blocks
-// ============================================================
-function richText(s) {
-  return [{ type: "text", text: { content: String(s || "") } }];
+  // Notion API max children per request is 100. Trim safely.
+  return blocks.slice(0, 95);
 }
 
 function buildNotionProperties({ firstName, businessName, email, sop }) {
@@ -211,112 +324,232 @@ function buildNotionProperties({ firstName, businessName, email, sop }) {
     "Owner": { rich_text: richText(sop.owner || "") },
     "Backup": { rich_text: richText(sop.backup || "") },
     "Estimated Time": { rich_text: richText(sop.estimatedTime || "") },
-    "Status": { status: { name: "Draft" } },
+    "Status": { select: { name: "Draft" } },
     "Last Updated": { date: { start: today } },
   };
-}
-
-// Build Notion block children for the SOP body
-function buildNotionBlocks(sop) {
-  const blocks = [];
-  const heading = (t) => ({
-    object: "block",
-    type: "heading_2",
-    heading_2: { rich_text: richText(t) },
-  });
-  const paragraph = (t) => ({
-    object: "block",
-    type: "paragraph",
-    paragraph: { rich_text: richText(t || "(none captured)") },
-  });
-  const bullet = (t) => ({
-    object: "block",
-    type: "bulleted_list_item",
-    bulleted_list_item: { rich_text: richText(t) },
-  });
-  const numbered = (t) => ({
-    object: "block",
-    type: "numbered_list_item",
-    numbered_list_item: { rich_text: richText(t) },
-  });
-
-  // Summary header
-  const summary = [];
-  if (sop.frequency) summary.push("Frequency: " + sop.frequency);
-  if (sop.estimatedTime) summary.push("Est. time: " + sop.estimatedTime);
-  if (sop.owner) summary.push("Owner: " + sop.owner);
-  if (sop.backup) summary.push("Backup: " + sop.backup);
-  if (summary.length) {
-    blocks.push({
-      object: "block",
-      type: "callout",
-      callout: {
-        icon: { type: "emoji", emoji: "📋" },
-        color: "blue_background",
-        rich_text: richText(summary.join("  ·  ")),
-      },
-    });
-  }
-
-  blocks.push(heading("Trigger"));
-  blocks.push(paragraph(sop.trigger));
-
-  blocks.push(heading("Dependencies"));
-  if (asList(sop.dependencies).length) {
-    asList(sop.dependencies).forEach((d) => blocks.push(bullet(d)));
-  } else {
-    blocks.push(paragraph("(none captured)"));
-  }
-
-  blocks.push(heading("Steps"));
-  if (asArr(sop.steps).length) {
-    asArr(sop.steps).forEach((s) => {
-      const action = s.action || "";
-      blocks.push(numbered(action));
-      const metaParts = [];
-      if (s.tool) metaParts.push("Tool: " + s.tool);
-      if (s.owner) metaParts.push("Owner: " + s.owner);
-      if (s.output) metaParts.push("Output: " + s.output);
-      if (metaParts.length) blocks.push(paragraph(metaParts.join("  ·  ")));
-      asArr(s.branches).forEach((b) => {
-        blocks.push(bullet("If " + (b.if || "") + "  →  " + (b.then || "")));
-      });
-    });
-  } else {
-    blocks.push(paragraph("(no steps captured)"));
-  }
-
-  blocks.push(heading("Decisions"));
-  if (asArr(sop.decisions).length) {
-    asArr(sop.decisions).forEach((d) =>
-      blocks.push(bullet("If " + (d.if || "") + "  →  " + (d.then || "")))
-    );
-  } else {
-    blocks.push(paragraph("(none captured)"));
-  }
-
-  blocks.push(heading("Failure modes"));
-  if (asArr(sop.failureModes).length) {
-    asArr(sop.failureModes).forEach((f) =>
-      blocks.push(bullet((f.issue || "") + "  →  " + (f.recovery || "")))
-    );
-  } else {
-    blocks.push(paragraph("(none captured)"));
-  }
-
-  blocks.push(heading("Definition of done"));
-  blocks.push(paragraph(sop.definitionOfDone));
-
-  // Notion API caps children per request at 100; we'll stay well under.
-  return blocks.slice(0, 95);
 }
 
 async function createSopPage(notion, props, children) {
   return notion.pages.create({
     parent: { database_id: SOP_LIBRARY_DB_ID },
     properties: props,
-    children: children,
+    children,
   });
+}
+
+// ============================================================
+// Email rendering — polished HTML
+// ============================================================
+function renderEmailHtml({ sop, analysis, isJoe, businessName, firstName }) {
+  const wrap = (inner) => `<!DOCTYPE html>
+<html><body style="margin:0;padding:0;background:#FBF5EA;font-family:Helvetica,Arial,sans-serif;color:#172033;">
+  <div style="max-width:680px;margin:0 auto;padding:40px 24px 60px;">
+    <div style="font-family:Georgia,serif;font-weight:800;color:#172033;font-size:24px;letter-spacing:-0.02em;margin-bottom:4px;">
+      Practical <span style="color:#2456FF;">AI</span> Co.
+    </div>
+    <div style="font-size:10px;font-weight:900;letter-spacing:0.26em;color:#667085;text-transform:uppercase;margin-bottom:28px;">
+      Systems that run so you can lead
+    </div>
+    ${inner}
+    <div style="margin-top:40px;padding-top:20px;border-top:1px solid #E7DCCB;font-size:12px;color:#8A93A5;">
+      Practical AI Co. &middot; Franklin, TN &middot; <a href="mailto:joe@thepracticalai.co" style="color:#2456FF;text-decoration:none;">joe@thepracticalai.co</a>
+    </div>
+  </div>
+</body></html>`;
+
+  const H2 = (t) => `<h2 style="font-family:Georgia,serif;font-size:22px;letter-spacing:-0.022em;color:#172033;margin:36px 0 12px;border-top:1px solid #E7DCCB;padding-top:28px;">${esc(t)}</h2>`;
+  const H3 = (t) => `<h3 style="font-family:Georgia,serif;font-size:17px;letter-spacing:-0.018em;color:#172033;margin:22px 0 6px;">${esc(t)}</h3>`;
+  const P = (t, opts = {}) => {
+    const color = opts.muted ? "#667085" : "#172033";
+    return `<p style="margin:8px 0;color:${color};line-height:1.6;font-size:15px;">${esc(t)}</p>`;
+  };
+  const UL = (arr) =>
+    arr.length
+      ? `<ul style="margin:8px 0 14px;padding-left:20px;color:#172033;">${arr.map((x) => `<li style="margin:6px 0;line-height:1.55;">${esc(x)}</li>`).join("")}</ul>`
+      : "";
+
+  const calloutBlock = (text, opts = {}) => `
+    <div style="background:${opts.bg || "rgba(36,86,255,0.08)"};border-left:3px solid ${opts.border || "#2456FF"};padding:18px 22px;border-radius:8px;margin:18px 0;color:#172033;font-size:15px;line-height:1.55;">
+      ${esc(text)}
+    </div>`;
+
+  const factsCallout = (() => {
+    const facts = [];
+    if (sop.frequency) facts.push(["Frequency", sop.frequency]);
+    if (sop.estimatedTime) facts.push(["Est. time", sop.estimatedTime]);
+    if (sop.owner) facts.push(["Owner", sop.owner]);
+    if (sop.backup) facts.push(["Backup", sop.backup]);
+    if (!facts.length) return "";
+    return `<table cellpadding="10" cellspacing="0" style="margin:14px 0 28px;background:#FBF5EA;border:1px solid #E7DCCB;border-radius:10px;width:100%;border-collapse:separate;">
+      <tr>${facts.map(([l, v]) => `
+        <td style="font-size:13px;color:#172033;vertical-align:top;">
+          <div style="font-size:10px;font-weight:900;color:#667085;letter-spacing:0.14em;text-transform:uppercase;margin-bottom:2px;">${esc(l)}</div>
+          <div style="font-weight:700;">${esc(v)}</div>
+        </td>`).join("")}
+      </tr>
+    </table>`;
+  })();
+
+  const stepsHtml = (() => {
+    const steps = asArr(analysis.stepsAnnotated).length ? asArr(analysis.stepsAnnotated) : asArr(sop.steps);
+    if (!steps.length) return P("(no steps captured)", { muted: true });
+    return steps.map((s, i) => {
+      const n = s.n || (i + 1);
+      const meta = [];
+      if (s.tool) meta.push("<b>Tool:</b> " + esc(s.tool));
+      if (s.owner) meta.push("<b>Owner:</b> " + esc(s.owner));
+      if (s.output) meta.push("<b>Output:</b> " + esc(s.output));
+      const metaLine = meta.length
+        ? `<div style="font-size:13px;color:#667085;margin-top:4px;">${meta.join("&nbsp; &middot; &nbsp;")}</div>`
+        : "";
+      const obs = s.observation && s.observation.trim()
+        ? `<div style="margin-top:8px;background:rgba(255,200,40,0.10);border-left:3px solid #B45309;padding:10px 14px;border-radius:6px;font-size:14px;color:#172033;line-height:1.5;"><b>Note:</b> ${esc(s.observation)}</div>`
+        : "";
+      const branches = asArr(s.branches).length
+        ? `<ul style="margin:6px 0 0;padding-left:18px;font-size:13px;color:#667085;">${asArr(s.branches).map((b) => `<li><b>If</b> ${esc(b.if || "")} &rarr; ${esc(b.then || "")}</li>`).join("")}</ul>`
+        : "";
+      return `<div style="padding:16px 18px;background:#FFFDF8;border:1px solid #E7DCCB;border-radius:12px;margin:12px 0;">
+        <div style="display:flex;gap:14px;align-items:baseline;">
+          <div style="font-family:Georgia,serif;font-weight:800;color:#2456FF;font-size:18px;min-width:24px;">${n}.</div>
+          <div style="font-size:15px;font-weight:700;color:#172033;line-height:1.4;">${esc(s.action || "")}</div>
+        </div>
+        ${metaLine}${obs}${branches}
+      </div>`;
+    }).join("");
+  })();
+
+  const opportunitiesHtml = (() => {
+    const opps = asArr(analysis.automationOpportunities);
+    if (!opps.length) return "";
+    return opps.map((o) => {
+      const rank = String(o.rank || "").padStart(2, "0");
+      const facts = [];
+      if (o.timeSavings) facts.push(["Time savings", o.timeSavings]);
+      if (o.complexity) facts.push(["Complexity", o.complexity]);
+      if (asArr(o.tools).length) facts.push(["Tools", asArr(o.tools).join(", ")]);
+      const factsHtml = facts.length
+        ? `<div style="margin-top:8px;font-size:13px;color:#667085;">${facts.map(([l, v]) => `<b>${esc(l)}:</b> ${esc(v)}`).join("&nbsp; &middot; &nbsp;")}</div>`
+        : "";
+      return `<div style="padding:20px 22px;background:#FFFDF8;border:1px solid #E7DCCB;border-radius:14px;margin:14px 0;">
+        <div style="font-size:11px;font-weight:900;color:#2456FF;letter-spacing:0.18em;text-transform:uppercase;margin-bottom:8px;">Opportunity ${rank}</div>
+        <div style="font-family:Georgia,serif;font-size:20px;font-weight:800;color:#172033;letter-spacing:-0.022em;margin-bottom:10px;">${esc(o.name || "")}</div>
+        ${o.whatItDoes ? P(o.whatItDoes) : ""}
+        ${factsHtml}
+        ${o.whyItMatters ? `<div style="margin-top:10px;font-size:14.5px;line-height:1.55;"><b>Why it matters:</b> ${esc(o.whyItMatters)}</div>` : ""}
+        ${o.humanInLoop ? `<div style="margin-top:6px;font-size:14px;color:#667085;line-height:1.55;"><b>Human in loop:</b> ${esc(o.humanInLoop)}</div>` : ""}
+      </div>`;
+    }).join("");
+  })();
+
+  const greeting = isJoe
+    ? P(`A new SOP just completed. Analysis below. Full record also synced to the SOP Library in Notion.`)
+    : "";
+
+  const inner = `
+    <h1 style="font-family:Georgia,serif;font-size:32px;letter-spacing:-0.028em;color:#172033;margin:0 0 6px;line-height:1.12;">${esc(sop.processName || "Process")}</h1>
+    <div style="color:#667085;font-size:13px;font-weight:700;margin-bottom:18px;">
+      ${esc(businessName)} &middot; ${esc(firstName)} &middot; ${esc(sop.date || "")}
+    </div>
+    ${greeting}
+    ${analysis.executiveSummary ? calloutBlock(analysis.executiveSummary, { bg: "rgba(36,86,255,0.08)", border: "#2456FF" }) : ""}
+    ${analysis.openingNote ? P(analysis.openingNote) : ""}
+    ${factsCallout}
+
+    ${analysis.currentStateNarrative ? H2("Current state") + P(analysis.currentStateNarrative) : ""}
+
+    ${sop.trigger ? H2("Trigger") + P(sop.trigger) : ""}
+    ${asArr(sop.dependencies).length ? H2("Dependencies") + UL(asArr(sop.dependencies)) : ""}
+
+    ${H2("Workflow")}
+    ${stepsHtml}
+
+    ${asArr(sop.decisions).length ? H2("Decision points") + UL(asArr(sop.decisions).map((d) => `If ${d.if || ""} → ${d.then || ""}`)) : ""}
+    ${asArr(sop.failureModes).length ? H2("Failure modes & recovery") + UL(asArr(sop.failureModes).map((f) => `${f.issue || ""} → ${f.recovery || ""}`)) : ""}
+    ${sop.definitionOfDone ? H2("Definition of done") + P(sop.definitionOfDone) : ""}
+
+    ${(asArr(analysis.whatsWorking).length || asArr(analysis.whatsBrittle).length) ? H2("Strategic observations") : ""}
+    ${asArr(analysis.whatsWorking).length ? H3("What's working") + UL(asArr(analysis.whatsWorking)) : ""}
+    ${asArr(analysis.whatsBrittle).length ? H3("What's brittle") + UL(asArr(analysis.whatsBrittle)) : ""}
+
+    ${asArr(analysis.automationOpportunities).length ? H2("Automation opportunities") + P("Ranked by leverage for this business. Each one references specifics we heard in the interview.", { muted: true }) + opportunitiesHtml : ""}
+
+    ${asArr(analysis.suggestedNextMoves).length ? H2("Suggested next moves") + `<ol style="margin:10px 0 14px;padding-left:22px;color:#172033;">${asArr(analysis.suggestedNextMoves).map((m) => `<li style="margin:8px 0;line-height:1.55;">${esc(m)}</li>`).join("")}</ol>` : ""}
+
+    ${analysis.closingNote ? calloutBlock(analysis.closingNote, { bg: "rgba(47,143,91,0.08)", border: "#2F8F5B" }) : ""}
+  `;
+
+  return wrap(inner);
+}
+
+// Plain-text fallback for email clients that don't render HTML
+function renderPlainText({ sop, analysis }) {
+  const lines = [];
+  lines.push("SOP: " + (sop.processName || ""));
+  lines.push("");
+  if (analysis.executiveSummary) {
+    lines.push(analysis.executiveSummary);
+    lines.push("");
+  }
+  if (analysis.currentStateNarrative) {
+    lines.push("CURRENT STATE");
+    lines.push(analysis.currentStateNarrative);
+    lines.push("");
+  }
+  lines.push("WORKFLOW");
+  const steps = asArr(analysis.stepsAnnotated).length ? asArr(analysis.stepsAnnotated) : asArr(sop.steps);
+  steps.forEach((s, i) => {
+    const n = s.n || (i + 1);
+    lines.push("  " + n + ". " + (s.action || ""));
+    const meta = [];
+    if (s.tool) meta.push("Tool: " + s.tool);
+    if (s.owner) meta.push("Owner: " + s.owner);
+    if (s.output) meta.push("Output: " + s.output);
+    if (meta.length) lines.push("       " + meta.join(" | "));
+    if (s.observation && s.observation.trim()) lines.push("       Note: " + s.observation);
+  });
+  lines.push("");
+  if (asArr(analysis.automationOpportunities).length) {
+    lines.push("AUTOMATION OPPORTUNITIES");
+    asArr(analysis.automationOpportunities).forEach((o) => {
+      const rank = String(o.rank || "").padStart(2, "0");
+      lines.push("  " + rank + ". " + (o.name || ""));
+      if (o.whatItDoes) lines.push("       " + o.whatItDoes);
+      if (o.timeSavings) lines.push("       Time savings: " + o.timeSavings);
+    });
+    lines.push("");
+  }
+  if (asArr(analysis.suggestedNextMoves).length) {
+    lines.push("NEXT MOVES");
+    asArr(analysis.suggestedNextMoves).forEach((m, i) => lines.push("  " + (i + 1) + ". " + m));
+  }
+  return lines.join("\n");
+}
+
+// ============================================================
+// Fallback analysis (used if the analysis pass fails)
+// ============================================================
+function buildFallbackAnalysis(sop) {
+  return {
+    executiveSummary:
+      `Captured a working SOP for ${sop.processName || "this process"}. Below is the workflow as documented, ready to hand off.`,
+    openingNote:
+      "Here's the process as we captured it together. We weren't able to run our strategic analysis pass this round, but everything you walked through is recorded faithfully below.",
+    currentStateNarrative: sop.trigger || "",
+    stepsAnnotated: asArr(sop.steps).map((s, i) => ({
+      n: s.n || (i + 1),
+      action: s.action || "",
+      tool: s.tool || "",
+      owner: s.owner || "",
+      output: s.output || "",
+      observation: "",
+    })),
+    whatsWorking: [],
+    whatsBrittle: [],
+    automationOpportunities: [],
+    suggestedNextMoves: [],
+    closingNote:
+      "Strategic analysis pass didn't run cleanly this session. Joe will review the captured SOP and follow up with observations and automation opportunities directly.",
+  };
 }
 
 // ============================================================
@@ -343,36 +576,39 @@ module.exports = async (req, res) => {
     return res.status(400).json({ error: "Missing firstName, businessName, email, or sop" });
   }
 
+  const anthropicKey = process.env.ANTHROPIC_API_KEY;
   const notionKey = process.env.NOTION_API_KEY;
   const resendKey = process.env.RESEND_API_KEY;
-  if (!notionKey) return res.status(500).json({ error: "NOTION_API_KEY is not set" });
-  if (!resendKey) return res.status(500).json({ error: "RESEND_API_KEY is not set" });
+  if (!anthropicKey) return res.status(500).json({ error: "ANTHROPIC_API_KEY not set" });
+  if (!notionKey) return res.status(500).json({ error: "NOTION_API_KEY not set" });
+  if (!resendKey) return res.status(500).json({ error: "RESEND_API_KEY not set" });
 
-  // Notion page write
-  let notionPromise;
-  if (SOP_LIBRARY_DB_ID && !SOP_LIBRARY_DB_ID.startsWith("TODO")) {
-    const notion = new NotionClient({ auth: notionKey });
-    const props = buildNotionProperties({ firstName, businessName, email, sop });
-    const blocks = buildNotionBlocks(sop);
-    notionPromise = createSopPage(notion, props, blocks).catch(async (err) => {
-      // If Status is a Select rather than Status type, fall back
-      const msg = (err && err.message) || "";
-      if (/status/i.test(msg) && /select/i.test(msg)) {
-        const fallbackProps = Object.assign({}, props, {
-          Status: { select: { name: "Draft" } },
-        });
-        return createSopPage(notion, fallbackProps, blocks);
-      }
-      throw err;
-    });
-  } else {
-    notionPromise = Promise.reject(new Error("SOP_LIBRARY_DB_ID not configured yet"));
+  const anthropic = new Anthropic({ apiKey: anthropicKey });
+
+  // 1. Analysis pass (graceful fallback if it fails)
+  let analysis;
+  let analysisError = null;
+  try {
+    analysis = await runAnalysisPass(anthropic, sop);
+  } catch (err) {
+    console.error("Analysis pass failed:", err);
+    analysisError = err && err.message;
+    analysis = buildFallbackAnalysis(sop);
   }
 
+  // 2. Build deliverables in parallel
+  const notion = new NotionClient({ auth: notionKey });
   const resend = new Resend(resendKey);
-  const clientHtml = renderEmailHtml(sop, false);
-  const joeHtml = renderEmailHtml(sop, true);
-  const textBody = renderSopText(sop);
+
+  const notionPromise = createSopPage(
+    notion,
+    buildNotionProperties({ firstName, businessName, email, sop }),
+    buildNotionBlocks({ sop, analysis })
+  );
+
+  const clientHtml = renderEmailHtml({ sop, analysis, isJoe: false, businessName, firstName });
+  const joeHtml = renderEmailHtml({ sop, analysis, isJoe: true, businessName, firstName });
+  const textBody = renderPlainText({ sop, analysis });
   const processLabel = sop.processName || "process";
 
   const clientEmailPromise = resend.emails.send({
@@ -408,16 +644,12 @@ module.exports = async (req, res) => {
   };
 
   console.log("SOP complete:", {
-    firstName,
-    businessName,
-    email,
+    firstName, businessName, email,
     processName: sop.processName,
-    notion: summarize(notionResult),
-    notionErr: reasonOf(notionResult),
-    clientEmail: summarize(clientEmailResult),
-    clientEmailErr: reasonOf(clientEmailResult),
-    joeEmail: summarize(joeEmailResult),
-    joeEmailErr: reasonOf(joeEmailResult),
+    analysisError,
+    notion: summarize(notionResult), notionErr: reasonOf(notionResult),
+    clientEmail: summarize(clientEmailResult), clientEmailErr: reasonOf(clientEmailResult),
+    joeEmail: summarize(joeEmailResult), joeEmailErr: reasonOf(joeEmailResult),
   });
 
   return res.status(200).json({
@@ -428,6 +660,8 @@ module.exports = async (req, res) => {
       notion: reasonOf(notionResult),
       clientEmail: reasonOf(clientEmailResult),
       joeEmail: reasonOf(joeEmailResult),
+      analysis: analysisError,
     },
+    analysis,
   });
 };

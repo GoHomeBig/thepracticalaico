@@ -336,7 +336,106 @@
     .complete-card p { color: var(--muted); font-size: 16px; margin: 0 0 22px; }
     .complete-actions { display: flex; gap: 12px; flex-wrap: wrap; }
 
-    /* SOP document */
+    /* Analyzing state */
+    .analyzing-bar {
+      height: 4px;
+      background: var(--line);
+      border-radius: 999px;
+      overflow: hidden;
+      margin-top: 18px;
+    }
+    .analyzing-bar-fill {
+      width: 30%;
+      height: 100%;
+      background: linear-gradient(90deg, transparent, var(--blue), transparent);
+      animation: scan 1.6s linear infinite;
+    }
+    @keyframes scan {
+      0% { transform: translateX(-100%); }
+      100% { transform: translateX(400%); }
+    }
+
+    /* Polished SOP document (analysis-driven) */
+    .exec-summary {
+      background: rgba(36, 86, 255, 0.08);
+      border-left: 3px solid var(--blue);
+      padding: 18px 22px;
+      border-radius: 8px;
+      margin: 0 0 22px;
+      color: var(--charcoal);
+      font-size: 16px;
+      line-height: 1.55;
+    }
+    .opening-note { font-size: 16px; line-height: 1.6; color: var(--charcoal); margin: 0 0 24px; }
+    .step-observation {
+      margin-top: 10px;
+      background: rgba(255, 200, 40, 0.10);
+      border-left: 3px solid #B45309;
+      padding: 10px 14px;
+      border-radius: 6px;
+      font-size: 14px;
+      color: var(--charcoal);
+      line-height: 1.55;
+    }
+    .step-observation b { color: #B45309; margin-right: 4px; }
+
+    .opp-card {
+      padding: 22px 24px;
+      background: var(--paper);
+      border: 1px solid var(--line);
+      border-radius: 14px;
+      margin: 14px 0;
+      box-shadow: var(--shadow-soft);
+    }
+    .opp-rank {
+      font-size: 11px;
+      font-weight: 900;
+      color: var(--blue);
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      margin-bottom: 8px;
+    }
+    .opp-name {
+      font-family: Fraunces, Georgia, serif;
+      font-size: 22px;
+      font-weight: 800;
+      color: var(--charcoal);
+      letter-spacing: -0.022em;
+      margin-bottom: 10px;
+      line-height: 1.2;
+    }
+    .opp-what { font-size: 15px; color: var(--charcoal); margin: 6px 0; line-height: 1.55; }
+    .opp-facts {
+      font-size: 13px;
+      color: var(--muted);
+      margin: 10px 0 6px;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 14px;
+    }
+    .opp-facts b { color: var(--charcoal); font-weight: 800; }
+    .opp-detail {
+      margin-top: 8px;
+      font-size: 14.5px;
+      color: var(--charcoal);
+      line-height: 1.55;
+    }
+    .opp-detail b { font-weight: 800; }
+    .opp-human { font-size: 14px; color: var(--muted); line-height: 1.55; margin-top: 4px; }
+    .opp-human b { color: var(--charcoal); }
+
+    .closing-note {
+      background: rgba(47, 143, 91, 0.08);
+      border-left: 3px solid var(--green);
+      padding: 18px 22px;
+      border-radius: 8px;
+      margin: 28px 0 0;
+      color: var(--charcoal);
+      font-size: 15px;
+      line-height: 1.55;
+    }
+
+    /* SOP document (shared) */
     .sop-document {
       background: var(--paper);
       border: 1px solid var(--line);
@@ -567,9 +666,17 @@
 
       <!-- COMPLETE -->
       <section id="completeView" hidden>
-        <div class="complete-card">
-          <h2 id="completeHeading">Your SOP has been sent to your email.</h2>
-          <p>It's also saved to your SOP Library in Notion. Want to capture another process? Just refresh this page.</p>
+        <!-- Analyzing state -->
+        <div class="complete-card" id="analyzingCard" hidden>
+          <h2>Building your deliverable&hellip;</h2>
+          <p>Running your process through Claude to extract observations, identify automation opportunities, and write the customer-ready document. This takes about 20&ndash;30 seconds.</p>
+          <div class="analyzing-bar"><div class="analyzing-bar-fill"></div></div>
+        </div>
+
+        <!-- Final state -->
+        <div class="complete-card" id="resultCard" hidden>
+          <h2 id="completeHeading">Your SOP is ready.</h2>
+          <p>It's saved to your SOP Library in Notion and on its way to your inbox. Want to capture another process? Just refresh this page.</p>
           <div class="complete-actions">
             <button class="button button-primary" id="copyBtn" type="button">Copy SOP</button>
             <button class="button button-light" id="printBtn" type="button">Download PDF</button>
@@ -761,11 +868,14 @@
     });
 
     async function onComplete(sop) {
-      renderDocument(sop);
       $('chatView').hidden = true;
       $('completeView').hidden = false;
+      $('analyzingCard').hidden = false;
+      $('resultCard').hidden = true;
+      $('documentView').innerHTML = '';
       window.scrollTo({ top: 0, behavior: 'instant' });
 
+      let result = null;
       try {
         const res = await fetch('/api/sop-complete', {
           method: 'POST',
@@ -781,18 +891,133 @@
           const body = await res.json().catch(() => ({ error: 'Unknown' }));
           throw new Error(body.error || ('HTTP ' + res.status));
         }
-        const result = await res.json();
-        const failures = [];
-        if (result.notion === 'rejected') failures.push('Notion (' + (result.errors?.notion || 'unknown') + ')');
-        if (result.clientEmail === 'rejected') failures.push('client email (' + (result.errors?.clientEmail || 'unknown') + ')');
-        if (result.joeEmail === 'rejected') failures.push("Joe's email (" + (result.errors?.joeEmail || 'unknown') + ')');
-        if (failures.length) {
-          showError($('completeErr'), 'SOP captured. Couldn\'t fully sync: ' + failures.join('; ') + '. Joe will follow up.');
-        }
+        result = await res.json();
       } catch (err) {
         console.error(err);
-        showError($('completeErr'), 'SOP captured but failed to sync upstream. Joe will follow up.');
       }
+
+      // Show final state regardless of partial failures
+      $('analyzingCard').hidden = true;
+      $('resultCard').hidden = false;
+
+      const analysis = (result && result.analysis) || null;
+      renderAnalysisDocument(sop, analysis);
+
+      if (!result) {
+        showError($('completeErr'), 'SOP captured but the analysis pass failed. Joe will follow up directly.');
+        return;
+      }
+
+      const failures = [];
+      if (result.notion === 'rejected') failures.push('Notion (' + (result.errors?.notion || 'unknown') + ')');
+      if (result.clientEmail === 'rejected') failures.push('client email (' + (result.errors?.clientEmail || 'unknown') + ')');
+      if (result.joeEmail === 'rejected') failures.push("Joe's email (" + (result.errors?.joeEmail || 'unknown') + ')');
+      if (failures.length) {
+        showError($('completeErr'), 'SOP delivered. Some sync issues: ' + failures.join('; ') + '. Joe will follow up.');
+      }
+    }
+
+    function renderAnalysisDocument(sop, analysis) {
+      const esc = (s) => String(s == null ? '' : s).replace(/[&<>"']/g, (c) => ({ '&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;' }[c]));
+      const asArr = (x) => Array.isArray(x) ? x : [];
+      const list = (arr) => arr.length
+        ? '<ul>' + arr.map((x) => '<li>' + esc(x) + '</li>').join('') + '</ul>'
+        : '<p style="color:var(--muted);font-style:italic;">None captured.</p>';
+      const para = (s) => s ? '<p>' + esc(s) + '</p>' : '<p style="color:var(--muted);font-style:italic;">None captured.</p>';
+
+      const a = analysis || {};
+      const steps = asArr(a.stepsAnnotated).length ? asArr(a.stepsAnnotated) : asArr(sop.steps);
+
+      const stepsHtml = steps.length
+        ? steps.map((s, i) => {
+            const n = s.n || (i + 1);
+            const metaParts = [];
+            if (s.tool) metaParts.push('<span><b>Tool:</b> ' + esc(s.tool) + '</span>');
+            if (s.owner) metaParts.push('<span><b>Owner:</b> ' + esc(s.owner) + '</span>');
+            if (s.output) metaParts.push('<span><b>Output:</b> ' + esc(s.output) + '</span>');
+            const meta = metaParts.length ? '<div class="step-meta">' + metaParts.join('') + '</div>' : '';
+            const obs = s.observation && String(s.observation).trim()
+              ? '<div class="step-observation"><b>Note:</b> ' + esc(s.observation) + '</div>'
+              : '';
+            const branches = asArr(s.branches).length
+              ? '<ul class="branches">' + asArr(s.branches).map((b) => '<li><b>If</b> ' + esc(b.if || '') + ' &rarr; ' + esc(b.then || '') + '</li>').join('') + '</ul>'
+              : '';
+            return '<div class="sop-step">'
+              + '<div class="step-head"><div class="step-n">' + n + '.</div><div class="step-action">' + esc(s.action || '') + '</div></div>'
+              + meta + obs + branches
+              + '</div>';
+          }).join('')
+        : '<p style="color:var(--muted);font-style:italic;">No steps captured.</p>';
+
+      const decisionsHtml = asArr(sop.decisions).length
+        ? '<ul>' + asArr(sop.decisions).map((d) => '<li><b>If</b> ' + esc(d.if || '') + ' &rarr; ' + esc(d.then || '') + '</li>').join('') + '</ul>'
+        : '';
+      const failuresHtml = asArr(sop.failureModes).length
+        ? '<ul>' + asArr(sop.failureModes).map((f) => '<li><b>' + esc(f.issue || '') + '</b> &rarr; ' + esc(f.recovery || '') + '</li>').join('') + '</ul>'
+        : '';
+
+      const summary = [
+        { lbl: 'Frequency', val: sop.frequency },
+        { lbl: 'Est. time', val: sop.estimatedTime },
+        { lbl: 'Owner', val: sop.owner },
+        { lbl: 'Backup', val: sop.backup },
+      ].filter((x) => x.val);
+
+      const oppsHtml = asArr(a.automationOpportunities).length
+        ? asArr(a.automationOpportunities).map((o) => {
+            const rank = String(o.rank || '').padStart(2, '0');
+            const facts = [];
+            if (o.timeSavings) facts.push('<span><b>Time savings:</b> ' + esc(o.timeSavings) + '</span>');
+            if (o.complexity) facts.push('<span><b>Complexity:</b> ' + esc(o.complexity) + '</span>');
+            if (asArr(o.tools).length) facts.push('<span><b>Tools:</b> ' + esc(asArr(o.tools).join(', ')) + '</span>');
+            return '<div class="opp-card">'
+              + '<div class="opp-rank">Opportunity ' + rank + '</div>'
+              + '<div class="opp-name">' + esc(o.name || '') + '</div>'
+              + (o.whatItDoes ? '<div class="opp-what">' + esc(o.whatItDoes) + '</div>' : '')
+              + (facts.length ? '<div class="opp-facts">' + facts.join('') + '</div>' : '')
+              + (o.whyItMatters ? '<div class="opp-detail"><b>Why it matters:</b> ' + esc(o.whyItMatters) + '</div>' : '')
+              + (o.humanInLoop ? '<div class="opp-human"><b>Human in loop:</b> ' + esc(o.humanInLoop) + '</div>' : '')
+              + '</div>';
+          }).join('')
+        : '';
+
+      const nextHtml = asArr(a.suggestedNextMoves).length
+        ? '<ol>' + asArr(a.suggestedNextMoves).map((m) => '<li>' + esc(m) + '</li>').join('') + '</ol>'
+        : '';
+
+      $('documentView').innerHTML = `
+        <div class="sop-title">${esc(sop.processName || 'Untitled Process')}</div>
+        <div class="sop-doc-meta">${esc((sop.client && sop.client.businessName) || state.businessName)} &middot; ${esc((sop.client && sop.client.firstName) || state.firstName)} &middot; ${esc(sop.date || new Date().toISOString().slice(0,10))}</div>
+
+        ${a.executiveSummary ? '<div class="exec-summary">' + esc(a.executiveSummary) + '</div>' : ''}
+        ${a.openingNote ? '<p class="opening-note">' + esc(a.openingNote) + '</p>' : ''}
+
+        ${summary.length ? `<div class="sop-summary-grid">${summary.map(s => '<div><span class="lbl">' + esc(s.lbl) + '</span><span class="val">' + esc(s.val) + '</span></div>').join('')}</div>` : ''}
+
+        ${a.currentStateNarrative ? '<h3>Current state</h3>' + para(a.currentStateNarrative) : ''}
+
+        ${sop.trigger ? '<h3>Trigger</h3>' + para(sop.trigger) : ''}
+        ${asArr(sop.dependencies).length ? '<h3>Dependencies</h3>' + list(asArr(sop.dependencies)) : ''}
+
+        <h3>Workflow</h3>
+        ${stepsHtml}
+
+        ${decisionsHtml ? '<h3>Decision points</h3>' + decisionsHtml : ''}
+        ${failuresHtml ? '<h3>Failure modes &amp; recovery</h3>' + failuresHtml : ''}
+        ${sop.definitionOfDone ? '<h3>Definition of done</h3>' + para(sop.definitionOfDone) : ''}
+
+        ${(asArr(a.whatsWorking).length || asArr(a.whatsBrittle).length) ? '<h3>Strategic observations</h3>' : ''}
+        ${asArr(a.whatsWorking).length ? '<h4 style="color:var(--green);">What is working</h4>' + list(asArr(a.whatsWorking)) : ''}
+        ${asArr(a.whatsBrittle).length ? '<h4 style="color:#B45309;">What is brittle</h4>' + list(asArr(a.whatsBrittle)) : ''}
+
+        ${oppsHtml ? '<h3>Automation opportunities</h3><p style="color:var(--muted);font-size:14px;margin:-4px 0 16px;">Ranked by leverage for your business.</p>' + oppsHtml : ''}
+
+        ${nextHtml ? '<h3>Suggested next moves</h3>' + nextHtml : ''}
+
+        ${a.closingNote ? '<div class="closing-note">' + esc(a.closingNote) + '</div>' : ''}
+      `;
+
+      $('completeHeading').textContent = `${sop.processName || 'Your SOP'} is ready.`;
     }
 
     function renderDocument(sop) {
