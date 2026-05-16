@@ -1,0 +1,879 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="robots" content="noindex,nofollow" />
+  <title>READY SOP Builder &middot; Practical AI Co.</title>
+  <meta name="description" content="A private interview that turns one of your processes into a runnable SOP." />
+  <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32.png" />
+  <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16.png" />
+  <link rel="icon" type="image/x-icon" href="/favicon.ico" />
+  <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
+  <meta name="theme-color" content="#2456FF" />
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=Fraunces:opsz,wght@9..144,700;9..144,800&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --ink: #111827;
+      --charcoal: #172033;
+      --blue: #2456FF;
+      --blue-dark: #173BD7;
+      --cream: #FBF5EA;
+      --paper: #FFFDF8;
+      --green: #2F8F5B;
+      --muted: #667085;
+      --muted-2: #8A93A5;
+      --line: #E7DCCB;
+      --white: #FFFFFF;
+      --shadow: 0 20px 60px rgba(17, 24, 39, 0.12);
+      --shadow-soft: 0 16px 40px rgba(17, 24, 39, 0.08);
+      --radius: 28px;
+    }
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body {
+      margin: 0;
+      font-family: Inter, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      color: var(--ink);
+      background: var(--cream);
+      line-height: 1.5;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+    a { color: inherit; text-decoration: none; }
+    .container { width: min(820px, calc(100% - 40px)); margin: 0 auto; }
+
+    /* Nav */
+    .nav {
+      background: rgba(251, 245, 234, 0.92);
+      backdrop-filter: blur(16px);
+      border-bottom: 1px solid rgba(231, 220, 203, 0.78);
+    }
+    .nav-inner {
+      min-height: 80px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 24px;
+    }
+    .brand { display: inline-flex; align-items: center; gap: 12px; }
+    .brand-mark {
+      width: 46px;
+      height: 46px;
+      border-radius: 14px;
+      background: var(--paper);
+      border: 1px solid rgba(23, 32, 51, 0.10);
+      box-shadow: 0 10px 24px rgba(17, 24, 39, 0.07);
+      display: grid;
+      place-items: center;
+      flex: 0 0 auto;
+    }
+    .repeat-logo { width: 30px; height: 30px; }
+    .wordmark { display: flex; flex-direction: column; gap: 4px; }
+    .wordmark-title {
+      font-family: Fraunces, Georgia, serif;
+      font-weight: 800;
+      letter-spacing: -0.035em;
+      color: var(--charcoal);
+      font-size: 26px;
+      line-height: 1.05;
+    }
+    .wordmark-title .ai { color: var(--blue); }
+    .wordmark-subtitle {
+      color: var(--muted);
+      font-size: 9px;
+      font-weight: 900;
+      text-transform: uppercase;
+      letter-spacing: 0.26em;
+      line-height: 1;
+    }
+    .tool-pill {
+      font-size: 11px;
+      font-weight: 900;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: var(--blue);
+      padding: 7px 13px;
+      border-radius: 999px;
+      background: rgba(36, 86, 255, 0.10);
+    }
+    @media (max-width: 640px) {
+      .wordmark-subtitle { display: none; }
+      .tool-pill { font-size: 10px; padding: 6px 10px; letter-spacing: 0.14em; }
+    }
+
+    /* Buttons */
+    .button {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 48px;
+      padding: 0 24px;
+      border-radius: 999px;
+      border: 0;
+      font-family: inherit;
+      font-size: 15px;
+      font-weight: 800;
+      cursor: pointer;
+      transition: transform 180ms ease, box-shadow 180ms ease, background 180ms ease, opacity 180ms ease;
+      white-space: nowrap;
+    }
+    .button:hover { transform: translateY(-1px); }
+    .button:disabled { opacity: 0.5; cursor: not-allowed; transform: none; }
+    .button-primary {
+      background: var(--blue);
+      color: var(--white);
+      box-shadow: 0 14px 32px rgba(36, 86, 255, 0.22);
+    }
+    .button-primary:hover:not(:disabled) { background: var(--blue-dark); }
+    .button-light {
+      background: var(--paper);
+      color: var(--charcoal);
+      border: 1px solid var(--line);
+      box-shadow: 0 10px 24px rgba(17, 24, 39, 0.06);
+    }
+
+    main { flex: 1; padding: 64px 0 96px; }
+    .kicker {
+      color: var(--blue);
+      font-size: 12px;
+      font-weight: 900;
+      text-transform: uppercase;
+      letter-spacing: 0.18em;
+      margin-bottom: 16px;
+    }
+    h1 {
+      font-family: Fraunces, Georgia, serif;
+      font-size: clamp(34px, 4.6vw, 52px);
+      line-height: 1.08;
+      letter-spacing: -0.03em;
+      color: var(--charcoal);
+      margin: 0 0 20px;
+    }
+    .lede {
+      font-size: 17px;
+      color: var(--muted);
+      line-height: 1.6;
+      margin: 0 0 28px;
+      max-width: 640px;
+    }
+
+    /* Intake */
+    .intake-card {
+      background: var(--paper);
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      padding: 44px 44px 40px;
+      box-shadow: var(--shadow-soft);
+    }
+    .intake-form { display: grid; gap: 18px; margin-top: 8px; }
+    .intake-form label { display: grid; gap: 8px; }
+    .intake-form label span {
+      font-size: 13px;
+      font-weight: 800;
+      color: var(--charcoal);
+      letter-spacing: 0.01em;
+    }
+    .intake-form label span small {
+      font-weight: 600;
+      color: var(--muted-2);
+      letter-spacing: 0;
+      text-transform: none;
+      font-size: 12px;
+      margin-left: 6px;
+    }
+    .intake-form input {
+      font-family: inherit;
+      font-size: 16px;
+      padding: 14px 16px;
+      border: 1px solid var(--line);
+      border-radius: 14px;
+      background: var(--cream);
+      color: var(--charcoal);
+      transition: border-color 160ms ease, box-shadow 160ms ease;
+    }
+    .intake-form input:focus {
+      outline: none;
+      border-color: var(--blue);
+      box-shadow: 0 0 0 4px rgba(36, 86, 255, 0.10);
+    }
+    .intake-form button { margin-top: 12px; }
+    .intake-note { font-size: 13px; color: var(--muted); margin-top: 18px; }
+    @media (max-width: 640px) { .intake-card { padding: 32px 24px; } }
+
+    /* Progress */
+    .progress { margin-bottom: 28px; }
+    .progress-zones {
+      display: grid;
+      grid-template-columns: repeat(5, 1fr);
+      gap: 8px;
+      margin-bottom: 14px;
+    }
+    .zone-pill {
+      padding: 10px 8px;
+      border-radius: 12px;
+      background: var(--paper);
+      border: 1px solid var(--line);
+      font-size: 10.5px;
+      font-weight: 800;
+      letter-spacing: 0.04em;
+      color: var(--muted);
+      text-align: center;
+      transition: all 200ms ease;
+    }
+    .zone-pill.active { background: var(--charcoal); color: var(--white); border-color: var(--charcoal); }
+    .zone-pill.done {
+      background: rgba(47, 143, 91, 0.10);
+      color: var(--green);
+      border-color: rgba(47, 143, 91, 0.30);
+    }
+    .progress-bar { height: 4px; background: var(--line); border-radius: 999px; overflow: hidden; }
+    .progress-fill {
+      height: 100%;
+      background: var(--blue);
+      width: 0%;
+      transition: width 320ms ease;
+    }
+
+    /* Chat */
+    .chat {
+      background: var(--paper);
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      padding: 28px;
+      box-shadow: var(--shadow-soft);
+      min-height: 360px;
+      max-height: 60vh;
+      overflow-y: auto;
+      display: flex;
+      flex-direction: column;
+      gap: 18px;
+    }
+    .msg {
+      max-width: 88%;
+      padding: 14px 18px;
+      border-radius: 18px;
+      font-size: 15.5px;
+      line-height: 1.55;
+      animation: msgIn 220ms ease both;
+    }
+    @keyframes msgIn { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: translateY(0); } }
+    .msg-assistant {
+      align-self: flex-start;
+      background: var(--cream);
+      color: var(--charcoal);
+      border: 1px solid var(--line);
+      border-bottom-left-radius: 6px;
+    }
+    .msg-user {
+      align-self: flex-end;
+      background: var(--charcoal);
+      color: var(--white);
+      border-bottom-right-radius: 6px;
+    }
+    .msg-typing { align-self: flex-start; display: flex; gap: 6px; padding: 18px 22px; }
+    .msg-typing span {
+      width: 7px;
+      height: 7px;
+      border-radius: 999px;
+      background: var(--muted-2);
+      animation: typing 1.2s ease-in-out infinite;
+    }
+    .msg-typing span:nth-child(2) { animation-delay: 0.15s; }
+    .msg-typing span:nth-child(3) { animation-delay: 0.30s; }
+    @keyframes typing {
+      0%, 60%, 100% { opacity: 0.3; transform: scale(0.85); }
+      30% { opacity: 1; transform: scale(1); }
+    }
+
+    .chat-input-form {
+      margin-top: 20px;
+      display: grid;
+      grid-template-columns: 1fr auto;
+      gap: 12px;
+      align-items: end;
+    }
+    .chat-input-form textarea {
+      font-family: inherit;
+      font-size: 16px;
+      padding: 14px 18px;
+      border: 1px solid var(--line);
+      border-radius: 18px;
+      background: var(--paper);
+      color: var(--charcoal);
+      resize: none;
+      max-height: 200px;
+      min-height: 56px;
+      transition: border-color 160ms ease, box-shadow 160ms ease;
+    }
+    .chat-input-form textarea:focus {
+      outline: none;
+      border-color: var(--blue);
+      box-shadow: 0 0 0 4px rgba(36, 86, 255, 0.10);
+    }
+    .chat-input-form button { min-height: 56px; padding: 0 26px; }
+
+    /* Complete */
+    .complete-card {
+      background: var(--paper);
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      padding: 36px 40px;
+      box-shadow: var(--shadow-soft);
+      margin-bottom: 24px;
+    }
+    .complete-card h2 {
+      font-family: Fraunces, Georgia, serif;
+      font-size: 30px;
+      letter-spacing: -0.025em;
+      color: var(--charcoal);
+      margin: 0 0 10px;
+      line-height: 1.18;
+    }
+    .complete-card p { color: var(--muted); font-size: 16px; margin: 0 0 22px; }
+    .complete-actions { display: flex; gap: 12px; flex-wrap: wrap; }
+
+    /* SOP document */
+    .sop-document {
+      background: var(--paper);
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      padding: 48px 56px;
+      box-shadow: var(--shadow-soft);
+      color: var(--charcoal);
+    }
+    .sop-title {
+      font-family: Fraunces, Georgia, serif;
+      font-size: 36px;
+      letter-spacing: -0.03em;
+      margin: 0 0 6px;
+      line-height: 1.1;
+    }
+    .sop-doc-meta {
+      color: var(--muted);
+      font-size: 14px;
+      font-weight: 700;
+      margin-bottom: 12px;
+    }
+    .sop-summary-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+      gap: 14px;
+      margin: 24px 0 36px;
+      padding: 22px 24px;
+      background: var(--cream);
+      border-radius: 18px;
+      border: 1px solid var(--line);
+    }
+    .sop-summary-grid div { font-size: 14px; }
+    .sop-summary-grid div .lbl {
+      display: block;
+      font-size: 11px;
+      font-weight: 900;
+      color: var(--muted);
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      margin-bottom: 4px;
+    }
+    .sop-summary-grid div .val { color: var(--charcoal); font-weight: 700; }
+
+    .sop-document h3 {
+      font-family: Fraunces, Georgia, serif;
+      font-size: 22px;
+      letter-spacing: -0.02em;
+      margin: 32px 0 12px;
+      color: var(--charcoal);
+      padding-top: 24px;
+      border-top: 1px solid var(--line);
+    }
+    .sop-document h3:first-of-type { padding-top: 0; border-top: 0; margin-top: 0; }
+    .sop-document p { color: var(--charcoal); margin: 6px 0; line-height: 1.6; font-size: 15px; }
+    .sop-document ul, .sop-document ol { margin: 8px 0; padding-left: 22px; }
+    .sop-document li { color: var(--charcoal); line-height: 1.6; font-size: 15px; margin: 6px 0; }
+
+    .sop-step {
+      padding: 16px 18px;
+      background: var(--cream);
+      border-radius: 14px;
+      border: 1px solid var(--line);
+      margin: 10px 0;
+    }
+    .sop-step .step-head {
+      display: flex;
+      gap: 14px;
+      align-items: baseline;
+      margin-bottom: 4px;
+    }
+    .sop-step .step-n {
+      flex: 0 0 auto;
+      font-family: Fraunces, Georgia, serif;
+      font-size: 18px;
+      font-weight: 800;
+      color: var(--blue);
+      letter-spacing: -0.02em;
+      min-width: 24px;
+    }
+    .sop-step .step-action {
+      font-size: 16px;
+      font-weight: 700;
+      color: var(--charcoal);
+      line-height: 1.3;
+    }
+    .sop-step .step-meta {
+      margin-top: 6px;
+      font-size: 13px;
+      color: var(--muted);
+      display: flex;
+      flex-wrap: wrap;
+      gap: 14px;
+    }
+    .sop-step .step-meta b { color: var(--charcoal); font-weight: 800; }
+    .sop-step .branches { margin-top: 8px; padding-left: 4px; }
+    .sop-step .branches li { font-size: 13.5px; color: var(--muted); }
+    .sop-step .branches li b { color: var(--charcoal); }
+
+    @media print {
+      .nav, .footer, .complete-card, .progress, .chat, .chat-input-form, .intake-card { display: none !important; }
+      body { background: white; }
+      .sop-document { border: none; box-shadow: none; padding: 0; }
+      .sop-summary-grid { background: white; }
+    }
+
+    .err {
+      margin-top: 14px;
+      padding: 12px 16px;
+      border-radius: 12px;
+      background: rgba(220, 38, 38, 0.08);
+      color: #B91C1C;
+      border: 1px solid rgba(220, 38, 38, 0.20);
+      font-size: 14px;
+    }
+    .note {
+      margin-top: 14px;
+      padding: 12px 16px;
+      border-radius: 12px;
+      background: rgba(36, 86, 255, 0.06);
+      color: var(--charcoal);
+      border: 1px solid rgba(36, 86, 255, 0.20);
+      font-size: 14px;
+    }
+
+    .footer {
+      background: var(--charcoal);
+      color: rgba(255,255,255,0.78);
+      padding: 36px 0;
+      font-size: 13px;
+    }
+    .footer-inner {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 24px;
+      flex-wrap: wrap;
+    }
+    .footer .brand-mark.dark {
+      background: rgba(255,255,255,0.10);
+      border-color: rgba(255,255,255,0.12);
+      box-shadow: none;
+    }
+  </style>
+</head>
+<body>
+  <svg width="0" height="0" style="position:absolute" aria-hidden="true">
+    <symbol id="repeat-logo-symbol" viewBox="0 0 64 64">
+      <g>
+        <path d="M17 30 C17 20 25 13 35 13 H49" stroke="#2456FF" stroke-width="5.6" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+        <path d="M42 6 L50 13 L42 20" stroke="#2456FF" stroke-width="5.6" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+      </g>
+      <g>
+        <path d="M47 34 C47 44 39 51 29 51 H15" stroke="#172033" stroke-width="5.6" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+        <path d="M22 58 L14 51 L22 44" stroke="#172033" stroke-width="5.6" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+      </g>
+    </symbol>
+  </svg>
+
+  <header class="nav">
+    <div class="container nav-inner">
+      <a class="brand" href="/" aria-label="Practical AI Co. home">
+        <div class="brand-mark" aria-hidden="true">
+          <svg class="repeat-logo" viewBox="0 0 64 64"><use href="#repeat-logo-symbol"></use></svg>
+        </div>
+        <div class="wordmark">
+          <div class="wordmark-title">Practical <span class="ai">AI</span> Co.</div>
+          <div class="wordmark-subtitle">Systems that run so you can lead</div>
+        </div>
+      </a>
+      <div class="tool-pill" aria-hidden="true">READY SOP Builder</div>
+    </div>
+  </header>
+
+  <main>
+    <div class="container">
+      <!-- INTAKE -->
+      <section id="intakeView">
+        <div class="intake-card">
+          <div class="kicker">READY SOP Builder</div>
+          <h1>Turn one process into a runnable SOP.</h1>
+          <p class="lede">A focused interview that captures one of your processes in enough detail that a new hire could run it. Plan on 30&ndash;45 minutes. We'll go step by step, push for specifics, and end with a clean document you can hand to anyone.</p>
+          <form id="intakeForm" class="intake-form" autocomplete="on">
+            <label>
+              <span>First name</span>
+              <input type="text" name="firstName" required autocomplete="given-name" />
+            </label>
+            <label>
+              <span>Business name</span>
+              <input type="text" name="businessName" required autocomplete="organization" />
+            </label>
+            <label>
+              <span>Your email</span>
+              <input type="email" name="email" required autocomplete="email" />
+            </label>
+            <label>
+              <span>Process to document <small>optional, we can pick one together</small></span>
+              <input type="text" name="processName" placeholder="e.g. Customer onboarding, Invoice chase" />
+            </label>
+            <button type="submit" class="button button-primary" id="beginBtn">Start the interview</button>
+          </form>
+          <p class="intake-note">If you've completed a Discovery session, we'll pull in that context to help pick the best process to document.</p>
+        </div>
+      </section>
+
+      <!-- CHAT -->
+      <section id="chatView" hidden>
+        <div class="progress" aria-label="Interview progress">
+          <div class="progress-zones">
+            <div class="zone-pill active" data-section="1">Basics</div>
+            <div class="zone-pill" data-section="2">Dependencies</div>
+            <div class="zone-pill" data-section="3">Steps</div>
+            <div class="zone-pill" data-section="4">Failure modes</div>
+            <div class="zone-pill" data-section="5">Done state</div>
+          </div>
+          <div class="progress-bar" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100">
+            <div class="progress-fill" id="progressFill"></div>
+          </div>
+        </div>
+
+        <div class="chat" id="chatLog" aria-live="polite" aria-label="Conversation"></div>
+
+        <form id="chatForm" class="chat-input-form">
+          <textarea id="chatInput" name="message" placeholder="Type your answer&hellip; (Shift+Enter for newline)" rows="2" autocomplete="off" required></textarea>
+          <button type="submit" class="button button-primary" id="sendBtn">Send</button>
+        </form>
+        <div id="chatErr" class="err" hidden></div>
+      </section>
+
+      <!-- COMPLETE -->
+      <section id="completeView" hidden>
+        <div class="complete-card">
+          <h2 id="completeHeading">Your SOP has been sent to your email.</h2>
+          <p>It's also saved to your SOP Library in Notion. Want to capture another process? Just refresh this page.</p>
+          <div class="complete-actions">
+            <button class="button button-primary" id="copyBtn" type="button">Copy SOP</button>
+            <button class="button button-light" id="printBtn" type="button">Download PDF</button>
+            <a class="button button-light" href="/sop" id="newBtn">Document another process</a>
+          </div>
+          <div id="completeErr" class="err" hidden></div>
+        </div>
+        <article class="sop-document" id="documentView"></article>
+      </section>
+    </div>
+  </main>
+
+  <footer class="footer">
+    <div class="container footer-inner">
+      <div class="brand">
+        <div class="brand-mark dark" aria-hidden="true">
+          <svg class="repeat-logo" viewBox="0 0 64 64"><use href="#repeat-logo-symbol"></use></svg>
+        </div>
+        <div class="wordmark">
+          <div class="wordmark-title" style="color:#fff;">Practical <span class="ai">AI</span> Co.</div>
+          <div class="wordmark-subtitle">Systems that run so you can lead</div>
+        </div>
+      </div>
+      <div>Franklin, TN &middot; <a href="mailto:joe@thepracticalai.co" style="color:inherit;text-decoration:underline;">joe@thepracticalai.co</a></div>
+    </div>
+  </footer>
+
+  <script>
+    // ============================================================
+    // State
+    // ============================================================
+    const state = {
+      firstName: '',
+      businessName: '',
+      email: '',
+      processName: '',
+      conversation: [],
+      currentSection: 1,
+      complete: false,
+      sop: null,
+    };
+
+    const $ = (id) => document.getElementById(id);
+
+    function addMessage(role, text) {
+      const div = document.createElement('div');
+      div.className = 'msg msg-' + role;
+      div.textContent = text;
+      $('chatLog').appendChild(div);
+      $('chatLog').scrollTop = $('chatLog').scrollHeight;
+      return div;
+    }
+
+    function addTyping() {
+      const div = document.createElement('div');
+      div.className = 'msg-typing';
+      div.id = 'typingBubble';
+      div.innerHTML = '<span></span><span></span><span></span>';
+      $('chatLog').appendChild(div);
+      $('chatLog').scrollTop = $('chatLog').scrollHeight;
+    }
+    function removeTyping() {
+      const t = $('typingBubble');
+      if (t) t.remove();
+    }
+
+    function setSection(section) {
+      if (section < state.currentSection) return;
+      state.currentSection = section;
+      document.querySelectorAll('.zone-pill').forEach((p) => {
+        const s = parseInt(p.dataset.section, 10);
+        p.classList.remove('active', 'done');
+        if (s < section) p.classList.add('done');
+        else if (s === section) p.classList.add('active');
+      });
+      const pct = section === 1 ? 10 : section === 2 ? 28 : section === 3 ? 56 : section === 4 ? 78 : section === 5 ? 92 : 100;
+      $('progressFill').style.width = pct + '%';
+      $('progressFill').parentElement.setAttribute('aria-valuenow', String(pct));
+    }
+
+    function detectSection(text) {
+      const t = text.toLowerCase();
+      if (t.includes('definition of done') || t.includes('done state') || t.includes("how do you know")) setSection(5);
+      else if (t.includes('failure mode') || t.includes('goes wrong') || t.includes('worst-case') || t.includes('worst case')) setSection(4);
+      else if (t.includes('walk me through') || t.includes('first step') || t.includes('next step') || t.includes('step by step') || t.includes('section 3')) setSection(3);
+      else if (t.includes('dependencies') || t.includes('what has to be true') || t.includes('section 2')) setSection(2);
+    }
+
+    function parseExtraction(text) {
+      if (!text.includes('SOP_COMPLETE')) return null;
+      const match = text.match(/<SOP>([\s\S]*?)<\/SOP>/);
+      if (!match) return null;
+      try {
+        return JSON.parse(match[1].trim());
+      } catch (e) {
+        console.error('SOP JSON parse failed', e, match[1]);
+        return null;
+      }
+    }
+
+    function showError(target, message) { target.hidden = false; target.textContent = message; }
+    function hideError(target) { target.hidden = true; target.textContent = ''; }
+
+    async function callChat() {
+      $('sendBtn').disabled = true;
+      $('chatInput').disabled = true;
+      hideError($('chatErr'));
+      addTyping();
+
+      try {
+        const res = await fetch('/api/sop-chat', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            firstName: state.firstName,
+            businessName: state.businessName,
+            email: state.email,
+            processName: state.processName,
+            conversation: state.conversation,
+          }),
+        });
+
+        if (!res.ok) {
+          const body = await res.json().catch(() => ({ error: 'Request failed' }));
+          throw new Error(body.error || ('HTTP ' + res.status));
+        }
+        const data = await res.json();
+        removeTyping();
+
+        const text = data.message;
+        state.conversation.push({ role: 'assistant', content: text });
+
+        const sop = parseExtraction(text);
+        if (sop) {
+          state.sop = sop;
+          state.complete = true;
+          setSection(6);
+          const beforeMarker = text.split('SOP_COMPLETE')[0].trim();
+          if (beforeMarker) addMessage('assistant', beforeMarker);
+          await onComplete(sop);
+          return;
+        }
+
+        addMessage('assistant', text);
+        detectSection(text);
+      } catch (err) {
+        console.error(err);
+        removeTyping();
+        showError($('chatErr'), 'Connection hiccup. Try sending again. (' + (err.message || 'unknown') + ')');
+      } finally {
+        $('sendBtn').disabled = false;
+        $('chatInput').disabled = false;
+        $('chatInput').focus();
+      }
+    }
+
+    $('intakeForm').addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const fd = new FormData(e.target);
+      state.firstName = (fd.get('firstName') || '').toString().trim();
+      state.businessName = (fd.get('businessName') || '').toString().trim();
+      state.email = (fd.get('email') || '').toString().trim();
+      state.processName = (fd.get('processName') || '').toString().trim();
+      if (!state.firstName || !state.businessName || !state.email) return;
+
+      $('beginBtn').disabled = true;
+      $('beginBtn').textContent = 'Starting…';
+      $('intakeView').hidden = true;
+      $('chatView').hidden = false;
+      window.scrollTo({ top: 0, behavior: 'instant' });
+      await callChat();
+    });
+
+    $('chatForm').addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const msg = $('chatInput').value.trim();
+      if (!msg || $('sendBtn').disabled) return;
+      addMessage('user', msg);
+      state.conversation.push({ role: 'user', content: msg });
+      $('chatInput').value = '';
+      await callChat();
+    });
+
+    $('chatInput').addEventListener('keydown', (e) => {
+      if (e.key === 'Enter' && !e.shiftKey) {
+        e.preventDefault();
+        $('chatForm').requestSubmit();
+      }
+    });
+
+    async function onComplete(sop) {
+      renderDocument(sop);
+      $('chatView').hidden = true;
+      $('completeView').hidden = false;
+      window.scrollTo({ top: 0, behavior: 'instant' });
+
+      try {
+        const res = await fetch('/api/sop-complete', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            firstName: state.firstName,
+            businessName: state.businessName,
+            email: state.email,
+            sop,
+          }),
+        });
+        if (!res.ok) {
+          const body = await res.json().catch(() => ({ error: 'Unknown' }));
+          throw new Error(body.error || ('HTTP ' + res.status));
+        }
+        const result = await res.json();
+        const failures = [];
+        if (result.notion === 'rejected') failures.push('Notion (' + (result.errors?.notion || 'unknown') + ')');
+        if (result.clientEmail === 'rejected') failures.push('client email (' + (result.errors?.clientEmail || 'unknown') + ')');
+        if (result.joeEmail === 'rejected') failures.push("Joe's email (" + (result.errors?.joeEmail || 'unknown') + ')');
+        if (failures.length) {
+          showError($('completeErr'), 'SOP captured. Couldn\'t fully sync: ' + failures.join('; ') + '. Joe will follow up.');
+        }
+      } catch (err) {
+        console.error(err);
+        showError($('completeErr'), 'SOP captured but failed to sync upstream. Joe will follow up.');
+      }
+    }
+
+    function renderDocument(sop) {
+      const esc = (s) => String(s == null ? '' : s).replace(/[&<>"']/g, (c) => ({ '&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;' }[c]));
+      const list = (arr) => Array.isArray(arr) && arr.length
+        ? '<ul>' + arr.map((x) => '<li>' + esc(x) + '</li>').join('') + '</ul>'
+        : '<p style="color:var(--muted);font-style:italic;">None captured.</p>';
+      const para = (s) => s ? '<p>' + esc(s) + '</p>' : '<p style="color:var(--muted);font-style:italic;">None captured.</p>';
+
+      const stepsHtml = (Array.isArray(sop.steps) && sop.steps.length)
+        ? sop.steps.map((s, i) => {
+            const n = s.n || (i + 1);
+            const branches = (Array.isArray(s.branches) && s.branches.length)
+              ? '<ul class="branches">' + s.branches.map((b) => '<li><b>If</b> ' + esc(b.if || '') + ' &rarr; ' + esc(b.then || '') + '</li>').join('') + '</ul>'
+              : '';
+            const metaParts = [];
+            if (s.tool) metaParts.push('<span><b>Tool:</b> ' + esc(s.tool) + '</span>');
+            if (s.owner) metaParts.push('<span><b>Owner:</b> ' + esc(s.owner) + '</span>');
+            if (s.output) metaParts.push('<span><b>Output:</b> ' + esc(s.output) + '</span>');
+            const meta = metaParts.length ? '<div class="step-meta">' + metaParts.join('') + '</div>' : '';
+            return '<div class="sop-step">'
+              + '<div class="step-head"><div class="step-n">' + n + '.</div><div class="step-action">' + esc(s.action || '') + '</div></div>'
+              + meta + branches
+              + '</div>';
+          }).join('')
+        : '<p style="color:var(--muted);font-style:italic;">No steps captured.</p>';
+
+      const decisionsHtml = (Array.isArray(sop.decisions) && sop.decisions.length)
+        ? '<ul>' + sop.decisions.map((d) => '<li><b>If</b> ' + esc(d.if || '') + ' &rarr; ' + esc(d.then || '') + '</li>').join('') + '</ul>'
+        : '<p style="color:var(--muted);font-style:italic;">None captured.</p>';
+
+      const failuresHtml = (Array.isArray(sop.failureModes) && sop.failureModes.length)
+        ? '<ul>' + sop.failureModes.map((f) => '<li><b>' + esc(f.issue || '') + '</b> &rarr; ' + esc(f.recovery || '') + '</li>').join('') + '</ul>'
+        : '<p style="color:var(--muted);font-style:italic;">None captured.</p>';
+
+      const summary = [
+        { lbl: 'Frequency', val: sop.frequency },
+        { lbl: 'Est. time', val: sop.estimatedTime },
+        { lbl: 'Owner', val: sop.owner },
+        { lbl: 'Backup', val: sop.backup },
+      ].filter((x) => x.val);
+
+      $('documentView').innerHTML = `
+        <div class="sop-title">${esc(sop.processName || 'Untitled Process')}</div>
+        <div class="sop-doc-meta">${esc((sop.client && sop.client.businessName) || state.businessName)} &middot; ${esc((sop.client && sop.client.firstName) || state.firstName)} &middot; ${esc(sop.date || new Date().toISOString().slice(0,10))}</div>
+        ${summary.length ? `<div class="sop-summary-grid">${summary.map(s => '<div><span class="lbl">' + esc(s.lbl) + '</span><span class="val">' + esc(s.val) + '</span></div>').join('')}</div>` : ''}
+
+        <h3>Trigger</h3>
+        ${para(sop.trigger)}
+
+        <h3>Dependencies</h3>
+        ${list(sop.dependencies)}
+
+        <h3>Steps</h3>
+        ${stepsHtml}
+
+        <h3>Decisions</h3>
+        ${decisionsHtml}
+
+        <h3>Failure modes</h3>
+        ${failuresHtml}
+
+        <h3>Definition of done</h3>
+        ${para(sop.definitionOfDone)}
+      `;
+
+      $('completeHeading').textContent = `${sop.processName || 'Your SOP'} — captured and sent.`;
+    }
+
+    $('copyBtn').addEventListener('click', async () => {
+      const btn = $('copyBtn');
+      try {
+        await navigator.clipboard.writeText($('documentView').innerText);
+        const orig = btn.textContent;
+        btn.textContent = 'Copied ✓';
+        setTimeout(() => { btn.textContent = orig; }, 1800);
+      } catch (e) {
+        showError($('completeErr'), 'Could not copy. Try selecting manually.');
+      }
+    });
+    $('printBtn').addEventListener('click', () => window.print());
+  </script>
+</body>
+</html>
