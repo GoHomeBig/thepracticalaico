@@ -9,10 +9,7 @@
 const { Client: NotionClient } = require("@notionhq/client");
 const { Resend } = require("resend");
 
-// TODO: Paste the SOP Library database ID here once Joe creates it in Notion.
-// Same UUID format as the Discovery DB. Until set, Notion writes will fail
-// gracefully and the emails will still send.
-const SOP_LIBRARY_DB_ID = "TODO-PASTE-SOP-LIBRARY-DB-ID";
+const SOP_LIBRARY_DB_ID = "362567cd-8712-8174-982d-ffa3a95e441c";
 
 const JOE_EMAIL = "joe@thepracticalai.co";
 const FROM = "Practical AI Co. <joe@thepracticalai.co>";
