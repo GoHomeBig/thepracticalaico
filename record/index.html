@@ -1,0 +1,880 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="robots" content="noindex,nofollow" />
+  <title>READY Record &middot; Practical AI Co.</title>
+  <meta name="description" content="A private conversational interview to capture how your business actually works." />
+  <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32.png" />
+  <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16.png" />
+  <link rel="icon" type="image/x-icon" href="/favicon.ico" />
+  <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
+  <meta name="theme-color" content="#2456FF" />
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=Fraunces:opsz,wght@9..144,700;9..144,800&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --ink: #111827;
+      --charcoal: #172033;
+      --blue: #2456FF;
+      --blue-dark: #173BD7;
+      --cream: #FBF5EA;
+      --paper: #FFFDF8;
+      --green: #2F8F5B;
+      --muted: #667085;
+      --muted-2: #8A93A5;
+      --line: #E7DCCB;
+      --white: #FFFFFF;
+      --shadow: 0 20px 60px rgba(17, 24, 39, 0.12);
+      --shadow-soft: 0 16px 40px rgba(17, 24, 39, 0.08);
+      --radius: 28px;
+    }
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body {
+      margin: 0;
+      font-family: Inter, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      color: var(--ink);
+      background: var(--cream);
+      line-height: 1.5;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+    a { color: inherit; text-decoration: none; }
+    .container {
+      width: min(820px, calc(100% - 40px));
+      margin: 0 auto;
+    }
+
+    /* Nav (simplified — no public links, just brand) */
+    .nav {
+      background: rgba(251, 245, 234, 0.92);
+      backdrop-filter: blur(16px);
+      border-bottom: 1px solid rgba(231, 220, 203, 0.78);
+    }
+    .nav-inner {
+      min-height: 80px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 24px;
+    }
+    .brand { display: inline-flex; align-items: center; gap: 12px; }
+    .brand-mark {
+      width: 46px;
+      height: 46px;
+      border-radius: 14px;
+      background: var(--paper);
+      border: 1px solid rgba(23, 32, 51, 0.10);
+      box-shadow: 0 10px 24px rgba(17, 24, 39, 0.07);
+      display: grid;
+      place-items: center;
+      flex: 0 0 auto;
+      overflow: hidden;
+    }
+    .repeat-logo {
+      width: 30px;
+      height: 30px;
+    }
+    .wordmark { display: flex; flex-direction: column; gap: 4px; }
+    .wordmark-title {
+      font-family: Fraunces, Georgia, serif;
+      font-weight: 800;
+      letter-spacing: -0.035em;
+      color: var(--charcoal);
+      font-size: 26px;
+      line-height: 1.05;
+    }
+    .wordmark-title .ai { color: var(--blue); }
+    .wordmark-subtitle {
+      color: var(--muted);
+      font-size: 9px;
+      font-weight: 900;
+      text-transform: uppercase;
+      letter-spacing: 0.26em;
+      line-height: 1;
+    }
+    .tool-pill {
+      font-size: 11px;
+      font-weight: 900;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: var(--blue);
+      padding: 7px 13px;
+      border-radius: 999px;
+      background: rgba(36, 86, 255, 0.10);
+    }
+    @media (max-width: 640px) {
+      .wordmark-subtitle { display: none; }
+      .tool-pill { font-size: 10px; padding: 6px 10px; letter-spacing: 0.14em; }
+    }
+
+    /* Buttons */
+    .button {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 48px;
+      padding: 0 24px;
+      border-radius: 999px;
+      border: 0;
+      font-family: inherit;
+      font-size: 15px;
+      font-weight: 800;
+      cursor: pointer;
+      transition: transform 180ms ease, box-shadow 180ms ease, background 180ms ease, opacity 180ms ease;
+      white-space: nowrap;
+    }
+    .button:hover { transform: translateY(-1px); }
+    .button:disabled { opacity: 0.5; cursor: not-allowed; transform: none; }
+    .button-primary {
+      background: var(--blue);
+      color: var(--white);
+      box-shadow: 0 14px 32px rgba(36, 86, 255, 0.22);
+    }
+    .button-primary:hover:not(:disabled) { background: var(--blue-dark); }
+    .button-light {
+      background: var(--paper);
+      color: var(--charcoal);
+      border: 1px solid var(--line);
+      box-shadow: 0 10px 24px rgba(17, 24, 39, 0.06);
+    }
+
+    /* Layout */
+    main { flex: 1; padding: 64px 0 96px; }
+    .kicker {
+      color: var(--blue);
+      font-size: 12px;
+      font-weight: 900;
+      text-transform: uppercase;
+      letter-spacing: 0.18em;
+      margin-bottom: 16px;
+    }
+    h1 {
+      font-family: Fraunces, Georgia, serif;
+      font-size: clamp(34px, 4.6vw, 52px);
+      line-height: 1.08;
+      letter-spacing: -0.03em;
+      color: var(--charcoal);
+      margin: 0 0 20px;
+    }
+    .lede {
+      font-size: 17px;
+      color: var(--muted);
+      line-height: 1.6;
+      margin: 0 0 28px;
+      max-width: 640px;
+    }
+
+    /* Intake form */
+    .intake-card {
+      background: var(--paper);
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      padding: 44px 44px 40px;
+      box-shadow: var(--shadow-soft);
+    }
+    .intake-form {
+      display: grid;
+      gap: 18px;
+      margin-top: 8px;
+    }
+    .intake-form label {
+      display: grid;
+      gap: 8px;
+    }
+    .intake-form label span {
+      font-size: 13px;
+      font-weight: 800;
+      color: var(--charcoal);
+      letter-spacing: 0.01em;
+    }
+    .intake-form input {
+      font-family: inherit;
+      font-size: 16px;
+      padding: 14px 16px;
+      border: 1px solid var(--line);
+      border-radius: 14px;
+      background: var(--cream);
+      color: var(--charcoal);
+      transition: border-color 160ms ease, box-shadow 160ms ease;
+    }
+    .intake-form input:focus {
+      outline: none;
+      border-color: var(--blue);
+      box-shadow: 0 0 0 4px rgba(36, 86, 255, 0.10);
+    }
+    .intake-form button { margin-top: 12px; }
+    .intake-note {
+      font-size: 13px;
+      color: var(--muted);
+      margin-top: 18px;
+    }
+    @media (max-width: 640px) {
+      .intake-card { padding: 32px 24px; }
+    }
+
+    /* Progress */
+    .progress {
+      margin-bottom: 28px;
+    }
+    .progress-zones {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 10px;
+      margin-bottom: 14px;
+    }
+    .zone-pill {
+      padding: 12px 14px;
+      border-radius: 14px;
+      background: var(--paper);
+      border: 1px solid var(--line);
+      font-size: 12px;
+      font-weight: 800;
+      letter-spacing: 0.04em;
+      color: var(--muted);
+      text-align: center;
+      transition: all 200ms ease;
+    }
+    .zone-pill.active {
+      background: var(--charcoal);
+      color: var(--white);
+      border-color: var(--charcoal);
+    }
+    .zone-pill.done {
+      background: rgba(47, 143, 91, 0.10);
+      color: var(--green);
+      border-color: rgba(47, 143, 91, 0.30);
+    }
+    .progress-bar {
+      height: 4px;
+      background: var(--line);
+      border-radius: 999px;
+      overflow: hidden;
+    }
+    .progress-fill {
+      height: 100%;
+      background: var(--blue);
+      width: 0%;
+      transition: width 320ms ease;
+    }
+
+    /* Chat */
+    .chat {
+      background: var(--paper);
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      padding: 28px;
+      box-shadow: var(--shadow-soft);
+      min-height: 360px;
+      max-height: 60vh;
+      overflow-y: auto;
+      display: flex;
+      flex-direction: column;
+      gap: 18px;
+    }
+    .msg {
+      max-width: 88%;
+      padding: 14px 18px;
+      border-radius: 18px;
+      font-size: 15.5px;
+      line-height: 1.55;
+      animation: msgIn 220ms ease both;
+    }
+    @keyframes msgIn {
+      from { opacity: 0; transform: translateY(6px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    .msg-assistant {
+      align-self: flex-start;
+      background: var(--cream);
+      color: var(--charcoal);
+      border: 1px solid var(--line);
+      border-bottom-left-radius: 6px;
+    }
+    .msg-user {
+      align-self: flex-end;
+      background: var(--charcoal);
+      color: var(--white);
+      border-bottom-right-radius: 6px;
+    }
+    .msg-typing {
+      align-self: flex-start;
+      display: flex;
+      gap: 6px;
+      padding: 18px 22px;
+    }
+    .msg-typing span {
+      width: 7px;
+      height: 7px;
+      border-radius: 999px;
+      background: var(--muted-2);
+      animation: typing 1.2s ease-in-out infinite;
+    }
+    .msg-typing span:nth-child(2) { animation-delay: 0.15s; }
+    .msg-typing span:nth-child(3) { animation-delay: 0.30s; }
+    @keyframes typing {
+      0%, 60%, 100% { opacity: 0.3; transform: scale(0.85); }
+      30% { opacity: 1; transform: scale(1); }
+    }
+
+    .chat-input-form {
+      margin-top: 20px;
+      display: grid;
+      grid-template-columns: 1fr auto;
+      gap: 12px;
+      align-items: end;
+    }
+    .chat-input-form textarea {
+      font-family: inherit;
+      font-size: 16px;
+      padding: 14px 18px;
+      border: 1px solid var(--line);
+      border-radius: 18px;
+      background: var(--paper);
+      color: var(--charcoal);
+      resize: none;
+      max-height: 200px;
+      min-height: 56px;
+      transition: border-color 160ms ease, box-shadow 160ms ease;
+    }
+    .chat-input-form textarea:focus {
+      outline: none;
+      border-color: var(--blue);
+      box-shadow: 0 0 0 4px rgba(36, 86, 255, 0.10);
+    }
+    .chat-input-form button { min-height: 56px; padding: 0 26px; }
+
+    /* Completion view */
+    .complete-card {
+      background: var(--paper);
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      padding: 36px 40px;
+      box-shadow: var(--shadow-soft);
+      margin-bottom: 24px;
+    }
+    .complete-card h2 {
+      font-family: Fraunces, Georgia, serif;
+      font-size: 30px;
+      letter-spacing: -0.025em;
+      color: var(--charcoal);
+      margin: 0 0 10px;
+      line-height: 1.18;
+    }
+    .complete-card p {
+      color: var(--muted);
+      font-size: 16px;
+      margin: 0 0 22px;
+    }
+    .complete-actions {
+      display: flex;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+
+    /* Final document */
+    .record-document {
+      background: var(--paper);
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      padding: 42px 44px;
+      box-shadow: var(--shadow-soft);
+      color: var(--charcoal);
+    }
+    .record-document h2 {
+      font-family: Fraunces, Georgia, serif;
+      font-size: 30px;
+      letter-spacing: -0.025em;
+      margin: 0 0 4px;
+    }
+    .record-document .doc-meta {
+      color: var(--muted);
+      font-size: 14px;
+      font-weight: 700;
+      margin-bottom: 32px;
+    }
+    .record-document section {
+      border-top: 1px solid var(--line);
+      padding-top: 24px;
+      margin-top: 24px;
+    }
+    .record-document section:first-of-type { border-top: 0; padding-top: 0; margin-top: 0; }
+    .record-document h3 {
+      font-family: Fraunces, Georgia, serif;
+      font-size: 22px;
+      letter-spacing: -0.02em;
+      margin: 0 0 14px;
+      color: var(--charcoal);
+    }
+    .record-document h4 {
+      font-size: 12px;
+      text-transform: uppercase;
+      letter-spacing: 0.14em;
+      color: var(--blue);
+      margin: 18px 0 6px;
+      font-weight: 900;
+    }
+    .record-document p { color: var(--charcoal); margin: 6px 0; line-height: 1.6; font-size: 15px; }
+    .record-document ul { margin: 6px 0; padding-left: 20px; }
+    .record-document li { color: var(--charcoal); line-height: 1.6; font-size: 15px; margin: 4px 0; }
+    @media print {
+      .nav, .footer, .complete-card, .progress, .chat, .chat-input-form, .intake-card { display: none !important; }
+      body { background: white; }
+      .record-document { border: none; box-shadow: none; padding: 0; }
+    }
+
+    .err {
+      margin-top: 14px;
+      padding: 12px 16px;
+      border-radius: 12px;
+      background: rgba(220, 38, 38, 0.08);
+      color: #B91C1C;
+      border: 1px solid rgba(220, 38, 38, 0.20);
+      font-size: 14px;
+    }
+
+    /* Footer */
+    .footer {
+      background: var(--charcoal);
+      color: rgba(255,255,255,0.78);
+      padding: 36px 0;
+      font-size: 13px;
+    }
+    .footer-inner {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 24px;
+      flex-wrap: wrap;
+    }
+    .footer .brand-mark.dark {
+      background: rgba(255,255,255,0.10);
+      border-color: rgba(255,255,255,0.12);
+      box-shadow: none;
+    }
+    .footer .wordmark-title { color: var(--white); }
+    .footer .wordmark-subtitle { color: rgba(255,255,255,0.55); }
+  </style>
+</head>
+<body>
+  <svg width="0" height="0" style="position:absolute" aria-hidden="true">
+    <symbol id="repeat-logo-symbol" viewBox="0 0 64 64">
+      <g>
+        <path d="M17 30 C17 20 25 13 35 13 H49" stroke="#2456FF" stroke-width="5.6" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+        <path d="M42 6 L50 13 L42 20" stroke="#2456FF" stroke-width="5.6" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+      </g>
+      <g>
+        <path d="M47 34 C47 44 39 51 29 51 H15" stroke="#172033" stroke-width="5.6" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+        <path d="M22 58 L14 51 L22 44" stroke="#172033" stroke-width="5.6" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+      </g>
+    </symbol>
+  </svg>
+
+  <header class="nav">
+    <div class="container nav-inner">
+      <a class="brand" href="/" aria-label="Practical AI Co. home">
+        <div class="brand-mark" aria-hidden="true">
+          <svg class="repeat-logo" viewBox="0 0 64 64"><use href="#repeat-logo-symbol"></use></svg>
+        </div>
+        <div class="wordmark">
+          <div class="wordmark-title">Practical <span class="ai">AI</span> Co.</div>
+          <div class="wordmark-subtitle">Systems that run so you can lead</div>
+        </div>
+      </a>
+      <div class="tool-pill" aria-hidden="true">READY Record</div>
+    </div>
+  </header>
+
+  <main>
+    <div class="container">
+      <!-- INTAKE -->
+      <section id="intakeView">
+        <div class="intake-card">
+          <div class="kicker">READY Record Tool</div>
+          <h1>Let's get what's in your head into a system.</h1>
+          <p class="lede">A short, conversational interview that captures how your business actually runs. We'll move through three zones together: how customers move through your business, what tasks repeat every week, and the things only you know how to do. About 15&ndash;25 minutes.</p>
+          <form id="intakeForm" class="intake-form" autocomplete="on">
+            <label>
+              <span>First name</span>
+              <input type="text" name="firstName" required autocomplete="given-name" />
+            </label>
+            <label>
+              <span>Business name</span>
+              <input type="text" name="businessName" required autocomplete="organization" />
+            </label>
+            <label>
+              <span>Your email</span>
+              <input type="email" name="email" required autocomplete="email" />
+            </label>
+            <button type="submit" class="button button-primary" id="beginBtn">Begin the interview</button>
+          </form>
+          <p class="intake-note">Your responses go to a private document shared with Joe at Practical AI Co. Nothing is published.</p>
+        </div>
+      </section>
+
+      <!-- CHAT -->
+      <section id="chatView" hidden>
+        <div class="progress" aria-label="Interview progress">
+          <div class="progress-zones">
+            <div class="zone-pill active" data-zone="1">Zone 1 &middot; Customer Journey</div>
+            <div class="zone-pill" data-zone="2">Zone 2 &middot; Repetitive Tasks</div>
+            <div class="zone-pill" data-zone="3">Zone 3 &middot; Only&ndash;I&ndash;Know List</div>
+          </div>
+          <div class="progress-bar" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100">
+            <div class="progress-fill" id="progressFill"></div>
+          </div>
+        </div>
+
+        <div class="chat" id="chatLog" aria-live="polite" aria-label="Conversation"></div>
+
+        <form id="chatForm" class="chat-input-form">
+          <textarea id="chatInput" name="message" placeholder="Type your answer&hellip; (Shift+Enter for newline)" rows="2" autocomplete="off" required></textarea>
+          <button type="submit" class="button button-primary" id="sendBtn">Send</button>
+        </form>
+        <div id="chatErr" class="err" hidden></div>
+      </section>
+
+      <!-- COMPLETE -->
+      <section id="completeView" hidden>
+        <div class="complete-card">
+          <h2>Your document has been sent to your email.</h2>
+          <p>Joe will be in touch within 24 hours.</p>
+          <div class="complete-actions">
+            <button class="button button-primary" id="copyBtn" type="button">Copy full document</button>
+            <button class="button button-light" id="printBtn" type="button">Print / Save PDF</button>
+          </div>
+          <div id="completeErr" class="err" hidden></div>
+        </div>
+        <article class="record-document" id="documentView"></article>
+      </section>
+    </div>
+  </main>
+
+  <footer class="footer">
+    <div class="container footer-inner">
+      <div class="brand">
+        <div class="brand-mark dark" aria-hidden="true">
+          <svg class="repeat-logo" viewBox="0 0 64 64"><use href="#repeat-logo-symbol"></use></svg>
+        </div>
+        <div class="wordmark">
+          <div class="wordmark-title" style="color:#fff;">Practical <span class="ai">AI</span> Co.</div>
+          <div class="wordmark-subtitle">Systems that run so you can lead</div>
+        </div>
+      </div>
+      <div>Franklin, TN &middot; <a href="mailto:joe@thepracticalai.co" style="color:inherit;text-decoration:underline;">joe@thepracticalai.co</a></div>
+    </div>
+  </footer>
+
+  <script>
+    // ============================================================
+    // State
+    // ============================================================
+    const state = {
+      firstName: '',
+      businessName: '',
+      email: '',
+      conversation: [],   // [{ role, content }]
+      currentZone: 1,
+      complete: false,
+      doc: null,
+    };
+
+    // ============================================================
+    // DOM
+    // ============================================================
+    const $ = (id) => document.getElementById(id);
+    const intakeView = $('intakeView');
+    const chatView = $('chatView');
+    const completeView = $('completeView');
+    const intakeForm = $('intakeForm');
+    const chatLog = $('chatLog');
+    const chatForm = $('chatForm');
+    const chatInput = $('chatInput');
+    const sendBtn = $('sendBtn');
+    const beginBtn = $('beginBtn');
+    const progressFill = $('progressFill');
+    const zonePills = document.querySelectorAll('.zone-pill');
+    const chatErr = $('chatErr');
+    const completeErr = $('completeErr');
+
+    // ============================================================
+    // Helpers
+    // ============================================================
+    function addMessage(role, text) {
+      const div = document.createElement('div');
+      div.className = 'msg msg-' + role;
+      div.textContent = text;
+      chatLog.appendChild(div);
+      chatLog.scrollTop = chatLog.scrollHeight;
+      return div;
+    }
+
+    function addTyping() {
+      const div = document.createElement('div');
+      div.className = 'msg-typing';
+      div.id = 'typingBubble';
+      div.innerHTML = '<span></span><span></span><span></span>';
+      chatLog.appendChild(div);
+      chatLog.scrollTop = chatLog.scrollHeight;
+      return div;
+    }
+
+    function removeTyping() {
+      const t = $('typingBubble');
+      if (t) t.remove();
+    }
+
+    function setZone(zone) {
+      state.currentZone = zone;
+      zonePills.forEach((p) => {
+        const z = parseInt(p.dataset.zone, 10);
+        p.classList.remove('active', 'done');
+        if (z < zone) p.classList.add('done');
+        else if (z === zone) p.classList.add('active');
+      });
+      const pct = zone === 1 ? 16 : zone === 2 ? 50 : zone === 3 ? 84 : 100;
+      progressFill.style.width = pct + '%';
+      progressFill.parentElement.setAttribute('aria-valuenow', String(pct));
+    }
+
+    function detectZoneFromAssistant(text) {
+      // Move forward only — never go backwards
+      const t = text.toLowerCase();
+      if (t.includes('zone 3') && state.currentZone < 3) setZone(3);
+      else if (t.includes('zone 2') && state.currentZone < 2) setZone(2);
+    }
+
+    function parseExtraction(text) {
+      if (!text.includes('EXTRACTION_COMPLETE')) return null;
+      const match = text.match(/<DOC>([\s\S]*?)<\/DOC>/);
+      if (!match) return null;
+      try {
+        return JSON.parse(match[1].trim());
+      } catch (e) {
+        console.error('JSON parse failed', e, match[1]);
+        return null;
+      }
+    }
+
+    function showError(target, message) {
+      target.hidden = false;
+      target.textContent = message;
+    }
+
+    function hideError(target) {
+      target.hidden = true;
+      target.textContent = '';
+    }
+
+    // ============================================================
+    // Anthropic call
+    // ============================================================
+    async function callChat() {
+      sendBtn.disabled = true;
+      chatInput.disabled = true;
+      hideError(chatErr);
+      addTyping();
+
+      try {
+        const res = await fetch('/api/chat', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            firstName: state.firstName,
+            businessName: state.businessName,
+            conversation: state.conversation,
+          }),
+        });
+
+        if (!res.ok) {
+          const body = await res.json().catch(() => ({ error: 'Request failed' }));
+          throw new Error(body.error || ('HTTP ' + res.status));
+        }
+
+        const data = await res.json();
+        removeTyping();
+
+        const text = data.message;
+        state.conversation.push({ role: 'assistant', content: text });
+
+        // Detect extraction
+        const doc = parseExtraction(text);
+        if (doc) {
+          state.doc = doc;
+          state.complete = true;
+          setZone(4);  // all done
+          // Display only the conversational part (before EXTRACTION_COMPLETE) in chat
+          const beforeMarker = text.split('EXTRACTION_COMPLETE')[0].trim();
+          if (beforeMarker) addMessage('assistant', beforeMarker);
+          await onComplete(doc);
+          return;
+        }
+
+        // Normal turn
+        addMessage('assistant', text);
+        detectZoneFromAssistant(text);
+      } catch (err) {
+        console.error(err);
+        removeTyping();
+        showError(chatErr, 'Connection hiccup. Try sending again. (' + (err.message || 'unknown') + ')');
+      } finally {
+        sendBtn.disabled = false;
+        chatInput.disabled = false;
+        chatInput.focus();
+      }
+    }
+
+    // ============================================================
+    // Intake submit
+    // ============================================================
+    intakeForm.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const fd = new FormData(intakeForm);
+      state.firstName = (fd.get('firstName') || '').toString().trim();
+      state.businessName = (fd.get('businessName') || '').toString().trim();
+      state.email = (fd.get('email') || '').toString().trim();
+      if (!state.firstName || !state.businessName || !state.email) return;
+
+      beginBtn.disabled = true;
+      beginBtn.textContent = 'Starting…';
+      intakeView.hidden = true;
+      chatView.hidden = false;
+      window.scrollTo({ top: 0, behavior: 'instant' });
+      await callChat();
+    });
+
+    // ============================================================
+    // Chat submit
+    // ============================================================
+    chatForm.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const msg = chatInput.value.trim();
+      if (!msg || sendBtn.disabled) return;
+      addMessage('user', msg);
+      state.conversation.push({ role: 'user', content: msg });
+      chatInput.value = '';
+      await callChat();
+    });
+
+    // Enter to send, Shift+Enter for newline
+    chatInput.addEventListener('keydown', (e) => {
+      if (e.key === 'Enter' && !e.shiftKey) {
+        e.preventDefault();
+        chatForm.requestSubmit();
+      }
+    });
+
+    // ============================================================
+    // Completion
+    // ============================================================
+    async function onComplete(doc) {
+      renderDocument(doc);
+      chatView.hidden = true;
+      completeView.hidden = false;
+      window.scrollTo({ top: 0, behavior: 'instant' });
+
+      try {
+        const res = await fetch('/api/complete', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            firstName: state.firstName,
+            businessName: state.businessName,
+            email: state.email,
+            doc,
+          }),
+        });
+        if (!res.ok) {
+          const body = await res.json().catch(() => ({ error: 'Unknown' }));
+          throw new Error(body.error || ('HTTP ' + res.status));
+        }
+        const result = await res.json();
+        // Surface any partial failures softly
+        const failures = [];
+        if (result.notion === 'rejected') failures.push('Notion (' + (result.errors?.notion || 'unknown') + ')');
+        if (result.clientEmail === 'rejected') failures.push('client email (' + (result.errors?.clientEmail || 'unknown') + ')');
+        if (result.joeEmail === 'rejected') failures.push("Joe's email (" + (result.errors?.joeEmail || 'unknown') + ')');
+        if (failures.length) {
+          showError(completeErr, 'Document captured. Couldn\'t fully sync: ' + failures.join('; ') + '. Joe will follow up directly.');
+        }
+      } catch (err) {
+        console.error(err);
+        showError(completeErr, 'Document captured but failed to sync upstream. Joe will follow up.');
+      }
+    }
+
+    function renderDocument(doc) {
+      const view = $('documentView');
+      const cj = doc.customerJourney || {};
+      const rt = doc.repetitiveTasks || {};
+      const ok = doc.onlyIKnow || {};
+      const opps = doc.topAutomationOpportunities || [];
+      const dateStr = doc.date || new Date().toISOString().split('T')[0];
+      const esc = (s) => String(s == null ? '' : s).replace(/[&<>"']/g, (c) => ({ '&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;' }[c]));
+      const list = (arr) => Array.isArray(arr) && arr.length
+        ? '<ul>' + arr.map((x) => '<li>' + esc(x) + '</li>').join('') + '</ul>'
+        : '<p style="color:var(--muted);font-style:italic;">None captured.</p>';
+      const para = (s) => s ? '<p>' + esc(s) + '</p>' : '<p style="color:var(--muted);font-style:italic;">None captured.</p>';
+
+      view.innerHTML = `
+        <h2>${esc(doc.businessName || state.businessName)} &middot; Business Process Record</h2>
+        <div class="doc-meta">${esc(doc.clientName || state.firstName)} &middot; ${esc(dateStr)}</div>
+
+        <section>
+          <h3>Customer Journey</h3>
+          <h4>Lead Sources</h4>${list(cj.leadSources)}
+          <h4>First Contact</h4>${para(cj.firstContact)}
+          <h4>Qualification</h4>${para(cj.qualification)}
+          <h4>Fulfillment</h4>${list(cj.fulfillment)}
+          <h4>Aftercare</h4>${para(cj.aftercare)}
+          <h4>Common Exceptions</h4>${list(cj.commonExceptions)}
+        </section>
+
+        <section>
+          <h3>Repetitive Tasks</h3>
+          <h4>Weekly</h4>${list(rt.weekly)}
+          <h4>Manual that should be automatic</h4>${list(rt.manualThatShouldBeAuto)}
+          <h4>Would stop on vacation</h4>${list(rt.wouldStopIfVacation)}
+        </section>
+
+        <section>
+          <h3>Only-I-Know List</h3>
+          <h4>Would break with a new hire</h4>${list(ok.wouldBreakWithNewHire)}
+          <h4>Owner judgment calls</h4>${list(ok.judgmentCalls)}
+          <h4>Hidden standards</h4>${list(ok.hiddenStandards)}
+          <h4>Week-one wrong moves</h4>${list(ok.weekOneWrongMoves)}
+        </section>
+
+        <section>
+          <h3>Top Automation Opportunities</h3>
+          ${list(opps)}
+        </section>
+      `;
+    }
+
+    // ============================================================
+    // Copy & Print
+    // ============================================================
+    $('copyBtn').addEventListener('click', async () => {
+      const btn = $('copyBtn');
+      const text = $('documentView').innerText;
+      try {
+        await navigator.clipboard.writeText(text);
+        const orig = btn.textContent;
+        btn.textContent = 'Copied ✓';
+        setTimeout(() => { btn.textContent = orig; }, 1800);
+      } catch (e) {
+        showError(completeErr, 'Could not copy to clipboard. Try selecting manually.');
+      }
+    });
+
+    $('printBtn').addEventListener('click', () => {
+      window.print();
+    });
+  </script>
+</body>
+</html>

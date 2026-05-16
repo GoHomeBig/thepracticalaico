@@ -1,0 +1,11 @@
+{
+  "name": "thepracticalaico",
+  "private": true,
+  "version": "1.0.0",
+  "description": "Practical AI Co. marketing site + READY Record interview tool",
+  "dependencies": {
+    "@anthropic-ai/sdk": "^0.39.0",
+    "@notionhq/client": "^2.2.15",
+    "resend": "^4.0.1"
+  }
+}
