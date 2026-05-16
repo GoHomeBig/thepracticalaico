@@ -185,7 +185,8 @@
       font-size: 12px;
       margin-left: 6px;
     }
-    .intake-form input {
+    .intake-form input,
+    .intake-form textarea {
       font-family: inherit;
       font-size: 16px;
       padding: 14px 16px;
@@ -194,8 +195,12 @@
       background: var(--cream);
       color: var(--charcoal);
       transition: border-color 160ms ease, box-shadow 160ms ease;
+      width: 100%;
+      resize: vertical;
+      line-height: 1.5;
     }
-    .intake-form input:focus {
+    .intake-form input:focus,
+    .intake-form textarea:focus {
       outline: none;
       border-color: var(--blue);
       box-shadow: 0 0 0 4px rgba(36, 86, 255, 0.10);
@@ -722,6 +727,10 @@
               <span>Process to document <small>optional, we can pick one together</small></span>
               <input type="text" name="processName" placeholder="e.g. Customer onboarding, Invoice chase" />
             </label>
+            <label>
+              <span>Ideal Customer Profile <small>optional, sharpens sales / BD processes</small></span>
+              <textarea name="icp" rows="4" placeholder="Paste your ICP if you have one. Industry, role, size, pain points, budget range, anything that defines who you want as a customer. We use it to ask better questions and find automations that serve this specific buyer."></textarea>
+            </label>
             <button type="submit" class="button button-primary" id="beginBtn">Start the interview</button>
           </form>
           <p class="intake-note">If you've completed a Discovery session, we'll pull in that context to help pick the best process to document.</p>
@@ -801,6 +810,7 @@
       businessName: '',
       email: '',
       processName: '',
+      icp: '',
       conversation: [],
       currentSection: 1,
       complete: false,
@@ -883,6 +893,7 @@
             businessName: state.businessName,
             email: state.email,
             processName: state.processName,
+            icp: state.icp,
             conversation: state.conversation,
           }),
         });
@@ -928,6 +939,7 @@
       state.businessName = (fd.get('businessName') || '').toString().trim();
       state.email = (fd.get('email') || '').toString().trim();
       state.processName = (fd.get('processName') || '').toString().trim();
+      state.icp = (fd.get('icp') || '').toString().trim();
       if (!state.firstName || !state.businessName || !state.email) return;
 
       $('beginBtn').disabled = true;
@@ -972,6 +984,7 @@
             firstName: state.firstName,
             businessName: state.businessName,
             email: state.email,
+            icp: state.icp,
             sop,
           }),
         });

@@ -148,6 +148,7 @@ module.exports = async (req, res) => {
   const businessName = (body.businessName || "").toString().trim();
   const email = (body.email || "").toString().trim();
   const processName = (body.processName || "").toString().trim();
+  const icp = (body.icp || "").toString().slice(0, 6000).trim();
   const conversation = Array.isArray(body.conversation) ? body.conversation : [];
 
   if (!firstName || !businessName) {
@@ -175,6 +176,12 @@ module.exports = async (req, res) => {
         `---DISCOVERY CONTEXT---\n${discoveryContext}\n---END DISCOVERY CONTEXT---`;
     } else {
       opener += `\n\nNo prior Discovery session was found for this business. Proceed without it.`;
+    }
+
+    if (icp) {
+      opener +=
+        `\n\nThe client also provided their Ideal Customer Profile (ICP). When this process is sales or business development related, ASK QUESTIONS that connect the process to how well it serves this specific customer. Probe their qualification criteria and judgment calls (what makes a great fit, what disqualifies, what makes them a perfect customer). Do not just read this ICP back to them; use it to ask sharper questions.\n\n` +
+        `---IDEAL CUSTOMER PROFILE---\n${icp}\n---END ICP---`;
     }
 
     opener += `\n\nOpen with a warm, short greeting that uses ${firstName}'s name. Then either confirm the process they want to document, or help them pick one based on the Discovery context (if available). Then ask your first question.`;

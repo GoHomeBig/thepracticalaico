@@ -106,20 +106,62 @@ Priority guidance for opportunities:
 - Long-term: 8+ weeks or foundational work that unlocks future automation.
 
 Rules:
-- 3 to 5 automation opportunities. Ranked by leverage. NOT 10. Be selective.
+- 3 to 5 automation opportunities. Ranked by impact. NOT 10. Be selective.
 - Each opportunity must reference specific details from this process.
-- Avoid consulting jargon. Be sharp, direct, specific.
-- Tone: smart operator, warm, confident.
+- Tone: smart operator talking to a small business owner over coffee. Direct, plain, human. Not a consultant. Not a slide deck.
 - Every sentence earns its place. Cut what doesn't.
-- Output ONLY the JSON in tags. No other text.`;
+- Output ONLY the JSON in tags. No other text.
 
-async function runAnalysisPass(anthropic, sop) {
+TONE RULES — READ CAREFULLY:
+
+You are NOT a consultant. You are a friend who has run small businesses, talking to another small business owner. The owner is busy and impatient with corporate speak. You earn their attention by being specific, useful, and human.
+
+BANNED words and phrases. Do not use any of these, and do not use anything that sounds like them:
+- "leverage" — say "use"
+- "optimize" — rewrite without it ("make better" usually means nothing specific)
+- "behavioral triggers" — say "what causes X" or "what makes X happen"
+- "utilization" — say "how you use it"
+- "operationalize" — say "set up" or "actually do"
+- "pattern recognition" — say "spotting" or "noticing"
+- "actionable insights" — just say the thing
+- "synergies" — delete the sentence
+- "ecosystem" — name the specific tools
+- "transformation" — say "change" or be specific
+- "drive" as a verb — say "cause" or use a specific verb
+- "strategic" used as filler — only use when truly meaningful
+- "robust", "best-in-class", "world-class" — delete
+- "scalable" — say "grows with you" or be specific
+- "machine" to describe processes — say "system" or the actual process name
+- "ROI" — say "return" or describe the impact
+- "double down" — say "do more of"
+- "north star" — say "goal"
+- "high-leverage" — say "high-impact" or just describe the impact
+- "unlock" — say "make possible" or rewrite
+- "at scale" — say "as you grow"
+
+PLAIN ENGLISH TEST: read every sentence out loud. If it sounds like a consulting deck, rewrite it. If it sounds like something you'd actually say to a friend, ship it.
+
+GOOD vs BAD examples:
+
+BAD: "David has built a disciplined prospecting machine that leverages behavioral triggers to optimize credit utilization."
+GOOD: "David spends 30 minutes a day finding 10 to 25 prospects on LinkedIn. The system is tight, but every click is still him."
+
+BAD: "The opportunity is to operationalize the behavioral triggers in your candidate evaluation criteria."
+GOOD: "The biggest win is teaching the tool what a good candidate looks like to David, so it flags the right ones before he sees them."
+
+BAD: "Strategic implementation of pattern recognition across the lead qualification funnel."
+GOOD: "Train the filter to do the first cut for you — the obvious yes-or-no candidates."`;
+
+async function runAnalysisPass(anthropic, sop, icp) {
+  const icpBlock = icp && icp.trim()
+    ? "\n\nThe client also shared their Ideal Customer Profile (ICP). Use this to ground your analysis. The best automation opportunities are the ones that help this process serve THIS specific customer better — reference the ICP wherever it sharpens an observation or opportunity.\n\n--- IDEAL CUSTOMER PROFILE ---\n" + icp.trim() + "\n--- END ICP ---\n"
+    : "";
   const userMessage =
     "Here is the structured SOP we just captured in an interview with this business owner.\n\n" +
     "```json\n" +
     JSON.stringify(sop, null, 2) +
-    "\n```\n\n" +
-    "Produce the polished analysis document per the format in your system prompt. Think carefully — this is going to the client.";
+    "\n```" + icpBlock + "\n\n" +
+    "Produce the polished analysis document per the format in your system prompt. Think carefully — this is going to the client. Plain English only. Reference specifics from the SOP" + (icp && icp.trim() ? " and the ICP" : "") + ".";
 
   const response = await anthropic.messages.create({
     model: ANALYSIS_MODEL,
@@ -641,6 +683,10 @@ module.exports = async (req, res) => {
   const businessName = (body.businessName || "").toString().trim();
   const email = (body.email || "").toString().trim();
   const sop = body.sop;
+  // Optional ICP (Ideal Customer Profile). Free-form text the client pasted
+  // in at intake. Used to sharpen the analysis if present. Capped to keep
+  // prompt size sane.
+  const icp = (body.icp || "").toString().slice(0, 6000).trim();
 
   if (!firstName || !businessName || !email || !sop) {
     return res.status(400).json({ error: "Missing firstName, businessName, email, or sop" });
@@ -659,7 +705,7 @@ module.exports = async (req, res) => {
   let analysis;
   let analysisError = null;
   try {
-    analysis = await runAnalysisPass(anthropic, sop);
+    analysis = await runAnalysisPass(anthropic, sop, icp);
   } catch (err) {
     console.error("Analysis pass failed:", err);
     analysisError = err && err.message;
