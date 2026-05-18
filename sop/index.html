@@ -503,7 +503,7 @@
       }
     }
 
-    /* Priority pill on opportunities */
+    /* Priority pill on opportunities + AI Employees */
     .opp-priority {
       display: inline-block;
       padding: 4px 10px;
@@ -526,6 +526,188 @@
     .opp-priority.long-term {
       color: #B45309;
       background: rgba(180, 83, 9, 0.10);
+    }
+
+    /* Assembly line styling */
+    .assembly-line {
+      position: relative;
+      padding: 8px 0 0 0;
+    }
+    .assembly-step {
+      position: relative;
+      background: var(--paper);
+      border: 1px solid var(--line);
+      border-left: 4px solid var(--line);
+      border-radius: 14px;
+      padding: 18px 22px;
+      margin: 0 0 12px 0;
+      transition: border-color 180ms ease, box-shadow 180ms ease;
+    }
+    .assembly-step.has-employee {
+      border-left-color: var(--blue);
+    }
+    .assembly-step-head {
+      display: flex;
+      gap: 14px;
+      align-items: baseline;
+    }
+    .assembly-step-n {
+      font-family: Fraunces, Georgia, serif;
+      font-weight: 800;
+      color: var(--blue);
+      font-size: 22px;
+      min-width: 32px;
+      letter-spacing: -0.025em;
+      line-height: 1;
+    }
+    .assembly-step-action {
+      font-size: 16px;
+      font-weight: 700;
+      color: var(--charcoal);
+      line-height: 1.3;
+    }
+    .assembly-step-meta {
+      margin-top: 6px;
+      margin-left: 46px;
+      font-size: 13px;
+      color: var(--muted);
+      display: flex;
+      flex-wrap: wrap;
+      gap: 14px;
+    }
+    .assembly-step-meta b { color: var(--charcoal); font-weight: 800; }
+    .assembly-step-branches { margin: 8px 0 0 46px; padding-left: 4px; }
+    .assembly-step-branches li { font-size: 13.5px; color: var(--muted); }
+    .assembly-step-branches li b { color: var(--charcoal); }
+    .assembly-step-handoff {
+      margin: 12px 0 0 46px;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 8px 14px;
+      background: rgba(36, 86, 255, 0.08);
+      border: 1px solid rgba(36, 86, 255, 0.20);
+      border-radius: 999px;
+      font-size: 13px;
+      color: var(--charcoal);
+    }
+    .assembly-step-handoff b { color: var(--blue); font-weight: 800; }
+    .assembly-arrow {
+      display: flex;
+      justify-content: center;
+      margin: 4px 0;
+      opacity: 0.5;
+      color: var(--blue);
+    }
+    .assembly-arrow svg { width: 22px; height: auto; display: block; }
+
+    /* AI Employee cards */
+    .employee-card {
+      background: var(--paper);
+      border: 1px solid var(--line);
+      border-radius: 18px;
+      padding: 24px 26px;
+      margin: 14px 0;
+      box-shadow: 0 6px 18px rgba(17, 24, 39, 0.04);
+      transition: transform 180ms ease, box-shadow 180ms ease;
+    }
+    .employee-card:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 10px 28px rgba(17, 24, 39, 0.08);
+    }
+    .employee-rank {
+      font-size: 11px;
+      font-weight: 900;
+      color: var(--blue);
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      margin-bottom: 8px;
+    }
+    .employee-head {
+      display: flex;
+      align-items: baseline;
+      gap: 14px;
+      flex-wrap: wrap;
+    }
+    .employee-name {
+      font-family: Fraunces, Georgia, serif;
+      font-size: 26px;
+      font-weight: 800;
+      color: var(--charcoal);
+      letter-spacing: -0.022em;
+      line-height: 1.1;
+    }
+    .employee-role {
+      font-size: 14px;
+      font-weight: 700;
+      color: var(--muted);
+    }
+    .employee-tagline {
+      margin: 10px 0 14px;
+      font-style: italic;
+      color: var(--muted);
+      font-size: 15.5px;
+      line-height: 1.5;
+    }
+    .employee-detail {
+      margin: 8px 0;
+      font-size: 14.5px;
+      color: var(--charcoal);
+      line-height: 1.55;
+    }
+    .employee-detail b { font-weight: 800; }
+    .employee-facts {
+      margin-top: 12px;
+      font-size: 13px;
+      color: var(--muted);
+      display: flex;
+      flex-wrap: wrap;
+      gap: 14px;
+    }
+    .employee-facts b { color: var(--charcoal); font-weight: 800; }
+    .employee-human {
+      margin-top: 10px;
+      font-size: 13.5px;
+      color: var(--muted);
+      line-height: 1.55;
+    }
+    .employee-human b { color: var(--charcoal); font-weight: 800; }
+
+    /* Where we'd start */
+    .build-card {
+      background: rgba(36, 86, 255, 0.04);
+      border: 1px solid var(--line);
+      border-radius: 16px;
+      padding: 20px 24px;
+      margin: 12px 0;
+    }
+    .build-rank {
+      font-size: 11px;
+      font-weight: 900;
+      color: var(--blue);
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      margin-bottom: 6px;
+    }
+    .build-name {
+      font-family: Fraunces, Georgia, serif;
+      font-size: 22px;
+      font-weight: 800;
+      color: var(--charcoal);
+      letter-spacing: -0.022em;
+      margin-bottom: 8px;
+    }
+    .build-pitch {
+      font-size: 14.5px;
+      color: var(--charcoal);
+      line-height: 1.55;
+    }
+
+    .download-hint {
+      font-size: 13px;
+      color: var(--muted);
+      margin-top: 14px;
+      line-height: 1.55;
     }
 
     /* SOP document (shared) */
@@ -773,12 +955,15 @@
         <!-- Final state -->
         <div class="complete-card" id="resultCard" hidden>
           <h2 id="completeHeading">Your SOP is ready.</h2>
-          <p>It's saved to your SOP Library in Notion and on its way to your inbox. Want to capture another process? Just refresh this page.</p>
+          <p>Saved to your SOP Library, and the editable document is in your inbox. Pick a download below, or refresh this page to document another process.</p>
           <div class="complete-actions">
-            <button class="button button-primary" id="copyBtn" type="button">Copy SOP</button>
-            <button class="button button-light" id="printBtn" type="button">Download PDF</button>
-            <a class="button button-light" href="/sop" id="newBtn">Document another process</a>
+            <button class="button button-primary" id="downloadDocxBtn" type="button">Download Word doc</button>
+            <button class="button button-light" id="openInGdocsBtn" type="button">Open in Google Docs</button>
+            <button class="button button-light" id="printBtn" type="button">Save as PDF</button>
+            <button class="button button-light" id="copyBtn" type="button">Copy text</button>
+            <a class="button button-light" href="/sop" id="newBtn">Document another</a>
           </div>
+          <p class="download-hint" id="downloadHint" hidden>Heads up: opening in Google Docs downloads the Word doc to your computer. Then go to <a href="https://docs.google.com" target="_blank" rel="noopener" style="color:var(--blue);">docs.google.com</a> → <strong>File &rarr; Open &rarr; Upload</strong>.</p>
           <div id="completeErr" class="err" hidden></div>
         </div>
         <article class="sop-document" id="documentView"></article>
@@ -1000,23 +1185,29 @@
       // Show final state regardless of partial failures
       $('analyzingCard').hidden = true;
       $('resultCard').hidden = false;
+      lastResult = result;
 
       const analysis = (result && result.analysis) || null;
       renderAnalysisDocument(sop, analysis);
 
+      // Soft client-facing message; full technical detail goes to console for Joe
       if (!result) {
-        showError($('completeErr'), 'SOP captured but the analysis pass failed. Joe will follow up directly.');
+        console.error('[Practical AI Co.] /api/sop-complete returned no result');
+        showError($('completeErr'), "Your SOP is ready on this page. Joe has been notified about a delivery hiccup and will follow up if anything's missing.");
         return;
       }
-
-      const failures = [];
-      if (result.notion === 'rejected') failures.push('Notion (' + (result.errors?.notion || 'unknown') + ')');
-      if (result.clientEmail === 'rejected') failures.push('client email (' + (result.errors?.clientEmail || 'unknown') + ')');
-      if (result.joeEmail === 'rejected') failures.push("Joe's email (" + (result.errors?.joeEmail || 'unknown') + ')');
-      if (failures.length) {
-        showError($('completeErr'), 'SOP delivered. Some sync issues: ' + failures.join('; ') + '. Joe will follow up.');
+      const partial =
+        result.notion === 'rejected' ||
+        result.clientEmail === 'rejected' ||
+        result.joeEmail === 'rejected';
+      if (partial) {
+        console.warn('[Practical AI Co.] sync issues', result.errors || {});
+        showError($('completeErr'), "Your SOP is ready on this page. Joe has been notified about a delivery hiccup and will follow up if anything's missing.");
       }
     }
+
+    // Holds the latest API response so download buttons can use the .docx blob
+    let lastResult = null;
 
     function renderAnalysisDocument(sop, analysis) {
       const esc = (s) => String(s == null ? '' : s).replace(/[&<>"']/g, (c) => ({ '&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;' }[c]));
@@ -1029,6 +1220,13 @@
       const a = analysis || {};
       const steps = asArr(a.stepsAnnotated).length ? asArr(a.stepsAnnotated) : asArr(sop.steps);
 
+      const employeesForStep = (n) =>
+        asArr(a.aiEmployees).filter((e) =>
+          asArr(e.appliesToSteps).some((sN) => Number(sN) === Number(n))
+        );
+
+      const ARROW_SVG = '<svg viewBox="0 0 24 18" xmlns="http://www.w3.org/2000/svg" fill="none" aria-hidden="true"><path d="M12 2 L12 14 M6 10 L12 16 L18 10" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg>';
+
       const stepsHtml = steps.length
         ? steps.map((s, i) => {
             const n = s.n || (i + 1);
@@ -1036,17 +1234,24 @@
             if (s.tool) metaParts.push('<span><b>Tool:</b> ' + esc(s.tool) + '</span>');
             if (s.owner) metaParts.push('<span><b>Owner:</b> ' + esc(s.owner) + '</span>');
             if (s.output) metaParts.push('<span><b>Output:</b> ' + esc(s.output) + '</span>');
-            const meta = metaParts.length ? '<div class="step-meta">' + metaParts.join('') + '</div>' : '';
+            const meta = metaParts.length ? '<div class="assembly-step-meta">' + metaParts.join('') + '</div>' : '';
             const obs = s.observation && String(s.observation).trim()
               ? '<div class="step-observation"><b>Note:</b> ' + esc(s.observation) + '</div>'
               : '';
             const branches = asArr(s.branches).length
-              ? '<ul class="branches">' + asArr(s.branches).map((b) => '<li><b>If</b> ' + esc(b.if || '') + ' &rarr; ' + esc(b.then || '') + '</li>').join('') + '</ul>'
+              ? '<ul class="assembly-step-branches">' + asArr(s.branches).map((b) => '<li><b>If</b> ' + esc(b.if || '') + ' &rarr; ' + esc(b.then || '') + '</li>').join('') + '</ul>'
               : '';
-            return '<div class="sop-step">'
-              + '<div class="step-head"><div class="step-n">' + n + '.</div><div class="step-action">' + esc(s.action || '') + '</div></div>'
-              + meta + obs + branches
-              + '</div>';
+            const handoffs = employeesForStep(n);
+            const handoffHtml = handoffs.length
+              ? handoffs.map((e) => '<div class="assembly-step-handoff">⚡&nbsp; <b>' + esc(e.firstName || 'AI Employee') + '</b> (' + esc(e.role || 'AI Employee') + ') takes this</div>').join(' ')
+              : '';
+            const arrowAfter = i < steps.length - 1 ? '<div class="assembly-arrow">' + ARROW_SVG + '</div>' : '';
+            const stepClass = handoffs.length ? 'assembly-step has-employee' : 'assembly-step';
+            return '<div class="' + stepClass + '">'
+              + '<div class="assembly-step-head"><div class="assembly-step-n">' + n + '</div><div class="assembly-step-action">' + esc(s.action || '') + '</div></div>'
+              + meta + obs + branches + handoffHtml
+              + '</div>'
+              + arrowAfter;
           }).join('')
         : '<p style="color:var(--muted);font-style:italic;">No steps captured.</p>';
 
@@ -1073,25 +1278,31 @@
         return '';
       };
 
-      const oppsHtml = asArr(a.automationOpportunities).length
-        ? asArr(a.automationOpportunities).map((o) => {
-            const rank = String(o.rank || '').padStart(2, '0');
-            const priorityHtml = o.priority
-              ? '<span class="opp-priority ' + priorityClass(o.priority) + '">' + esc(o.priority) + '</span>'
+      const employeesHtml = asArr(a.aiEmployees).length
+        ? asArr(a.aiEmployees).map((e) => {
+            const rank = String(e.rank || '').padStart(2, '0');
+            const firstName = e.firstName || e.name || 'AI Employee';
+            const role = e.role || '';
+            const priorityHtml = e.priority
+              ? '<span class="opp-priority ' + priorityClass(e.priority) + '">' + esc(e.priority) + '</span>'
               : '';
             const facts = [];
-            if (o.timeSavings) facts.push('<span><b>Time savings:</b> ' + esc(o.timeSavings) + '</span>');
-            if (o.estimatedDollarValue) facts.push('<span><b>Est. value:</b> ' + esc(o.estimatedDollarValue) + '</span>');
-            if (o.buildEffort) facts.push('<span><b>Build effort:</b> ' + esc(o.buildEffort) + '</span>');
-            if (o.complexity) facts.push('<span><b>Complexity:</b> ' + esc(o.complexity) + '</span>');
-            if (asArr(o.tools).length) facts.push('<span><b>Tools:</b> ' + esc(asArr(o.tools).join(', ')) + '</span>');
-            return '<div class="opp-card">'
-              + '<div class="opp-rank">Opportunity ' + rank + priorityHtml + '</div>'
-              + '<div class="opp-name">' + esc(o.name || '') + '</div>'
-              + (o.whatItDoes ? '<div class="opp-what">' + esc(o.whatItDoes) + '</div>' : '')
-              + (facts.length ? '<div class="opp-facts">' + facts.join('') + '</div>' : '')
-              + (o.whyItMatters ? '<div class="opp-detail"><b>Why it matters:</b> ' + esc(o.whyItMatters) + '</div>' : '')
-              + (o.humanInLoop ? '<div class="opp-human"><b>Human in loop:</b> ' + esc(o.humanInLoop) + '</div>' : '')
+            if (e.timeSavings) facts.push('<span><b>Time savings:</b> ' + esc(e.timeSavings) + '</span>');
+            if (e.estimatedDollarValue) facts.push('<span><b>Est. value:</b> ' + esc(e.estimatedDollarValue) + '</span>');
+            if (e.buildEffort) facts.push('<span><b>Build effort:</b> ' + esc(e.buildEffort) + '</span>');
+            if (e.complexity) facts.push('<span><b>Complexity:</b> ' + esc(e.complexity) + '</span>');
+            if (asArr(e.tools).length) facts.push('<span><b>Tools:</b> ' + esc(asArr(e.tools).join(', ')) + '</span>');
+            if (asArr(e.appliesToSteps).length) facts.push('<span><b>Covers steps:</b> ' + esc(asArr(e.appliesToSteps).join(', ')) + '</span>');
+            return '<div class="employee-card">'
+              + '<div class="employee-rank">AI Employee #' + rank + priorityHtml + '</div>'
+              + '<div class="employee-head"><div class="employee-name">' + esc(firstName) + '</div>'
+              + (role ? '<div class="employee-role">' + esc(role) + '</div>' : '')
+              + '</div>'
+              + (e.tagline ? '<div class="employee-tagline">&ldquo;' + esc(e.tagline) + '&rdquo;</div>' : '')
+              + (e.whatTheyDo ? '<div class="employee-detail"><b>What they do:</b> ' + esc(e.whatTheyDo) + '</div>' : '')
+              + (e.whatYouSkip ? '<div class="employee-detail"><b>What you skip:</b> ' + esc(e.whatYouSkip) + '</div>' : '')
+              + (facts.length ? '<div class="employee-facts">' + facts.join('') + '</div>' : '')
+              + (e.humanInLoop ? '<div class="employee-human"><b>You still own:</b> ' + esc(e.humanInLoop) + '</div>' : '')
               + '</div>';
           }).join('')
         : '';
@@ -1118,8 +1329,15 @@
           })()
         : '';
 
-      const nextHtml = asArr(a.suggestedNextMoves).length
-        ? '<ol>' + asArr(a.suggestedNextMoves).map((m) => '<li>' + esc(m) + '</li>').join('') + '</ol>'
+      const whereWedStartHtml = asArr(a.whereWedStart).length
+        ? asArr(a.whereWedStart).map((w, i) => {
+            const stepNum = i + 1;
+            return '<div class="build-card">'
+              + '<div class="build-rank">Build ' + stepNum + (w.timeline ? ' &middot; ' + esc(w.timeline) : '') + '</div>'
+              + '<div class="build-name">' + esc(w.name || '') + '</div>'
+              + (w.pitch ? '<div class="build-pitch">' + esc(w.pitch) + '</div>' : '')
+              + '</div>';
+          }).join('')
         : '';
 
       $('documentView').innerHTML = `
@@ -1138,20 +1356,21 @@
         ${sop.trigger ? '<h3>Trigger</h3>' + para(sop.trigger) : ''}
         ${asArr(sop.dependencies).length ? '<h3>Dependencies</h3>' + list(asArr(sop.dependencies)) : ''}
 
-        <h3>Workflow</h3>
-        ${stepsHtml}
+        <h3>The assembly line</h3>
+        <p style="color:var(--muted);font-size:14px;margin:-4px 0 16px;">Every step in order. Where an AI Employee would take over, you'll see them tagged.</p>
+        <div class="assembly-line">${stepsHtml}</div>
 
         ${decisionsHtml ? '<h3>Decision points</h3>' + decisionsHtml : ''}
         ${failuresHtml ? '<h3>Failure modes &amp; recovery</h3>' + failuresHtml : ''}
         ${sop.definitionOfDone ? '<h3>Definition of done</h3>' + para(sop.definitionOfDone) : ''}
 
-        ${(asArr(a.whatsWorking).length || asArr(a.whatsBrittle).length) ? '<h3>Strategic observations</h3>' : ''}
+        ${(asArr(a.whatsWorking).length || asArr(a.whatsBrittle).length) ? '<h3>What we noticed</h3>' : ''}
         ${asArr(a.whatsWorking).length ? '<h4 style="color:var(--green);">What is working</h4>' + list(asArr(a.whatsWorking)) : ''}
         ${asArr(a.whatsBrittle).length ? '<h4 style="color:#B45309;">What is brittle</h4>' + list(asArr(a.whatsBrittle)) : ''}
 
-        ${oppsHtml ? '<h3>Automation opportunities</h3><p style="color:var(--muted);font-size:14px;margin:-4px 0 16px;">Ranked by leverage for your business.</p>' + oppsHtml : ''}
+        ${employeesHtml ? '<h3>Your first suggested AI Employees</h3><p style="color:var(--muted);font-size:14px;margin:-4px 0 16px;">Each one is a build we would ship for you. Names you can remember, roles you can point at, things you can stop doing.</p>' + employeesHtml : ''}
 
-        ${nextHtml ? '<h3>Suggested next moves</h3>' + nextHtml : ''}
+        ${whereWedStartHtml ? '<h3>Where we would start</h3><p style="color:var(--muted);font-size:14px;margin:-4px 0 16px;">Our recommended build order. We ship one, prove it, then roll into the next.</p>' + whereWedStartHtml : ''}
 
         ${a.closingNote ? '<div class="closing-note">' + esc(a.closingNote) + '</div>' : ''}
       `;
@@ -1226,6 +1445,56 @@
       $('completeHeading').textContent = `${sop.processName || 'Your SOP'} — captured and sent.`;
     }
 
+    // ============================================================
+    // Download handlers
+    // ============================================================
+    function downloadDocxBlob() {
+      if (!lastResult || !lastResult.docx || !lastResult.docx.base64) {
+        // .docx unavailable — fall back to print
+        window.print();
+        return null;
+      }
+      const { filename, base64 } = lastResult.docx;
+      const bin = atob(base64);
+      const bytes = new Uint8Array(bin.length);
+      for (let i = 0; i < bin.length; i++) bytes[i] = bin.charCodeAt(i);
+      const blob = new Blob([bytes], {
+        type: 'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
+      });
+      const url = URL.createObjectURL(blob);
+      const link = document.createElement('a');
+      link.href = url;
+      link.download = filename || 'SOP.docx';
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+      setTimeout(() => URL.revokeObjectURL(url), 4000);
+      return filename;
+    }
+
+    $('downloadDocxBtn').addEventListener('click', () => {
+      const btn = $('downloadDocxBtn');
+      const orig = btn.textContent;
+      const filename = downloadDocxBlob();
+      if (filename) {
+        btn.textContent = 'Downloaded ✓';
+        setTimeout(() => { btn.textContent = orig; }, 1800);
+      }
+    });
+
+    $('openInGdocsBtn').addEventListener('click', () => {
+      // Trigger the .docx download first, then point them at Google Docs
+      // (there's no public API to send a doc directly into a user's Drive
+      // without OAuth — this is the cleanest path)
+      const filename = downloadDocxBlob();
+      if (filename) {
+        $('downloadHint').hidden = false;
+        window.open('https://docs.google.com/document/u/0/', '_blank');
+      }
+    });
+
+    $('printBtn').addEventListener('click', () => window.print());
+
     $('copyBtn').addEventListener('click', async () => {
       const btn = $('copyBtn');
       try {
@@ -1237,7 +1506,6 @@
         showError($('completeErr'), 'Could not copy. Try selecting manually.');
       }
     });
-    $('printBtn').addEventListener('click', () => window.print());
   </script>
 </body>
 </html>
