@@ -1,0 +1,1776 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="robots" content="noindex,nofollow" />
+  <title>Let's Map How Your Business Works &middot; Practical AI Co.</title>
+  <meta name="description" content="Prepared for your Practical AI Co. discovery process. We'll help you get the important steps out of your head, organize them clearly, and spot a few smart places AI can help." />
+  <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32.png" />
+  <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16.png" />
+  <link rel="icon" type="image/x-icon" href="/favicon.ico" />
+  <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
+  <meta name="theme-color" content="#2456FF" />
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=Fraunces:opsz,wght@9..144,700;9..144,800&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --ink: #111827;
+      --charcoal: #172033;
+      --blue: #2456FF;
+      --blue-dark: #173BD7;
+      --cream: #FBF5EA;
+      --paper: #FFFDF8;
+      --green: #2F8F5B;
+      --amber: #B45309;
+      --muted: #667085;
+      --muted-2: #8A93A5;
+      --line: #E7DCCB;
+      --white: #FFFFFF;
+      --shadow: 0 20px 60px rgba(17, 24, 39, 0.12);
+      --shadow-soft: 0 16px 40px rgba(17, 24, 39, 0.08);
+      --radius: 28px;
+    }
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body {
+      margin: 0;
+      font-family: Inter, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      color: var(--ink);
+      background: var(--cream);
+      line-height: 1.5;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+    a { color: inherit; text-decoration: none; }
+    .container { width: min(880px, calc(100% - 40px)); margin: 0 auto; }
+
+    /* Nav */
+    .nav {
+      background: rgba(251, 245, 234, 0.92);
+      backdrop-filter: blur(16px);
+      border-bottom: 1px solid rgba(231, 220, 203, 0.78);
+    }
+    .nav-inner {
+      min-height: 80px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 24px;
+    }
+    .brand { display: inline-flex; align-items: center; gap: 12px; }
+    .brand-mark {
+      width: 46px; height: 46px;
+      border-radius: 14px;
+      background: var(--paper);
+      border: 1px solid rgba(23, 32, 51, 0.10);
+      box-shadow: 0 10px 24px rgba(17, 24, 39, 0.07);
+      display: grid;
+      place-items: center;
+      flex: 0 0 auto;
+    }
+    .repeat-logo { width: 30px; height: 30px; }
+    .wordmark { display: flex; flex-direction: column; gap: 4px; }
+    .wordmark-title {
+      font-family: Fraunces, Georgia, serif;
+      font-weight: 800;
+      letter-spacing: -0.035em;
+      color: var(--charcoal);
+      font-size: 26px;
+      line-height: 1.05;
+    }
+    .wordmark-title .ai { color: var(--blue); }
+    .wordmark-subtitle {
+      color: var(--muted);
+      font-size: 9px;
+      font-weight: 900;
+      text-transform: uppercase;
+      letter-spacing: 0.26em;
+      line-height: 1;
+    }
+    .tool-pill {
+      font-size: 11px;
+      font-weight: 900;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: var(--blue);
+      padding: 7px 13px;
+      border-radius: 999px;
+      background: rgba(36, 86, 255, 0.10);
+    }
+    @media (max-width: 640px) {
+      .wordmark-subtitle { display: none; }
+      .tool-pill { font-size: 10px; padding: 6px 10px; letter-spacing: 0.14em; }
+    }
+
+    /* Buttons */
+    .button {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 50px;
+      padding: 0 26px;
+      border-radius: 999px;
+      border: 0;
+      font-family: inherit;
+      font-size: 15px;
+      font-weight: 800;
+      cursor: pointer;
+      transition: transform 180ms ease, box-shadow 180ms ease, background 180ms ease, opacity 180ms ease;
+      white-space: nowrap;
+    }
+    .button:hover { transform: translateY(-1px); }
+    .button:disabled { opacity: 0.5; cursor: not-allowed; transform: none; }
+    .button-primary {
+      background: var(--blue);
+      color: var(--white);
+      box-shadow: 0 14px 32px rgba(36, 86, 255, 0.22);
+    }
+    .button-primary:hover:not(:disabled) { background: var(--blue-dark); }
+    .button-light {
+      background: var(--paper);
+      color: var(--charcoal);
+      border: 1px solid var(--line);
+      box-shadow: 0 10px 24px rgba(17, 24, 39, 0.06);
+    }
+    .button-ghost {
+      background: transparent;
+      color: var(--muted);
+      box-shadow: none;
+    }
+
+    main { flex: 1; padding: 48px 0 96px; }
+    .screen { animation: fadeIn 360ms ease both; }
+    @keyframes fadeIn { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: translateY(0); } }
+
+    /* Journey progress (top of every screen except welcome) */
+    .journey {
+      display: grid;
+      grid-template-columns: repeat(5, 1fr);
+      gap: 8px;
+      margin: 0 0 36px;
+    }
+    .journey-step {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 8px;
+      color: var(--muted-2);
+      font-size: 11px;
+      font-weight: 800;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      text-align: center;
+      transition: color 220ms ease;
+    }
+    .journey-dot {
+      width: 28px;
+      height: 28px;
+      border-radius: 999px;
+      border: 2px solid var(--line);
+      background: var(--paper);
+      display: grid;
+      place-items: center;
+      font-size: 13px;
+      font-weight: 900;
+      color: var(--muted-2);
+      transition: all 280ms ease;
+      position: relative;
+    }
+    .journey-step.done .journey-dot {
+      background: var(--green);
+      border-color: var(--green);
+      color: white;
+    }
+    .journey-step.done .journey-dot::after {
+      content: "✓";
+      position: absolute;
+      inset: 0;
+      display: grid;
+      place-items: center;
+      color: white;
+      font-size: 14px;
+      font-weight: 800;
+    }
+    .journey-step.done .journey-dot { font-size: 0; }
+    .journey-step.current .journey-dot {
+      background: var(--blue);
+      border-color: var(--blue);
+      color: white;
+      box-shadow: 0 0 0 6px rgba(36, 86, 255, 0.10);
+    }
+    .journey-step.current { color: var(--blue); }
+    .journey-step.done { color: var(--green); }
+    @media (max-width: 640px) {
+      .journey-step { font-size: 9px; letter-spacing: 0.06em; }
+      .journey-dot { width: 24px; height: 24px; }
+    }
+
+    /* Typography */
+    .eyebrow {
+      color: var(--blue);
+      font-size: 12px;
+      font-weight: 900;
+      text-transform: uppercase;
+      letter-spacing: 0.18em;
+      margin-bottom: 14px;
+    }
+    h1 {
+      font-family: Fraunces, Georgia, serif;
+      font-size: clamp(36px, 5vw, 54px);
+      line-height: 1.06;
+      letter-spacing: -0.03em;
+      color: var(--charcoal);
+      margin: 0 0 18px;
+    }
+    h2 {
+      font-family: Fraunces, Georgia, serif;
+      font-size: clamp(26px, 3.6vw, 36px);
+      line-height: 1.12;
+      letter-spacing: -0.025em;
+      color: var(--charcoal);
+      margin: 0 0 16px;
+    }
+    h3 {
+      font-family: Fraunces, Georgia, serif;
+      font-size: 22px;
+      line-height: 1.2;
+      letter-spacing: -0.022em;
+      color: var(--charcoal);
+      margin: 0 0 12px;
+    }
+    .lede {
+      font-size: 17px;
+      color: var(--muted);
+      line-height: 1.6;
+      margin: 0 0 18px;
+      max-width: 640px;
+    }
+    .body-text {
+      font-size: 16px;
+      color: var(--charcoal);
+      line-height: 1.6;
+      margin: 0 0 18px;
+      max-width: 700px;
+    }
+
+    /* Welcome screen */
+    .welcome-prep {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      padding: 8px 16px;
+      border-radius: 999px;
+      background: rgba(36, 86, 255, 0.08);
+      color: var(--blue);
+      font-size: 12px;
+      font-weight: 800;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      margin-bottom: 28px;
+    }
+    .welcome-prep .dot {
+      width: 8px; height: 8px;
+      background: var(--blue);
+      border-radius: 999px;
+      animation: pulseDot 1.8s ease-in-out infinite;
+    }
+    @keyframes pulseDot { 0%, 100% { opacity: 0.5; } 50% { opacity: 1; } }
+
+    .welcome-get {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 18px;
+      margin: 28px 0 36px;
+    }
+    .welcome-get-card {
+      background: var(--paper);
+      border: 1px solid var(--line);
+      border-radius: 18px;
+      padding: 22px 24px;
+      box-shadow: var(--shadow-soft);
+    }
+    .welcome-get-card .num {
+      font-family: Fraunces, Georgia, serif;
+      color: var(--blue);
+      font-size: 28px;
+      font-weight: 800;
+      letter-spacing: -0.025em;
+      line-height: 1;
+      margin-bottom: 8px;
+    }
+    .welcome-get-card .name {
+      font-family: Fraunces, Georgia, serif;
+      font-size: 20px;
+      font-weight: 800;
+      color: var(--charcoal);
+      letter-spacing: -0.022em;
+      margin-bottom: 10px;
+      line-height: 1.2;
+    }
+    .welcome-get-card .desc {
+      font-size: 14.5px;
+      color: var(--muted);
+      line-height: 1.55;
+    }
+    @media (max-width: 640px) {
+      .welcome-get { grid-template-columns: 1fr; }
+    }
+
+    /* Profile form */
+    .form-card {
+      background: var(--paper);
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      padding: 36px 36px 32px;
+      box-shadow: var(--shadow-soft);
+    }
+    .form-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 18px;
+    }
+    .form-grid .full { grid-column: 1 / -1; }
+    .form-label {
+      display: grid;
+      gap: 8px;
+    }
+    .form-label span {
+      font-size: 13px;
+      font-weight: 800;
+      color: var(--charcoal);
+      letter-spacing: 0.01em;
+    }
+    .form-label span small {
+      font-weight: 500;
+      color: var(--muted-2);
+      letter-spacing: 0;
+      text-transform: none;
+      font-size: 12px;
+      margin-left: 6px;
+    }
+    .form-label input,
+    .form-label select,
+    .form-label textarea {
+      font-family: inherit;
+      font-size: 16px;
+      padding: 14px 16px;
+      border: 1px solid var(--line);
+      border-radius: 14px;
+      background: var(--cream);
+      color: var(--charcoal);
+      transition: border-color 160ms ease, box-shadow 160ms ease;
+      width: 100%;
+      line-height: 1.5;
+    }
+    .form-label textarea { resize: vertical; min-height: 88px; }
+    .form-label input:focus,
+    .form-label select:focus,
+    .form-label textarea:focus {
+      outline: none;
+      border-color: var(--blue);
+      box-shadow: 0 0 0 4px rgba(36, 86, 255, 0.10);
+    }
+    .form-actions {
+      display: flex;
+      gap: 12px;
+      align-items: center;
+      margin-top: 28px;
+      flex-wrap: wrap;
+    }
+    @media (max-width: 640px) {
+      .form-card { padding: 28px 22px; }
+      .form-grid { grid-template-columns: 1fr; }
+    }
+
+    /* Workflow selection grid */
+    .workflow-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+      gap: 14px;
+      margin: 8px 0 28px;
+    }
+    .workflow-card {
+      background: var(--paper);
+      border: 2px solid var(--line);
+      border-radius: 18px;
+      padding: 18px 18px;
+      cursor: pointer;
+      transition: transform 200ms ease, border-color 200ms ease, box-shadow 200ms ease, background 200ms ease;
+      text-align: left;
+      font-family: inherit;
+      color: var(--charcoal);
+      position: relative;
+      box-shadow: 0 6px 16px rgba(17, 24, 39, 0.04);
+    }
+    .workflow-card:hover {
+      transform: translateY(-2px);
+      border-color: rgba(36, 86, 255, 0.30);
+      box-shadow: 0 12px 30px rgba(17, 24, 39, 0.08);
+    }
+    .workflow-card.selected {
+      border-color: var(--blue);
+      background: rgba(36, 86, 255, 0.05);
+      box-shadow: 0 0 0 4px rgba(36, 86, 255, 0.10);
+    }
+    .workflow-card.selected::after {
+      content: "✓";
+      position: absolute;
+      top: 14px;
+      right: 14px;
+      width: 24px;
+      height: 24px;
+      border-radius: 999px;
+      background: var(--blue);
+      color: white;
+      display: grid;
+      place-items: center;
+      font-size: 14px;
+      font-weight: 900;
+    }
+    .workflow-card .icon {
+      font-size: 22px;
+      margin-bottom: 10px;
+      display: block;
+    }
+    .workflow-card .label {
+      font-weight: 800;
+      font-size: 15px;
+      line-height: 1.3;
+      letter-spacing: -0.01em;
+    }
+    .workflow-card .hint {
+      font-size: 12.5px;
+      color: var(--muted);
+      margin-top: 6px;
+      line-height: 1.4;
+    }
+    .workflow-other-input {
+      width: 100%;
+      margin-top: 8px;
+    }
+
+    /* Chat */
+    .interview-meta {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 14px;
+      flex-wrap: wrap;
+      margin-bottom: 18px;
+    }
+    .interview-meta .now {
+      font-size: 12px;
+      font-weight: 800;
+      color: var(--blue);
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+    }
+    .interview-meta .now b {
+      color: var(--charcoal);
+      letter-spacing: 0.02em;
+      text-transform: none;
+      font-family: Fraunces, Georgia, serif;
+      font-size: 18px;
+      margin-left: 10px;
+    }
+    .workflow-pips {
+      display: flex;
+      gap: 6px;
+    }
+    .workflow-pip {
+      width: 32px;
+      height: 6px;
+      border-radius: 999px;
+      background: var(--line);
+      transition: background 220ms ease;
+    }
+    .workflow-pip.done { background: var(--green); }
+    .workflow-pip.current { background: var(--blue); }
+
+    .chat {
+      background: var(--paper);
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      padding: 28px;
+      box-shadow: var(--shadow-soft);
+      min-height: 320px;
+      max-height: 60vh;
+      overflow-y: auto;
+      display: flex;
+      flex-direction: column;
+      gap: 18px;
+    }
+    .msg {
+      max-width: 88%;
+      padding: 14px 18px;
+      border-radius: 18px;
+      font-size: 15.5px;
+      line-height: 1.55;
+      animation: msgIn 220ms ease both;
+    }
+    @keyframes msgIn { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: translateY(0); } }
+    .msg-assistant {
+      align-self: flex-start;
+      background: var(--cream);
+      color: var(--charcoal);
+      border: 1px solid var(--line);
+      border-bottom-left-radius: 6px;
+    }
+    .msg-user {
+      align-self: flex-end;
+      background: var(--charcoal);
+      color: var(--white);
+      border-bottom-right-radius: 6px;
+    }
+    .msg-summary {
+      align-self: stretch;
+      max-width: 100%;
+      background: rgba(36, 86, 255, 0.06);
+      border: 1px solid rgba(36, 86, 255, 0.20);
+      color: var(--charcoal);
+      border-radius: 14px;
+      padding: 18px 22px;
+    }
+    .msg-summary .label {
+      font-size: 11px;
+      font-weight: 900;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: var(--blue);
+      margin-bottom: 8px;
+    }
+    .msg-summary p { margin: 0 0 10px; font-size: 15px; line-height: 1.6; }
+    .msg-summary p:last-child { margin-bottom: 0; }
+    .msg-summary .summary-actions {
+      margin-top: 12px;
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+    .msg-typing { align-self: flex-start; display: flex; gap: 6px; padding: 18px 22px; }
+    .msg-typing span {
+      width: 7px;
+      height: 7px;
+      border-radius: 999px;
+      background: var(--muted-2);
+      animation: typing 1.2s ease-in-out infinite;
+    }
+    .msg-typing span:nth-child(2) { animation-delay: 0.15s; }
+    .msg-typing span:nth-child(3) { animation-delay: 0.30s; }
+    @keyframes typing {
+      0%, 60%, 100% { opacity: 0.3; transform: scale(0.85); }
+      30% { opacity: 1; transform: scale(1); }
+    }
+
+    .chat-input-form {
+      margin-top: 20px;
+      display: grid;
+      grid-template-columns: 1fr auto;
+      gap: 12px;
+      align-items: end;
+    }
+    .chat-input-form textarea {
+      font-family: inherit;
+      font-size: 16px;
+      padding: 14px 18px;
+      border: 1px solid var(--line);
+      border-radius: 18px;
+      background: var(--paper);
+      color: var(--charcoal);
+      resize: none;
+      max-height: 200px;
+      min-height: 56px;
+      transition: border-color 160ms ease, box-shadow 160ms ease;
+    }
+    .chat-input-form textarea:focus {
+      outline: none;
+      border-color: var(--blue);
+      box-shadow: 0 0 0 4px rgba(36, 86, 255, 0.10);
+    }
+    .chat-input-form button { min-height: 56px; padding: 0 26px; }
+
+    /* Processing animation */
+    .processing-stage {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+      padding: 40px 24px;
+    }
+    .processing-checklist {
+      list-style: none;
+      padding: 0;
+      margin: 28px 0 0;
+      width: 100%;
+      max-width: 520px;
+    }
+    .processing-checklist li {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      padding: 14px 18px;
+      background: var(--paper);
+      border: 1px solid var(--line);
+      border-radius: 14px;
+      margin: 10px 0;
+      font-size: 15.5px;
+      color: var(--muted);
+      transition: all 280ms ease;
+      box-shadow: 0 6px 16px rgba(17, 24, 39, 0.03);
+    }
+    .processing-checklist li.active {
+      border-color: var(--blue);
+      color: var(--charcoal);
+      box-shadow: 0 0 0 4px rgba(36, 86, 255, 0.08);
+    }
+    .processing-checklist li.done {
+      color: var(--green);
+      border-color: rgba(47, 143, 91, 0.30);
+      background: rgba(47, 143, 91, 0.04);
+    }
+    .processing-checklist .check {
+      width: 22px; height: 22px;
+      border-radius: 999px;
+      border: 2px solid var(--line);
+      display: grid;
+      place-items: center;
+      flex-shrink: 0;
+      font-size: 12px;
+      font-weight: 900;
+      color: transparent;
+      transition: all 280ms ease;
+    }
+    .processing-checklist li.active .check {
+      border-color: var(--blue);
+      background: var(--blue);
+      color: white;
+    }
+    .processing-checklist li.done .check {
+      border-color: var(--green);
+      background: var(--green);
+      color: white;
+    }
+    .processing-checklist li.active .check::after { content: "•"; }
+    .processing-checklist li.done .check::after { content: "✓"; }
+    .processing-spinner {
+      width: 48px;
+      height: 48px;
+      border: 3px solid var(--line);
+      border-top-color: var(--blue);
+      border-radius: 999px;
+      animation: spin 1s linear infinite;
+      margin: 0 auto 20px;
+    }
+    @keyframes spin { to { transform: rotate(360deg); } }
+
+    /* Deliverables */
+    .deliverable-journey {
+      display: grid;
+      grid-template-columns: repeat(5, 1fr);
+      gap: 8px;
+      margin: 28px 0 36px;
+      padding: 20px 24px;
+      background: var(--paper);
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow-soft);
+    }
+    .deliverable-journey-step {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 8px;
+      color: var(--green);
+      font-size: 11.5px;
+      font-weight: 800;
+      letter-spacing: 0.04em;
+      text-align: center;
+      line-height: 1.2;
+    }
+    .deliverable-journey-step .check {
+      width: 28px;
+      height: 28px;
+      border-radius: 999px;
+      background: var(--green);
+      color: white;
+      display: grid;
+      place-items: center;
+      font-size: 14px;
+      font-weight: 900;
+    }
+    @media (max-width: 640px) {
+      .deliverable-journey { grid-template-columns: 1fr 1fr; gap: 14px; padding: 18px; }
+    }
+
+    .deliverable-card {
+      background: var(--paper);
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      padding: 36px 36px 32px;
+      box-shadow: var(--shadow-soft);
+      margin-bottom: 20px;
+    }
+    .deliverable-card .deliverable-label {
+      font-size: 11px;
+      font-weight: 900;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: var(--blue);
+      margin-bottom: 10px;
+    }
+    .deliverable-card h3 {
+      margin-bottom: 12px;
+      font-size: 28px;
+    }
+    .deliverable-card p {
+      color: var(--muted);
+      font-size: 15.5px;
+      line-height: 1.6;
+      margin: 0 0 20px;
+    }
+    .deliverable-actions {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+
+    /* Game plan rendering */
+    .gameplan {
+      background: var(--paper);
+      border: 1px solid var(--line);
+      border-radius: 18px;
+      padding: 28px 30px;
+      margin-top: 24px;
+    }
+    .gameplan h4 {
+      font-family: Fraunces, Georgia, serif;
+      font-size: 18px;
+      letter-spacing: -0.02em;
+      margin: 22px 0 8px;
+      color: var(--charcoal);
+    }
+    .gameplan h4:first-child { margin-top: 0; }
+    .gameplan p { font-size: 15px; line-height: 1.6; margin: 6px 0; color: var(--charcoal); }
+    .gameplan ul { padding-left: 20px; margin: 6px 0 14px; }
+    .gameplan li { font-size: 15px; line-height: 1.6; margin: 5px 0; color: var(--charcoal); }
+
+    .closing-cta {
+      margin-top: 36px;
+      background: var(--charcoal);
+      color: var(--white);
+      border-radius: var(--radius);
+      padding: 36px 40px;
+      box-shadow: var(--shadow);
+    }
+    .closing-cta h3 {
+      color: var(--white);
+      font-size: 26px;
+      margin-bottom: 10px;
+    }
+    .closing-cta p {
+      color: rgba(255,255,255,0.78);
+      font-size: 16px;
+      margin: 0 0 20px;
+      line-height: 1.55;
+    }
+    .closing-cta .button-primary {
+      background: var(--blue);
+      color: var(--white);
+    }
+
+    /* Notion preview chip */
+    .notion-chip {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      padding: 10px 14px;
+      background: var(--cream);
+      border: 1px solid var(--line);
+      border-radius: 999px;
+      font-size: 13px;
+      font-weight: 700;
+      color: var(--muted);
+      margin-top: 14px;
+    }
+    .notion-chip-icon {
+      width: 18px;
+      height: 18px;
+      background: var(--charcoal);
+      color: white;
+      font-size: 11px;
+      font-weight: 900;
+      border-radius: 5px;
+      display: grid;
+      place-items: center;
+      font-family: Fraunces, Georgia, serif;
+    }
+
+    .err {
+      margin-top: 14px;
+      padding: 12px 16px;
+      border-radius: 12px;
+      background: rgba(220, 38, 38, 0.08);
+      color: #B91C1C;
+      border: 1px solid rgba(220, 38, 38, 0.20);
+      font-size: 14px;
+    }
+    .note {
+      margin-top: 14px;
+      padding: 12px 16px;
+      border-radius: 12px;
+      background: rgba(36, 86, 255, 0.06);
+      color: var(--charcoal);
+      border: 1px solid rgba(36, 86, 255, 0.20);
+      font-size: 14px;
+    }
+
+    .resume-banner {
+      background: rgba(36, 86, 255, 0.06);
+      border: 1px solid rgba(36, 86, 255, 0.20);
+      border-radius: 14px;
+      padding: 14px 18px;
+      margin-bottom: 24px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 14px;
+      flex-wrap: wrap;
+      font-size: 14.5px;
+      color: var(--charcoal);
+    }
+    .resume-banner .actions { display: flex; gap: 8px; }
+    .resume-banner button {
+      background: none;
+      border: 1px solid var(--line);
+      padding: 7px 14px;
+      font-family: inherit;
+      font-size: 13px;
+      font-weight: 700;
+      color: var(--charcoal);
+      border-radius: 999px;
+      cursor: pointer;
+      transition: background 160ms ease;
+    }
+    .resume-banner button:hover { background: var(--paper); }
+    .resume-banner button.primary {
+      background: var(--blue);
+      color: white;
+      border-color: var(--blue);
+    }
+
+    /* Footer */
+    .footer {
+      background: var(--charcoal);
+      color: rgba(255,255,255,0.78);
+      padding: 36px 0;
+      font-size: 13px;
+    }
+    .footer-inner {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 24px;
+      flex-wrap: wrap;
+    }
+    .footer .brand-mark.dark {
+      background: rgba(255,255,255,0.10);
+      border-color: rgba(255,255,255,0.12);
+      box-shadow: none;
+    }
+    .footer .wordmark-title { color: var(--white); }
+    .footer .wordmark-subtitle { color: rgba(255,255,255,0.55); }
+  </style>
+</head>
+<body>
+  <svg width="0" height="0" style="position:absolute" aria-hidden="true">
+    <symbol id="repeat-logo-symbol" viewBox="0 0 64 64">
+      <g>
+        <path d="M17 30 C17 20 25 13 35 13 H49" stroke="#2456FF" stroke-width="5.6" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+        <path d="M42 6 L50 13 L42 20" stroke="#2456FF" stroke-width="5.6" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+      </g>
+      <g>
+        <path d="M47 34 C47 44 39 51 29 51 H15" stroke="#172033" stroke-width="5.6" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+        <path d="M22 58 L14 51 L22 44" stroke="#172033" stroke-width="5.6" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+      </g>
+    </symbol>
+  </svg>
+
+  <header class="nav">
+    <div class="container nav-inner">
+      <a class="brand" href="/" aria-label="Practical AI Co. home">
+        <div class="brand-mark" aria-hidden="true">
+          <svg class="repeat-logo" viewBox="0 0 64 64"><use href="#repeat-logo-symbol"></use></svg>
+        </div>
+        <div class="wordmark">
+          <div class="wordmark-title">Practical <span class="ai">AI</span> Co.</div>
+          <div class="wordmark-subtitle">Systems that run so you can lead</div>
+        </div>
+      </a>
+      <div class="tool-pill" aria-hidden="true">Client Discovery</div>
+    </div>
+  </header>
+
+  <main>
+    <div class="container">
+      <!-- Resume banner -->
+      <div id="resumeBanner" class="resume-banner" hidden>
+        <div>
+          <b>Welcome back.</b> You started this discovery earlier. Continue where you left off, or start over.
+        </div>
+        <div class="actions">
+          <button class="primary" id="resumeContinueBtn" type="button">Continue</button>
+          <button id="resumeStartOverBtn" type="button">Start over</button>
+        </div>
+      </div>
+
+      <!-- Journey progress (hidden on welcome) -->
+      <div id="journeyProgress" hidden></div>
+
+      <!-- ============================================================
+           WELCOME
+           ============================================================ -->
+      <section id="welcomeView" class="screen">
+        <div class="welcome-prep">
+          <span class="dot"></span>
+          Prepared for your Practical AI Co. discovery process
+        </div>
+        <h1>Let's map how your business works.</h1>
+        <p class="lede">We'll help you get the important steps out of your head, organize them clearly, and spot a few smart places AI can help.</p>
+        <p class="body-text">Every business has a way work gets done. Some of it lives in systems. Some of it lives in spreadsheets. A lot of it lives in someone's head. This guided walkthrough helps us understand how your business runs today, so we can turn that into clear process notes, simple SOPs, and a practical AI game plan.</p>
+
+        <h3 style="margin-top: 38px;">What you'll get</h3>
+        <div class="welcome-get">
+          <div class="welcome-get-card">
+            <div class="num">01</div>
+            <div class="name">Here's Your First Process, Mapped Out</div>
+            <div class="desc">A clear, organized version of how this work gets done today, formatted for Notion so your team can use it, edit it, and improve it over time.</div>
+          </div>
+          <div class="welcome-get-card">
+            <div class="num">02</div>
+            <div class="name">Your Practical AI Game Plan</div>
+            <div class="desc">A simple plan showing where AI can help first, what Practical AI Co. can help build with you, what not to automate yet, and how we can move forward together.</div>
+          </div>
+        </div>
+
+        <div class="form-actions">
+          <button id="startBtn" class="button button-primary" type="button">Start mapping</button>
+          <span style="font-size: 13px; color: var(--muted);">Takes about 30 to 45 minutes. Tip: use your phone keyboard mic to dictate, much faster than typing.</span>
+        </div>
+      </section>
+
+      <!-- ============================================================
+           PROFILE
+           ============================================================ -->
+      <section id="profileView" class="screen" hidden>
+        <div class="eyebrow">Step 1 of 5 &middot; Tell us about your business</div>
+        <h2>Let's start with the basics.</h2>
+        <p class="lede">A few quick fields so we know who we're mapping for. We'll dig into specifics next.</p>
+
+        <div class="form-card">
+          <form id="profileForm" class="form-grid" autocomplete="on">
+            <label class="form-label">
+              <span>Business name</span>
+              <input type="text" name="businessName" required autocomplete="organization" />
+            </label>
+            <label class="form-label">
+              <span>Industry</span>
+              <input type="text" name="industry" placeholder="e.g. luxury transportation, home services" required />
+            </label>
+            <label class="form-label">
+              <span>Team size</span>
+              <select name="teamSize" required>
+                <option value="">Pick one&hellip;</option>
+                <option>Just me</option>
+                <option>2 to 5</option>
+                <option>6 to 15</option>
+                <option>16 to 50</option>
+                <option>50+</option>
+              </select>
+            </label>
+            <label class="form-label">
+              <span>Main customer type</span>
+              <input type="text" name="customerType" placeholder="who you serve" required />
+            </label>
+            <label class="form-label full">
+              <span>Primary services or products</span>
+              <textarea name="services" required></textarea>
+            </label>
+            <label class="form-label full">
+              <span>Current tools you use <small>name what comes to mind, no need to be complete</small></span>
+              <textarea name="tools" placeholder="e.g. Gmail, ServiceTitan, QuickBooks, a Google Sheet for scheduling, iMessage with the team" required></textarea>
+            </label>
+            <label class="form-label">
+              <span>Your name</span>
+              <input type="text" name="firstName" required autocomplete="given-name" />
+            </label>
+            <label class="form-label">
+              <span>Your role</span>
+              <input type="text" name="role" placeholder="founder, ops manager, etc." required />
+            </label>
+            <label class="form-label">
+              <span>Your email</span>
+              <input type="email" name="email" required autocomplete="email" />
+            </label>
+            <label class="form-label">
+              <span>Joe's email <small>so we can send the deliverables to your project manager too</small></span>
+              <input type="email" name="joeEmail" value="joe@thepracticalai.co" />
+            </label>
+            <label class="form-label full">
+              <span>Biggest operational headache right now <small>one sentence is fine</small></span>
+              <textarea name="headache" placeholder="What's the thing that keeps you up at night, or eats your week?" required></textarea>
+            </label>
+            <div class="form-actions full">
+              <button type="submit" class="button button-primary">Continue to workflows</button>
+              <button type="button" class="button button-ghost" id="profileBackBtn">Back</button>
+            </div>
+          </form>
+        </div>
+      </section>
+
+      <!-- ============================================================
+           WORKFLOW SELECT
+           ============================================================ -->
+      <section id="workflowSelectView" class="screen" hidden>
+        <div class="eyebrow">Step 2 of 5 &middot; Pick your workflows</div>
+        <h2>Which workflows should we map first?</h2>
+        <p class="lede">Pick any that come to mind. We'll go through them one at a time. Most people start with 1 or 2 they know really well.</p>
+
+        <div class="workflow-grid" id="workflowGrid"></div>
+        <label class="form-label" style="margin-top: 0;" id="otherWorkflowWrap" hidden>
+          <span>Tell us about your other workflow</span>
+          <input type="text" id="otherWorkflowInput" class="workflow-other-input" placeholder="e.g. Annual safety audit" />
+        </label>
+
+        <div class="form-actions">
+          <button id="workflowContinueBtn" class="button button-primary" type="button" disabled>Start with these</button>
+          <button id="workflowBackBtn" class="button button-ghost" type="button">Back</button>
+          <span id="workflowSelectionCount" style="font-size: 13px; color: var(--muted);"></span>
+        </div>
+      </section>
+
+      <!-- ============================================================
+           INTERVIEW
+           ============================================================ -->
+      <section id="interviewView" class="screen" hidden>
+        <div class="interview-meta">
+          <div class="now">
+            Mapping
+            <b id="currentWorkflowName">your workflow</b>
+          </div>
+          <div class="workflow-pips" id="workflowPips"></div>
+        </div>
+        <div class="chat" id="chatLog" aria-live="polite"></div>
+        <form id="chatForm" class="chat-input-form">
+          <textarea id="chatInput" name="message" placeholder="Type your answer&hellip; (Shift+Enter for newline, or tap the mic on your phone keyboard)" rows="2" autocomplete="off" required></textarea>
+          <button type="submit" class="button button-primary" id="sendBtn">Send</button>
+        </form>
+        <div id="chatErr" class="err" hidden></div>
+        <div class="form-actions" style="margin-top: 18px;">
+          <button id="interviewSaveExitBtn" class="button button-ghost" type="button">Save and exit</button>
+          <span style="font-size: 13px; color: var(--muted);">Your progress is saved automatically.</span>
+        </div>
+      </section>
+
+      <!-- ============================================================
+           PROCESSING
+           ============================================================ -->
+      <section id="processingView" class="screen" hidden>
+        <div class="processing-stage">
+          <div class="processing-spinner"></div>
+          <h2 style="text-align: center;">Putting it all together.</h2>
+          <p class="lede" style="text-align: center;">We're organizing what we heard into your process map and your AI game plan. Takes about a minute.</p>
+          <ul class="processing-checklist" id="processingChecklist">
+            <li data-step="1"><span class="check"></span><span>We listened to how your business runs.</span></li>
+            <li data-step="2"><span class="check"></span><span>We mapped each workflow you shared.</span></li>
+            <li data-step="3"><span class="check"></span><span>We organized the steps into a process you can hand to your team.</span></li>
+            <li data-step="4"><span class="check"></span><span>We spotted the busywork that's slowing you down.</span></li>
+            <li data-step="5"><span class="check"></span><span>We built your Practical AI Game Plan.</span></li>
+          </ul>
+          <div id="processingErr" class="err" hidden></div>
+        </div>
+      </section>
+
+      <!-- ============================================================
+           DELIVERABLES
+           ============================================================ -->
+      <section id="deliverablesView" class="screen" hidden>
+        <h1>Your first process is mapped.</h1>
+        <p class="lede">We pulled the steps out of the conversation, organized them clearly, and turned them into something your team can use.</p>
+
+        <div class="deliverable-journey">
+          <div class="deliverable-journey-step"><div class="check">✓</div><div>We listened</div></div>
+          <div class="deliverable-journey-step"><div class="check">✓</div><div>We mapped the process</div></div>
+          <div class="deliverable-journey-step"><div class="check">✓</div><div>We organized the steps</div></div>
+          <div class="deliverable-journey-step"><div class="check">✓</div><div>We spotted the busywork</div></div>
+          <div class="deliverable-journey-step"><div class="check">✓</div><div>We built your game plan</div></div>
+        </div>
+
+        <!-- Deliverable 1 -->
+        <article class="deliverable-card">
+          <div class="deliverable-label">Deliverable 01</div>
+          <h3>Here's Your First Process, Mapped Out</h3>
+          <p>You now have a clear, organized version of how this work gets done today. It is formatted so it can live in Notion, be used by your team, and be edited as your process changes.</p>
+          <div class="deliverable-actions">
+            <a class="button button-primary" id="openNotionBtn" target="_blank" rel="noopener" hidden>Open your process in Notion</a>
+            <button class="button button-light" id="copyNotionBtn" type="button">Copy for Notion</button>
+            <button class="button button-light" id="downloadMdBtn" type="button">Download Markdown</button>
+          </div>
+          <div class="notion-chip" id="notionStatusChip" hidden>
+            <span class="notion-chip-icon">N</span>
+            <span id="notionStatusText">Creating your Notion page&hellip;</span>
+          </div>
+          <div id="deliverable1Err" class="err" hidden></div>
+        </article>
+
+        <!-- Deliverable 2 -->
+        <article class="deliverable-card">
+          <div class="deliverable-label">Deliverable 02</div>
+          <h3>Your Practical AI Game Plan</h3>
+          <p>A simple plan showing where AI can help first, what Practical AI Co. can help build with you, what not to automate yet, and how we can move forward together.</p>
+          <div class="deliverable-actions">
+            <button class="button button-primary" id="reviewGameplanBtn" type="button">Review my AI game plan</button>
+            <button class="button button-light" id="copyGameplanBtn" type="button">Copy game plan</button>
+            <button class="button button-light" id="downloadGameplanBtn" type="button">Download Markdown</button>
+          </div>
+          <div class="gameplan" id="gameplanView" hidden></div>
+        </article>
+
+        <!-- Closing CTA -->
+        <div class="closing-cta">
+          <h3>Ready to turn this into a working system?</h3>
+          <p>Reply to your discovery email or book another time with Joe. We can review what you mapped, confirm any open questions, and scope the first build together.</p>
+          <a class="button button-primary" href="https://calendar.app.google/SnmSbP7hZCprCZ9B7" target="_blank" rel="noopener">Build this with Practical AI Co.</a>
+        </div>
+      </section>
+    </div>
+  </main>
+
+  <footer class="footer">
+    <div class="container footer-inner">
+      <div class="brand">
+        <div class="brand-mark dark" aria-hidden="true">
+          <svg class="repeat-logo" viewBox="0 0 64 64"><use href="#repeat-logo-symbol"></use></svg>
+        </div>
+        <div class="wordmark">
+          <div class="wordmark-title" style="color:#fff;">Practical <span class="ai">AI</span> Co.</div>
+          <div class="wordmark-subtitle">Systems that run so you can lead</div>
+        </div>
+      </div>
+      <div>Franklin, TN &middot; <a href="mailto:joe@thepracticalai.co" style="color:inherit;text-decoration:underline;">joe@thepracticalai.co</a></div>
+    </div>
+  </footer>
+
+  <script>
+    // ============================================================
+    // Constants and state
+    // ============================================================
+    const STORAGE_KEY = 'map_session_v1';
+    const $ = (id) => document.getElementById(id);
+
+    const WORKFLOWS = [
+      { key: 'leadIntake',       icon: '📥', label: 'Lead intake',         hint: 'How new prospects come in.' },
+      { key: 'salesFollowUp',    icon: '📞', label: 'Sales follow-up',     hint: 'Chasing replies, decisions, deals.' },
+      { key: 'quoting',          icon: '📝', label: 'Quoting or proposals',hint: 'Putting a number to the work.' },
+      { key: 'onboarding',       icon: '👋', label: 'Customer onboarding', hint: 'First days after they say yes.' },
+      { key: 'serviceDelivery',  icon: '🛠️', label: 'Service delivery',     hint: 'Doing the actual work.' },
+      { key: 'scheduling',       icon: '📅', label: 'Scheduling',           hint: 'Time, calendars, assignments.' },
+      { key: 'communication',    icon: '💬', label: 'Customer communication',hint:'Updates, replies, check-ins.' },
+      { key: 'invoicing',        icon: '💰', label: 'Invoicing and payment',hint: 'Getting paid and reconciling.' },
+      { key: 'reporting',        icon: '📊', label: 'Reporting',            hint: 'Weekly numbers, dashboards.' },
+      { key: 'hiring',           icon: '👥', label: 'Hiring or recruiting', hint: 'Finding and bringing people on.' },
+      { key: 'taskManagement',   icon: '📌', label: 'Internal task management',hint:'Who is doing what, by when.' },
+      { key: 'operations',       icon: '🔧', label: 'Operations management',hint: 'Keeping the machine running.' },
+      { key: 'other',            icon: '✨', label: 'Other',                hint: 'Something not on this list.' },
+    ];
+
+    const PROCESSING_STEPS_MIN_DELAY = 700;  // ms between checklist ticks for nice pacing
+
+    let state = {
+      profile: null,
+      selectedWorkflows: [],
+      otherWorkflowLabel: '',
+      currentWorkflowIndex: 0,
+      workflowConversations: {},  // { workflowKey: [{ role, content }] }
+      workflowSummaries: {},      // { workflowKey: summaryText }
+      currentScreen: 'welcome',
+      deliverables: null,         // { sopMarkdown, gameplanMarkdown, gameplanData, notionUrl }
+      complete: false,
+    };
+
+    // ============================================================
+    // Persistence (localStorage)
+    // ============================================================
+    function saveState() {
+      try { localStorage.setItem(STORAGE_KEY, JSON.stringify(state)); } catch (e) { /* ignore */ }
+    }
+    function loadState() {
+      try {
+        const raw = localStorage.getItem(STORAGE_KEY);
+        if (!raw) return null;
+        return JSON.parse(raw);
+      } catch (e) { return null; }
+    }
+    function clearState() {
+      try { localStorage.removeItem(STORAGE_KEY); } catch (e) { /* ignore */ }
+    }
+
+    // ============================================================
+    // Screen transitions
+    // ============================================================
+    const screens = ['welcome', 'profile', 'workflowSelect', 'interview', 'processing', 'deliverables'];
+    const screenViewMap = {
+      welcome: 'welcomeView',
+      profile: 'profileView',
+      workflowSelect: 'workflowSelectView',
+      interview: 'interviewView',
+      processing: 'processingView',
+      deliverables: 'deliverablesView',
+    };
+
+    function showScreen(name) {
+      state.currentScreen = name;
+      saveState();
+      screens.forEach((s) => { $(screenViewMap[s]).hidden = s !== name; });
+      renderJourneyProgress();
+      window.scrollTo({ top: 0, behavior: 'instant' });
+    }
+
+    function renderJourneyProgress() {
+      const wrap = $('journeyProgress');
+      if (state.currentScreen === 'welcome') {
+        wrap.hidden = true;
+        return;
+      }
+      wrap.hidden = false;
+      wrap.className = 'journey';
+      const steps = [
+        { id: 'profile',        label: 'Profile' },
+        { id: 'workflowSelect', label: 'Workflows' },
+        { id: 'interview',      label: 'Interview' },
+        { id: 'processing',     label: 'Organizing' },
+        { id: 'deliverables',   label: 'Deliverables' },
+      ];
+      const currentIdx = steps.findIndex((s) => s.id === state.currentScreen);
+      wrap.innerHTML = steps.map((s, i) => {
+        const cls = i < currentIdx ? 'done' : i === currentIdx ? 'current' : '';
+        const num = i + 1;
+        return '<div class="journey-step ' + cls + '">'
+          + '<div class="journey-dot">' + num + '</div>'
+          + '<div>' + s.label + '</div>'
+          + '</div>';
+      }).join('');
+    }
+
+    // ============================================================
+    // Welcome
+    // ============================================================
+    $('startBtn').addEventListener('click', () => {
+      showScreen('profile');
+    });
+
+    // ============================================================
+    // Resume / start over
+    // ============================================================
+    function initFromStorage() {
+      const saved = loadState();
+      if (!saved || !saved.profile) {
+        showScreen('welcome');
+        return;
+      }
+      state = Object.assign(state, saved);
+      // If completed, jump straight to deliverables
+      if (state.complete && state.deliverables) {
+        renderDeliverables();
+        showScreen('deliverables');
+        return;
+      }
+      // Otherwise show resume banner
+      $('resumeBanner').hidden = false;
+      showScreen('welcome');
+    }
+    $('resumeContinueBtn').addEventListener('click', () => {
+      $('resumeBanner').hidden = true;
+      // Resume at the saved screen, but never resume on 'welcome'
+      let target = state.currentScreen;
+      if (target === 'welcome') {
+        target = state.selectedWorkflows.length ? 'interview' : (state.profile ? 'workflowSelect' : 'profile');
+      }
+      if (target === 'interview') {
+        prepareInterviewScreen();
+      } else if (target === 'workflowSelect') {
+        renderWorkflowSelect();
+      } else if (target === 'profile') {
+        prefillProfileForm();
+      } else if (target === 'deliverables' && state.deliverables) {
+        renderDeliverables();
+      } else if (target === 'processing') {
+        // Don't resume mid-processing; rebuild from saved state
+        target = state.selectedWorkflows.length ? 'interview' : 'workflowSelect';
+        if (target === 'interview') prepareInterviewScreen();
+      }
+      showScreen(target);
+    });
+    $('resumeStartOverBtn').addEventListener('click', () => {
+      if (!confirm('Start over from scratch? Your saved progress will be erased.')) return;
+      clearState();
+      state = {
+        profile: null,
+        selectedWorkflows: [],
+        otherWorkflowLabel: '',
+        currentWorkflowIndex: 0,
+        workflowConversations: {},
+        workflowSummaries: {},
+        currentScreen: 'welcome',
+        deliverables: null,
+        complete: false,
+      };
+      $('resumeBanner').hidden = true;
+      // Reset profile form
+      $('profileForm').reset();
+      $('profileForm').elements['joeEmail'].value = 'joe@thepracticalai.co';
+      showScreen('welcome');
+    });
+
+    // ============================================================
+    // Profile
+    // ============================================================
+    function prefillProfileForm() {
+      if (!state.profile) return;
+      const f = $('profileForm');
+      Object.keys(state.profile).forEach((k) => {
+        if (f.elements[k]) f.elements[k].value = state.profile[k] || '';
+      });
+    }
+    $('profileForm').addEventListener('submit', (e) => {
+      e.preventDefault();
+      const fd = new FormData(e.target);
+      const profile = {};
+      fd.forEach((v, k) => { profile[k] = (v || '').toString().trim(); });
+      state.profile = profile;
+      saveState();
+      renderWorkflowSelect();
+      showScreen('workflowSelect');
+    });
+    $('profileBackBtn').addEventListener('click', () => showScreen('welcome'));
+
+    // ============================================================
+    // Workflow select
+    // ============================================================
+    function renderWorkflowSelect() {
+      const grid = $('workflowGrid');
+      grid.innerHTML = WORKFLOWS.map((w) => {
+        const sel = state.selectedWorkflows.includes(w.key) ? 'selected' : '';
+        return '<button class="workflow-card ' + sel + '" type="button" data-key="' + w.key + '">'
+          + '<span class="icon">' + w.icon + '</span>'
+          + '<span class="label">' + w.label + '</span>'
+          + '<span class="hint">' + w.hint + '</span>'
+          + '</button>';
+      }).join('');
+      grid.querySelectorAll('.workflow-card').forEach((btn) => {
+        btn.addEventListener('click', () => {
+          const key = btn.dataset.key;
+          const idx = state.selectedWorkflows.indexOf(key);
+          if (idx >= 0) state.selectedWorkflows.splice(idx, 1);
+          else state.selectedWorkflows.push(key);
+          btn.classList.toggle('selected');
+          updateWorkflowControls();
+          saveState();
+        });
+      });
+      // Other workflow input
+      $('otherWorkflowInput').value = state.otherWorkflowLabel || '';
+      $('otherWorkflowInput').addEventListener('input', (e) => {
+        state.otherWorkflowLabel = e.target.value.trim();
+        saveState();
+      });
+      updateWorkflowControls();
+    }
+    function updateWorkflowControls() {
+      const count = state.selectedWorkflows.length;
+      $('workflowContinueBtn').disabled = count === 0;
+      $('workflowSelectionCount').textContent = count === 0 ? '' : count === 1 ? '1 workflow selected' : count + ' workflows selected';
+      $('otherWorkflowWrap').hidden = !state.selectedWorkflows.includes('other');
+    }
+    $('workflowContinueBtn').addEventListener('click', () => {
+      if (state.selectedWorkflows.length === 0) return;
+      state.currentWorkflowIndex = 0;
+      saveState();
+      prepareInterviewScreen();
+      showScreen('interview');
+    });
+    $('workflowBackBtn').addEventListener('click', () => showScreen('profile'));
+
+    function workflowLabel(key) {
+      if (key === 'other') return state.otherWorkflowLabel || 'Other workflow';
+      const w = WORKFLOWS.find((x) => x.key === key);
+      return w ? w.label : key;
+    }
+
+    // ============================================================
+    // Interview
+    // ============================================================
+    function prepareInterviewScreen() {
+      renderWorkflowPips();
+      const currentKey = state.selectedWorkflows[state.currentWorkflowIndex];
+      $('currentWorkflowName').textContent = workflowLabel(currentKey);
+      renderChatLog();
+      $('chatInput').value = '';
+      $('chatInput').focus();
+      // If conversation is empty, fire opener
+      const convo = state.workflowConversations[currentKey] || [];
+      if (convo.length === 0) {
+        callChat();
+      }
+    }
+    function renderWorkflowPips() {
+      const wrap = $('workflowPips');
+      wrap.innerHTML = state.selectedWorkflows.map((_k, i) => {
+        const cls = i < state.currentWorkflowIndex ? 'done'
+          : i === state.currentWorkflowIndex ? 'current'
+          : '';
+        return '<div class="workflow-pip ' + cls + '" title="' + workflowLabel(state.selectedWorkflows[i]) + '"></div>';
+      }).join('');
+    }
+    function renderChatLog() {
+      const log = $('chatLog');
+      log.innerHTML = '';
+      const currentKey = state.selectedWorkflows[state.currentWorkflowIndex];
+      const convo = state.workflowConversations[currentKey] || [];
+      convo.forEach((m) => {
+        if (m.role === 'summary') addSummaryMessage(m.content);
+        else if (m.role === 'assistant') addMessage('assistant', m.content);
+        else if (m.role === 'user') addMessage('user', m.content);
+      });
+      log.scrollTop = log.scrollHeight;
+    }
+    function addMessage(role, text) {
+      const log = $('chatLog');
+      const div = document.createElement('div');
+      div.className = 'msg msg-' + role;
+      div.textContent = text;
+      log.appendChild(div);
+      log.scrollTop = log.scrollHeight;
+    }
+    function addSummaryMessage(text) {
+      const log = $('chatLog');
+      const div = document.createElement('div');
+      div.className = 'msg-summary';
+      div.innerHTML = '<div class="label">Here\'s what I heard</div>'
+        + text.split('\n').filter(Boolean).map((p) => '<p>' + escapeHtml(p) + '</p>').join('')
+        + '<div class="summary-actions">'
+        + '<button class="button button-primary" id="summaryConfirmBtn" type="button">Yes, that\'s right. Move on.</button>'
+        + '<button class="button button-light" id="summaryAddBtn" type="button">I want to add or change something</button>'
+        + '</div>';
+      log.appendChild(div);
+      log.scrollTop = log.scrollHeight;
+      // wire buttons
+      div.querySelector('#summaryConfirmBtn').addEventListener('click', () => moveToNextWorkflow());
+      div.querySelector('#summaryAddBtn').addEventListener('click', () => {
+        // Strip the summary, add an assistant prompt to continue
+        const currentKey = state.selectedWorkflows[state.currentWorkflowIndex];
+        const convo = state.workflowConversations[currentKey] || [];
+        // Remove the trailing summary from state
+        if (convo.length && convo[convo.length - 1].role === 'summary') convo.pop();
+        state.workflowConversations[currentKey] = convo;
+        saveState();
+        renderChatLog();
+        addMessage('assistant', "Great. What did I miss or get wrong?");
+        // Inject back into conversation history so the model has context
+        state.workflowConversations[currentKey].push({
+          role: 'assistant',
+          content: 'Great. What did I miss or get wrong?'
+        });
+        saveState();
+        $('chatInput').focus();
+      });
+    }
+    function escapeHtml(s) {
+      return String(s).replace(/[&<>"']/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' })[c]);
+    }
+    function addTyping() {
+      const log = $('chatLog');
+      const div = document.createElement('div');
+      div.className = 'msg-typing';
+      div.id = 'typingBubble';
+      div.innerHTML = '<span></span><span></span><span></span>';
+      log.appendChild(div);
+      log.scrollTop = log.scrollHeight;
+    }
+    function removeTyping() {
+      const t = document.getElementById('typingBubble');
+      if (t) t.remove();
+    }
+    function showError(el, msg) { el.hidden = false; el.textContent = msg; }
+    function hideError(el) { el.hidden = true; el.textContent = ''; }
+
+    async function callChat() {
+      const currentKey = state.selectedWorkflows[state.currentWorkflowIndex];
+      const convo = state.workflowConversations[currentKey] || [];
+      $('sendBtn').disabled = true;
+      $('chatInput').disabled = true;
+      hideError($('chatErr'));
+      addTyping();
+      try {
+        const res = await fetch('/api/map-chat', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            profile: state.profile,
+            workflowKey: currentKey,
+            workflowLabel: workflowLabel(currentKey),
+            conversation: convo.filter((m) => m.role !== 'summary'),
+            allWorkflows: state.selectedWorkflows.map((k) => workflowLabel(k)),
+            workflowIndex: state.currentWorkflowIndex,
+            workflowCount: state.selectedWorkflows.length,
+          }),
+        });
+        if (!res.ok) {
+          const body = await res.json().catch(() => ({ error: 'Request failed' }));
+          throw new Error(body.error || ('HTTP ' + res.status));
+        }
+        const data = await res.json();
+        removeTyping();
+        const text = (data.message || '').trim();
+        // Check for workflow-complete marker
+        if (text.includes('WORKFLOW_SUMMARY_BELOW')) {
+          // Extract summary after the marker
+          const summary = text.split('WORKFLOW_SUMMARY_BELOW')[1].trim();
+          // Store both in convo
+          state.workflowConversations[currentKey] = convo;
+          state.workflowConversations[currentKey].push({ role: 'summary', content: summary });
+          state.workflowSummaries[currentKey] = summary;
+          saveState();
+          // Render the prior content if any, then the summary
+          // Add the pre-marker text as an assistant message if non-empty
+          const before = text.split('WORKFLOW_SUMMARY_BELOW')[0].trim();
+          if (before) {
+            addMessage('assistant', before);
+            state.workflowConversations[currentKey].splice(-1, 0, { role: 'assistant', content: before });
+          }
+          addSummaryMessage(summary);
+        } else {
+          state.workflowConversations[currentKey] = convo;
+          state.workflowConversations[currentKey].push({ role: 'assistant', content: text });
+          saveState();
+          addMessage('assistant', text);
+        }
+      } catch (err) {
+        console.error(err);
+        removeTyping();
+        showError($('chatErr'), 'Connection hiccup. Try sending again. (' + (err.message || 'unknown') + ')');
+      } finally {
+        $('sendBtn').disabled = false;
+        $('chatInput').disabled = false;
+        $('chatInput').focus();
+      }
+    }
+
+    $('chatForm').addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const msg = $('chatInput').value.trim();
+      if (!msg) return;
+      const currentKey = state.selectedWorkflows[state.currentWorkflowIndex];
+      state.workflowConversations[currentKey] = state.workflowConversations[currentKey] || [];
+      state.workflowConversations[currentKey].push({ role: 'user', content: msg });
+      $('chatInput').value = '';
+      addMessage('user', msg);
+      saveState();
+      await callChat();
+    });
+    $('chatInput').addEventListener('keydown', (e) => {
+      if (e.key === 'Enter' && !e.shiftKey) {
+        e.preventDefault();
+        $('chatForm').requestSubmit();
+      }
+    });
+    $('interviewSaveExitBtn').addEventListener('click', () => {
+      saveState();
+      alert('Saved. You can close this tab and come back later, your progress will pick up where you left off.');
+    });
+
+    function moveToNextWorkflow() {
+      state.currentWorkflowIndex += 1;
+      saveState();
+      if (state.currentWorkflowIndex >= state.selectedWorkflows.length) {
+        // All workflows complete, kick off final generation
+        startProcessing();
+      } else {
+        prepareInterviewScreen();
+      }
+    }
+
+    // ============================================================
+    // Processing + final generation
+    // ============================================================
+    async function startProcessing() {
+      showScreen('processing');
+      hideError($('processingErr'));
+      const items = document.querySelectorAll('#processingChecklist li');
+      items.forEach((li) => li.classList.remove('active', 'done'));
+
+      // Animate the first 4 checklist items while the API call runs
+      let tickIdx = 0;
+      const tickInterval = setInterval(() => {
+        if (tickIdx < items.length) {
+          if (tickIdx > 0) items[tickIdx - 1].classList.remove('active');
+          items[tickIdx].classList.add('active');
+          tickIdx += 1;
+        }
+      }, PROCESSING_STEPS_MIN_DELAY);
+
+      try {
+        const res = await fetch('/api/map-complete', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            profile: state.profile,
+            workflows: state.selectedWorkflows.map((k) => ({
+              key: k,
+              label: workflowLabel(k),
+              summary: state.workflowSummaries[k] || '',
+              conversation: (state.workflowConversations[k] || []).filter((m) => m.role !== 'summary'),
+            })),
+          }),
+        });
+        if (!res.ok) {
+          const body = await res.json().catch(() => ({ error: 'Generation failed' }));
+          throw new Error(body.error || ('HTTP ' + res.status));
+        }
+        const data = await res.json();
+        state.deliverables = {
+          sopMarkdown: data.sopMarkdown || '',
+          gameplanMarkdown: data.gameplanMarkdown || '',
+          gameplanData: data.gameplanData || null,
+          notionUrl: data.notionUrl || null,
+          notionError: data.errors && data.errors.notion ? data.errors.notion : null,
+        };
+        state.complete = true;
+        saveState();
+
+        // Finish the checklist with all done
+        clearInterval(tickInterval);
+        items.forEach((li) => {
+          li.classList.remove('active');
+          li.classList.add('done');
+        });
+        // Small pause then jump to deliverables
+        setTimeout(() => {
+          renderDeliverables();
+          showScreen('deliverables');
+        }, 700);
+      } catch (err) {
+        console.error(err);
+        clearInterval(tickInterval);
+        showError($('processingErr'), 'Something went wrong putting this together. Your answers are saved. Try again, or reach out to Joe if it keeps failing. (' + (err.message || 'unknown') + ')');
+      }
+    }
+
+    // ============================================================
+    // Deliverables view
+    // ============================================================
+    function renderDeliverables() {
+      const d = state.deliverables;
+      if (!d) return;
+      // Notion link
+      if (d.notionUrl) {
+        $('openNotionBtn').hidden = false;
+        $('openNotionBtn').href = d.notionUrl;
+        $('notionStatusChip').hidden = false;
+        $('notionStatusText').textContent = 'Your process is in Notion, ready to open.';
+      } else if (d.notionError) {
+        $('notionStatusChip').hidden = false;
+        $('notionStatusText').textContent = 'Notion publish didn\'t fully complete. Joe will follow up with the link.';
+      }
+      // Game plan render
+      if (d.gameplanMarkdown) {
+        $('gameplanView').innerHTML = markdownToHtml(d.gameplanMarkdown);
+      }
+    }
+    function markdownToHtml(md) {
+      // Tiny markdown renderer (h1-h4, lists, paragraphs, bold, italic)
+      const lines = md.split('\n');
+      let html = '';
+      let inList = false;
+      lines.forEach((line) => {
+        const t = line.trim();
+        if (/^####\s+/.test(t)) { if (inList) { html += '</ul>'; inList = false; } html += '<h4>' + escapeHtml(t.replace(/^####\s+/, '')) + '</h4>'; }
+        else if (/^###\s+/.test(t)) { if (inList) { html += '</ul>'; inList = false; } html += '<h4>' + escapeHtml(t.replace(/^###\s+/, '')) + '</h4>'; }
+        else if (/^##\s+/.test(t)) { if (inList) { html += '</ul>'; inList = false; } html += '<h4>' + escapeHtml(t.replace(/^##\s+/, '')) + '</h4>'; }
+        else if (/^#\s+/.test(t)) { if (inList) { html += '</ul>'; inList = false; } html += '<h4 style="font-size:22px;">' + escapeHtml(t.replace(/^#\s+/, '')) + '</h4>'; }
+        else if (/^[-*]\s+/.test(t)) {
+          if (!inList) { html += '<ul>'; inList = true; }
+          html += '<li>' + inlineMd(t.replace(/^[-*]\s+/, '')) + '</li>';
+        }
+        else if (t.length === 0) {
+          if (inList) { html += '</ul>'; inList = false; }
+        }
+        else {
+          if (inList) { html += '</ul>'; inList = false; }
+          html += '<p>' + inlineMd(t) + '</p>';
+        }
+      });
+      if (inList) html += '</ul>';
+      return html;
+    }
+    function inlineMd(s) {
+      return escapeHtml(s)
+        .replace(/\*\*([^*]+)\*\*/g, '<b>$1</b>')
+        .replace(/\*([^*]+)\*/g, '<i>$1</i>');
+    }
+
+    $('reviewGameplanBtn').addEventListener('click', () => {
+      const v = $('gameplanView');
+      v.hidden = !v.hidden;
+      if (!v.hidden) v.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    });
+    $('copyNotionBtn').addEventListener('click', async () => {
+      const btn = $('copyNotionBtn');
+      const orig = btn.textContent;
+      try {
+        await navigator.clipboard.writeText(state.deliverables.sopMarkdown || '');
+        btn.textContent = 'Copied ✓';
+        setTimeout(() => { btn.textContent = orig; }, 1800);
+      } catch (e) { showError($('deliverable1Err'), 'Could not copy. Try selecting and copying manually.'); }
+    });
+    $('copyGameplanBtn').addEventListener('click', async () => {
+      const btn = $('copyGameplanBtn');
+      const orig = btn.textContent;
+      try {
+        await navigator.clipboard.writeText(state.deliverables.gameplanMarkdown || '');
+        btn.textContent = 'Copied ✓';
+        setTimeout(() => { btn.textContent = orig; }, 1800);
+      } catch (e) { /* ignore */ }
+    });
+    function downloadFile(name, content) {
+      const blob = new Blob([content], { type: 'text/markdown;charset=utf-8' });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = name;
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+      setTimeout(() => URL.revokeObjectURL(url), 4000);
+    }
+    function slug(s) {
+      return (s || '').toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '').slice(0, 40);
+    }
+    $('downloadMdBtn').addEventListener('click', () => {
+      const name = (state.profile && slug(state.profile.businessName)) || 'business';
+      downloadFile(name + '-process-map.md', state.deliverables.sopMarkdown || '');
+    });
+    $('downloadGameplanBtn').addEventListener('click', () => {
+      const name = (state.profile && slug(state.profile.businessName)) || 'business';
+      downloadFile(name + '-ai-game-plan.md', state.deliverables.gameplanMarkdown || '');
+    });
+
+    // ============================================================
+    // Boot
+    // ============================================================
+    initFromStorage();
+  </script>
+</body>
+</html>
