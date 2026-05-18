@@ -710,6 +710,18 @@
       line-height: 1.55;
     }
 
+    .prompt-callout {
+      margin: 20px 0 8px;
+      padding: 18px 22px;
+      background: rgba(36, 86, 255, 0.08);
+      border-left: 3px solid var(--blue);
+      border-radius: 8px;
+      color: var(--charcoal);
+      font-size: 15px;
+      line-height: 1.55;
+      font-style: italic;
+    }
+
     /* SOP document (shared) */
     .sop-document {
       background: var(--paper);
@@ -1243,7 +1255,10 @@
               : '';
             const handoffs = employeesForStep(n);
             const handoffHtml = handoffs.length
-              ? handoffs.map((e) => '<div class="assembly-step-handoff">⚡&nbsp; <b>' + esc(e.firstName || 'AI Employee') + '</b> (' + esc(e.role || 'AI Employee') + ') takes this</div>').join(' ')
+              ? handoffs.map((e) => {
+                  const title = e.title || e.role || e.firstName || 'Area';
+                  return '<div class="assembly-step-handoff">💡&nbsp; Possible automation area: <b>' + esc(title) + '</b></div>';
+                }).join(' ')
               : '';
             const arrowAfter = i < steps.length - 1 ? '<div class="assembly-arrow">' + ARROW_SVG + '</div>' : '';
             const stepClass = handoffs.length ? 'assembly-step has-employee' : 'assembly-step';
@@ -1281,28 +1296,28 @@
       const employeesHtml = asArr(a.aiEmployees).length
         ? asArr(a.aiEmployees).map((e) => {
             const rank = String(e.rank || '').padStart(2, '0');
-            const firstName = e.firstName || e.name || 'AI Employee';
-            const role = e.role || '';
+            const title = e.title || e.role || e.firstName || 'Area';
             const priorityHtml = e.priority
               ? '<span class="opp-priority ' + priorityClass(e.priority) + '">' + esc(e.priority) + '</span>'
               : '';
             const facts = [];
-            if (e.timeSavings) facts.push('<span><b>Time savings:</b> ' + esc(e.timeSavings) + '</span>');
-            if (e.estimatedDollarValue) facts.push('<span><b>Est. value:</b> ' + esc(e.estimatedDollarValue) + '</span>');
-            if (e.buildEffort) facts.push('<span><b>Build effort:</b> ' + esc(e.buildEffort) + '</span>');
+            const impact = e.estimatedImpact || e.timeSavings || e.estimatedDollarValue;
+            if (impact) facts.push('<span><b>Rough impact:</b> ' + esc(impact) + '</span>');
+            if (e.buildEffort) facts.push('<span><b>Rough build effort:</b> ' + esc(e.buildEffort) + '</span>');
             if (e.complexity) facts.push('<span><b>Complexity:</b> ' + esc(e.complexity) + '</span>');
             if (asArr(e.tools).length) facts.push('<span><b>Tools:</b> ' + esc(asArr(e.tools).join(', ')) + '</span>');
             if (asArr(e.appliesToSteps).length) facts.push('<span><b>Covers steps:</b> ' + esc(asArr(e.appliesToSteps).join(', ')) + '</span>');
+            const whatWedExplore = e.whatWedExplore || e.whatTheyDo;
+            const lifts = e.whatThisLiftsOffYou || e.whatYouSkip;
             return '<div class="employee-card">'
-              + '<div class="employee-rank">AI Employee #' + rank + priorityHtml + '</div>'
-              + '<div class="employee-head"><div class="employee-name">' + esc(firstName) + '</div>'
-              + (role ? '<div class="employee-role">' + esc(role) + '</div>' : '')
-              + '</div>'
-              + (e.tagline ? '<div class="employee-tagline">&ldquo;' + esc(e.tagline) + '&rdquo;</div>' : '')
-              + (e.whatTheyDo ? '<div class="employee-detail"><b>What they do:</b> ' + esc(e.whatTheyDo) + '</div>' : '')
-              + (e.whatYouSkip ? '<div class="employee-detail"><b>What you skip:</b> ' + esc(e.whatYouSkip) + '</div>' : '')
+              + '<div class="employee-rank">Area #' + rank + priorityHtml + '</div>'
+              + '<div class="employee-head"><div class="employee-name">' + esc(title) + '</div></div>'
+              + (e.whatHappensToday ? '<div class="employee-detail"><b>What happens today:</b> ' + esc(e.whatHappensToday) + '</div>' : '')
+              + (whatWedExplore ? '<div class="employee-detail"><b>What we would explore:</b> ' + esc(whatWedExplore) + '</div>' : '')
+              + (e.whatWedFigureOutTogether ? '<div class="employee-detail"><b>What we would figure out together:</b> ' + esc(e.whatWedFigureOutTogether) + '</div>' : '')
+              + (lifts ? '<div class="employee-detail"><b>What this lifts off you:</b> ' + esc(lifts) + '</div>' : '')
               + (facts.length ? '<div class="employee-facts">' + facts.join('') + '</div>' : '')
-              + (e.humanInLoop ? '<div class="employee-human"><b>You still own:</b> ' + esc(e.humanInLoop) + '</div>' : '')
+              + (e.humanInLoop ? '<div class="employee-human"><b>What stays with you:</b> ' + esc(e.humanInLoop) + '</div>' : '')
               + '</div>';
           }).join('')
         : '';
@@ -1332,9 +1347,10 @@
       const whereWedStartHtml = asArr(a.whereWedStart).length
         ? asArr(a.whereWedStart).map((w, i) => {
             const stepNum = i + 1;
+            const title = w.title || w.name || '';
             return '<div class="build-card">'
-              + '<div class="build-rank">Build ' + stepNum + (w.timeline ? ' &middot; ' + esc(w.timeline) : '') + '</div>'
-              + '<div class="build-name">' + esc(w.name || '') + '</div>'
+              + '<div class="build-rank">Suggestion ' + stepNum + (w.timeline ? ' &middot; ' + esc(w.timeline) : '') + '</div>'
+              + '<div class="build-name">' + esc(title) + '</div>'
               + (w.pitch ? '<div class="build-pitch">' + esc(w.pitch) + '</div>' : '')
               + '</div>';
           }).join('')
@@ -1356,8 +1372,8 @@
         ${sop.trigger ? '<h3>Trigger</h3>' + para(sop.trigger) : ''}
         ${asArr(sop.dependencies).length ? '<h3>Dependencies</h3>' + list(asArr(sop.dependencies)) : ''}
 
-        <h3>The assembly line</h3>
-        <p style="color:var(--muted);font-size:14px;margin:-4px 0 16px;">Every step in order. Where an AI Employee would take over, you'll see them tagged.</p>
+        <h3>The assembly line &mdash; your process, on paper</h3>
+        <p style="color:var(--muted);font-size:14px;margin:-4px 0 16px;">This is the headline of this document. Every step of your process, in the order you described it. Read it carefully. Where a step could be automated, you will see a note pointing to one of the areas at the bottom.</p>
         <div class="assembly-line">${stepsHtml}</div>
 
         ${decisionsHtml ? '<h3>Decision points</h3>' + decisionsHtml : ''}
@@ -1368,9 +1384,9 @@
         ${asArr(a.whatsWorking).length ? '<h4 style="color:var(--green);">What is working</h4>' + list(asArr(a.whatsWorking)) : ''}
         ${asArr(a.whatsBrittle).length ? '<h4 style="color:#B45309;">What is brittle</h4>' + list(asArr(a.whatsBrittle)) : ''}
 
-        ${employeesHtml ? '<h3>Your first suggested AI Employees</h3><p style="color:var(--muted);font-size:14px;margin:-4px 0 16px;">Each one is a build we would ship for you. Names you can remember, roles you can point at, things you can stop doing.</p>' + employeesHtml : ''}
+        ${employeesHtml ? '<h3>Areas we could automate together</h3><p style="color:var(--muted);font-size:14px;margin:-4px 0 16px;">These are starting points for our conversation, not a final build plan. Read through and tell us which one would relieve the most pressure &mdash; that is where we would start.</p>' + employeesHtml + '<div class="prompt-callout">Which of these would lift the most off you? Tell Joe &mdash; that is the start of our next conversation.</div>' : ''}
 
-        ${whereWedStartHtml ? '<h3>Where we would start</h3><p style="color:var(--muted);font-size:14px;margin:-4px 0 16px;">Our recommended build order. We ship one, prove it, then roll into the next.</p>' + whereWedStartHtml : ''}
+        ${whereWedStartHtml ? '<h3>Where we would start the conversation</h3><p style="color:var(--muted);font-size:14px;margin:-4px 0 16px;">Our gut on which area to discuss first. But you know best where the heaviest pressure is &mdash; pick the one that sounds like the most relief.</p>' + whereWedStartHtml : ''}
 
         ${a.closingNote ? '<div class="closing-note">' + esc(a.closingNote) + '</div>' : ''}
       `;

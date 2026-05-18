@@ -27,39 +27,55 @@ const ANALYSIS_MAX_TOKENS = 8192;
 // ============================================================
 // Analysis pass — turns raw SOP into customer-ready deliverable
 // ============================================================
-const ANALYSIS_SYSTEM_PROMPT = `You are a senior operator at Practical AI Co. — a small business AI shop in Franklin, TN. We help owners turn the knowledge in their heads into systems that run without them. We don't sell strategy decks. We BUILD AI Employees that take real work off the owner's plate.
+const ANALYSIS_SYSTEM_PROMPT = `You are a senior operator at Practical AI Co. — a small business AI shop in Franklin, TN. We help owners turn the knowledge in their heads into systems that run without them.
 
-A small business owner just walked us through ONE of their processes in detail. Your job: produce a polished, customer-ready document that does two things at once:
+A small business owner just walked us through ONE of their processes in detail. Most of them have NEVER documented this process before. The interview is the first time it has ever existed outside their head.
 
-1) Shows the owner we actually understood their business (specifics, names, real details from the interview).
-2) Pitches the AI Employees Practical AI Co. would hire FOR THEM — as a proposal, not a homework assignment.
+THE PRIMARY DELIVERABLE IS THE SOP ITSELF. The detailed, organized, granular written record of how this business actually runs. That document — the brain dump, the assembly line, every sub-step — is the headline value the client takes away. They have just downloaded their own intellectual property out of their head. They should read it and say: "yes, that's exactly how it goes."
 
-This document is the artifact of the conversation. It feels like a $5,000 deliverable — warm, specific, fun, confident, plainly written. Not a consulting report. More like meeting the small team you just hired.
+The automation suggestions are SECONDARY. They're a collaborative starting point for our next conversation, not a fixed prescription. Frame them with humility and as areas to explore TOGETHER.
+
+This document feels like a $5,000 deliverable — warm, specific, plainly written, and respectful of how complex their actual business is. Not a consulting report. Not a sales pitch.
 
 ==========================================================
 HARD RULES — VIOLATE ANY OF THESE AND THE DELIVERABLE FAILS
 ==========================================================
 
-1. NO NEW SPREADSHEETS. EVER. Do not recommend the client build, maintain, or "set up" a spreadsheet, tracking sheet, manual log, paper checklist, or any other manual list. The point of Practical AI Co. is to REMOVE manual work. Every spreadsheet recommendation is a self-inflicted credibility wound. If your first instinct is "they should create a sheet to track X," propose an AI Employee that watches and remembers X instead.
+1. THE STEPS ARRAY IS A TRANSLATION, NOT A SUMMARY. This is the most important rule. The owner just dictated 20-40 sub-steps of their process. Your job is to ORGANIZE and TRANSLATE that into a clean, ordered, COMPLETE document. Not summarize. Not refine. Not consolidate.
 
-2. EXISTING SPREADSHEETS ARE FINE. The client may already maintain spreadsheets. We can absolutely build AI Employees that read FROM existing sheets, write TO existing sheets, or sync data across existing sheets. We just never ask them to create a NEW one or maintain a NEW manual list.
+   If they described 30 sub-steps in the conversation, the output has 30 steps. If they described what happens in the first 30 seconds of an email coming in (open Gmail → scan subject → check sender → decide if it's a real request → click reply or forward), each one of those is its OWN step in the output array.
 
-3. NO FAKE TOOL FEATURES. Do not propose "add a custom field to [tool]" unless you have direct evidence the tool supports custom fields. Limo Anywhere does not. Most legacy industry tools don't. When a tool can't do something, acknowledge it and propose an external AI Employee that bridges the gap (watches the tool's outputs, reads its emails, scrapes its dashboards) — not a fictional feature.
+   It is BETTER to have 30 granular steps than 10 elegant ones. Elegance is wrong here. Faithfulness is right. The reader (a new hire, or the owner reviewing what we captured) should be able to follow this document and DO the work. Missing micro-steps = a useless SOP.
 
-4. THIS IS A PROPOSAL, NOT A TO-DO LIST. Practical AI Co. is going to BUILD these AI Employees for the client. Frame every recommendation as something WE would build, hire, or ship. NEVER tell the client to go create a tool themselves. Wording examples:
-   ✓ "We'd build Quill — your follow-up specialist..."
-   ✓ "We'd hire Pace to handle your scheduling — she watches..."
-   ✓ "Where we'd start: ship Quill first."
-   ✗ "Create a tool that..."
-   ✗ "Set up an automation to..."
-   ✗ "You should build..."
-   ✗ "Implement a system that..."
+   Preserve the actual tools, the actual phrasings, the actual decisions. If they said "iMessage" not "text messaging app," write "iMessage."
 
-5. AI EMPLOYEES, NOT AGENTS OR AUTOMATIONS. Use the term "AI Employee" throughout. Each one is a hire. Give each one a friendly first name + a role title. Names should hint at function — short, distinct, easy to refer to in conversation ("Quill caught a stale quote today"). Examples: Quill (writing/replies), Pace (scheduling), Tally (counting/tracking), Sage (advisor), Beacon (alerts), Sweep (cleanup), Echo (follow-ups), Drift (monitoring), Mason (building artifacts).
+2. NO NEW SPREADSHEETS. EVER. Do not recommend the client build, maintain, or "set up" a spreadsheet, tracking sheet, manual log, paper checklist, or any other manual list. The point of Practical AI Co. is to REMOVE manual work. Every spreadsheet recommendation is a self-inflicted credibility wound.
 
-6. NO CONSULTING JARGON. Banned words: leverage, optimize, behavioral triggers, utilization, operationalize, pattern recognition, actionable insights, synergies, ecosystem, transformation, robust, best-in-class, scalable (as filler), machine (as metaphor for a process), ROI, double down, north star, high-leverage, unlock, at scale, drive (as a verb when a real verb exists). If a sentence sounds like a slide deck, rewrite it.
+3. EXISTING SPREADSHEETS ARE FINE. The client may already maintain spreadsheets. We can absolutely propose automations that read FROM existing sheets, write TO existing sheets, or sync data across existing sheets. We just never ask them to create a NEW one or maintain a NEW manual list.
 
-7. SELF-REVIEW BEFORE OUTPUTTING. After drafting, read your full JSON once more. Check: does any sentence suggest the client create/maintain a spreadsheet, sheet, log, list, or new manual process? Does any opportunity describe a tool feature that doesn't exist? Is any sentence framed as the client's homework instead of our build? If yes — rewrite it. Then output.
+4. NO FAKE TOOL FEATURES. Do not propose "add a custom field to [tool]" unless you have direct evidence the tool supports custom fields. Limo Anywhere does not. Most legacy industry tools don't. When a tool can't do something, acknowledge it and propose something external that bridges the gap (watches the tool's outputs, reads its emails, scrapes its dashboards) — not a fictional feature.
+
+5. SUGGEST, DON'T DECLARE. Practical AI Co. has just met this client's process for the first time. We don't yet know enough to commit to specific builds. The automation areas we propose are STARTING POINTS for our next conversation — not a fixed prescription. Use collaborative language:
+   ✓ "An area we could automate together"
+   ✓ "Something like an assistant that would watch X..."
+   ✓ "We'd explore..."
+   ✓ "If you wanted to try this, here's what we'd figure out together..."
+   ✗ "We'll build X"
+   ✗ "Pace will watch..."
+   ✗ "Here's what we're going to do"
+   ✗ "This will save you N hours"
+
+   No cute first names for the automations. The role/title is enough. Once we've actually built one together, the client gets to name it.
+
+6. SHOW MORE OPTIONS, NOT FEWER. Aim for 5-10 automation areas, not 3. The client probably hasn't seen anyone map their business this way before. They benefit from seeing the full landscape of what COULD be automated, and then choosing which 1-2 feel like the biggest pressure-relief. End the section with a soft prompt: "Which of these feels like it would lift the most off you?"
+
+7. NO CONSULTING JARGON. Banned words: leverage, optimize, behavioral triggers, utilization, operationalize, pattern recognition, actionable insights, synergies, ecosystem, transformation, robust, best-in-class, scalable (as filler), machine (as metaphor for a process), ROI, double down, north star, high-leverage, unlock, at scale, drive (as a verb when a real verb exists). If a sentence sounds like a slide deck, rewrite it.
+
+8. SELF-REVIEW BEFORE OUTPUTTING. After drafting, re-read your full JSON. Check three things:
+   (a) Did you preserve every sub-step the owner described, or did you summarize? If summarized — go back and break them apart.
+   (b) Does any sentence suggest the client create/maintain a spreadsheet, sheet, log, list, or new manual process? If yes — rewrite.
+   (c) Does any sentence sound like a final declaration rather than a collaborative suggestion? If yes — rewrite to "we'd explore" / "could be designed to" / "something like."
+   Only then output.
 
 ==========================================================
 OUTPUT FORMAT
@@ -69,8 +85,8 @@ Output a single JSON block wrapped in <ANALYSIS></ANALYSIS> tags. Use this exact
 
 <ANALYSIS>
 {
-  "executiveSummary": "2-3 sharp sentences. The essence of this process AND our POV on what to do about it. The owner should read this and feel both seen and excited.",
-  "openingNote": "1 paragraph (3-5 sentences). Warm opener acknowledging what we heard. End by framing the document as: here is your process, here are the AI Employees we'd hire for you, and here is where we'd start.",
+  "executiveSummary": "2-3 sharp sentences. The essence of this process. Frame the document so the client knows what they have: their process, on paper, for the first time, plus areas we could automate together.",
+  "openingNote": "1 paragraph (3-5 sentences). Warm. Acknowledge the size of what they just did — most owners have never gotten this out of their heads before. Frame the document: assembly line below is the headline; automation areas at the bottom are starting points for our next conversation.",
   "maturity": {
     "overall": 6,
     "documentation": 7,
@@ -82,7 +98,7 @@ Output a single JSON block wrapped in <ANALYSIS></ANALYSIS> tags. Use this exact
   "stepsAnnotated": [
     {
       "n": 1,
-      "action": "the step, cleaned up if needed",
+      "action": "the sub-step, faithful to what was said. Granular. Action-level.",
       "tool": "tool or system",
       "owner": "who does it today",
       "output": "what this step produces, or empty string",
@@ -100,29 +116,28 @@ Output a single JSON block wrapped in <ANALYSIS></ANALYSIS> tags. Use this exact
   "aiEmployees": [
     {
       "rank": 1,
-      "firstName": "Quill",
-      "role": "Follow-Up Specialist",
-      "tagline": "1 short sentence in the AI Employee's voice OR about them. Punchy. Like a LinkedIn bio line. Examples: 'Won't let a good quote sit unanswered.' / 'Watches your inbox so you don't have to.' / 'Keeps your subs honest about their insurance.'",
+      "title": "Driver Assignment Assistant",
+      "whatHappensToday": "1-2 sentences. Describe what currently happens in the specific steps this would cover. Mirrors back the part of the process. Proves you understood THIS area, not just the overall workflow.",
+      "whatWedExplore": "1-2 sentences. Frame the automation possibility as something to explore together. Use 'we could', 'might watch X and do Y', 'could be designed to'. NEVER 'we'd build' or 'this will'.",
+      "whatWedFigureOutTogether": "1-2 sentences. The open questions, design decisions, edge cases worth a real conversation. Shows you know this is collaborative, not prescriptive.",
+      "whatThisLiftsOffYou": "1 sentence. The mental load this would remove from the owner. What they would no longer have to remember, chase, track, or worry about.",
       "priority": "Quick win | Strategic | Long-term",
-      "whatTheyDo": "1-2 sentences. Concrete description of what this AI Employee actually does, day to day. Reference real tools and real triggers from the interview. Do NOT suggest the client create a spreadsheet.",
-      "whatYouSkip": "1-2 sentences. The mental load this lifts off the owner. What they no longer have to remember, chase, track, or worry about.",
       "appliesToSteps": [3, 4, 5],
-      "timeSavings": "Rough estimate like '2-3 hours/week' or 'reclaims your Monday morning'",
-      "estimatedDollarValue": "Annual dollar impact. GROUND in interview specifics when possible (deal sizes, headcount, hourly rates). When grounding is thin, give a wide range labeled 'rough estimate'. NEVER fabricate specific numbers.",
+      "estimatedImpact": "1 phrase. Rough estimate of the impact — could be time ('5-6 hours a week'), dollar range ('roughly $15K-$30K a year, rough estimate'), or qualitative ('reclaims your Monday mornings'). NEVER fabricate specific numbers.",
       "complexity": "Low | Medium | High",
-      "buildEffort": "Realistic build estimate: '1 week', '2-3 weeks', '1-2 months', '2-3 months'.",
-      "tools": ["specific tools or systems this AI Employee connects to"],
+      "buildEffort": "Realistic rough estimate: '1-2 weeks', '3-4 weeks', '1-2 months', '2-3 months'.",
+      "tools": ["specific tools or systems this would connect to"],
       "humanInLoop": "What the owner still owns: judgment calls, approvals, exceptions."
     }
   ],
   "whereWedStart": [
     {
-      "name": "Quill",
-      "pitch": "1-2 sentences. Why we'd ship THIS AI Employee first. What the owner will feel different about within the first week.",
-      "timeline": "Like '1-2 weeks to ship' or '3-4 weeks for the first version'"
+      "title": "Driver Assignment Assistant",
+      "pitch": "1-2 sentences. Why this one first — phrased as our gut/suggestion, not a declaration. End with something like: 'but you know best where the biggest pressure is — pick the one that feels heaviest.'",
+      "timeline": "Like '1-2 weeks to a first version' (loose, not a commitment)"
     }
   ],
-  "closingNote": "1 paragraph (2-3 sentences). Warm, confident close. We're excited to build this with them. Not salesy."
+  "closingNote": "1 paragraph (2-3 sentences). Warm close. Make clear: their next step is to look this over, see if any of the areas above feels like the biggest source of pressure, and tell Joe — that's the start of the next conversation. Confident, not salesy."
 }
 </ANALYSIS>
 
@@ -130,22 +145,24 @@ Output a single JSON block wrapped in <ANALYSIS></ANALYSIS> tags. Use this exact
 FIELD GUIDANCE
 ==========================================================
 
-aiEmployees: 3 to 5 total. Ranked by impact. Each one references real interview details. Each one is a real build proposal, not a vague idea.
+stepsAnnotated: AS MANY STEPS AS WERE DISCUSSED. Target 20-40 if the interview was thorough. Be FAITHFUL, not elegant. Each step is one specific action with one tool. Do not merge.
 
-appliesToSteps: array of step numbers (matching the "n" in stepsAnnotated) that this AI Employee would take over or assist with. If the AI Employee covers the whole process, list every step. If it only touches a few, list those. Helps the visual workflow show which steps get automated by which Employee.
+aiEmployees: 5 to 10 areas. Internal field name is aiEmployees but in the rendered output these are framed as "Areas we could automate together." More options are better — the client picks which feels heaviest.
 
-whereWedStart: 1 to 3 entries, picked from the aiEmployees list. Ordered by build sequence — the first one is the first thing we'd ship. Reference the AI Employee by firstName.
+appliesToSteps: array of step numbers (matching "n" in stepsAnnotated) that this area would cover. Helps the assembly-line visual tag each step.
 
-maturity scoring (1-10, 10 = excellent, 1 = chaos):
-- documentation: how well captured outside the owner's head
+whereWedStart: 1 to 3 entries, picked from the aiEmployees list. Phrased as a SUGGESTION ("here's where our gut says start") not a plan ("here's what we're doing"). End with an invitation for the client to pick.
+
+maturity scoring (1-10):
+- documentation: how well captured outside the owner's head before today
 - automationReadiness: how mechanical vs. judgment-heavy
 - resilience: how well it runs if the owner is out for a week
-- overall: holistic, don't just average
+- overall: holistic
 
-priority:
-- Quick win: under 2 weeks of build, fast obvious benefit
-- Strategic: 2-8 weeks, important leverage point
-- Long-term: 8+ weeks, foundational
+priority on each area:
+- Quick win: small lift, fast relief
+- Strategic: bigger lift, important leverage point
+- Long-term: foundational work that unlocks future automation
 
 ==========================================================
 TONE — FRIEND OVER COFFEE, NOT CONSULTANT IN A BOARDROOM
@@ -155,19 +172,22 @@ You're a smart small-business operator talking to another small-business owner. 
 
 GOOD vs BAD examples:
 
-BAD: "David has built a disciplined prospecting machine that leverages behavioral triggers to optimize credit utilization."
-GOOD: "David finds 10 to 25 prospects every morning in 30 minutes. The system is tight. Every click is still him."
+BAD (jargon): "David has built a disciplined prospecting machine that leverages behavioral triggers to optimize credit utilization."
+GOOD (plain): "David finds 10 to 25 prospects every morning in 30 minutes. The system is tight. Every click is still him."
 
-BAD: "Strategic implementation of pattern recognition across the lead qualification funnel."
-GOOD: "We'd hire Quill to do the first cut for you — the obvious yes-or-no candidates flagged before you ever see them."
+BAD (too directive): "We'd hire Quill to do the first cut for you — the obvious yes-or-no candidates flagged before you ever see them."
+GOOD (collaborative): "Candidate Pre-Filter — an area we could automate together. Right now David clicks through every candidate himself; we'd explore an assistant that does the obvious first cut before David ever sees the list. What we'd figure out together: what 'obvious' means to him."
 
-BAD: "Create a spreadsheet to capture client preferences."
-GOOD: "We'd hire Sage to remember what every client likes — preferred driver, preferred pickup style, prior trip notes — and surface it the moment that client is in your pipeline again."
+BAD (creates a spreadsheet): "Create a spreadsheet to capture client preferences."
+GOOD (uses real systems): "Client Preferences Memory — we'd explore something that remembers each client's preferred driver, pickup style, and prior trip notes and surfaces those details the moment that client appears in your pipeline. Reads from your existing reservation history. No new sheet for you to maintain."
 
-BAD: "Add a 'notification sent' field to your reservations and track in a sheet."
-GOOD: "We'd hire Beacon to watch your reservations and your sent-folder, match them up, and ping you the second a reservation hasn't been confirmed in time."
+BAD (invents tool features): "Add a 'notification sent' field to your reservations and track in a sheet."
+GOOD (works around limits): "Notification Watcher — Limo Anywhere doesn't let us tag reservations directly, but we'd explore something that watches your Gmail outbox and your reservation list, matches them up, and pings you the second a confirmation hasn't gone out in time."
 
-Plain English test: read every sentence out loud. If it sounds like a slide deck, rewrite. If it sounds like you'd say it to a friend over coffee, ship it.
+BAD (declarative): "Where we'd start: ship Quill first. 2 weeks."
+GOOD (a suggestion): "Where we'd start the conversation: our gut is Candidate Pre-Filter — it gives you the biggest exhale fastest. But you know best where the heaviest pressure is. Tell us which one sounds like the most relief."
+
+Plain English test: read every sentence out loud. If it sounds like a slide deck OR like a vendor making promises they haven't earned the right to make, rewrite. If it sounds like a smart operator suggesting something to a peer, ship it.
 
 Output ONLY the JSON in <ANALYSIS></ANALYSIS> tags. No other text.`;
 
@@ -316,9 +336,9 @@ function buildNotionBlocks({ sop, analysis }) {
     ? asArr(analysis.stepsAnnotated)
     : asArr(sop.steps);
   if (annotatedSteps.length) {
-    blocks.push(heading2("The assembly line"));
+    blocks.push(heading2("The assembly line — your process, on paper"));
     blocks.push(paragraph(
-      "Every step of your process, in order. Where an AI Employee can take over, you'll see them tagged below.",
+      "This is the headline of this document. Every step of your process, in the order you described it. Read it carefully. Where a step could be automated, you'll see a callout below it pointing back to one of the areas at the bottom.",
       "gray"
     ));
     annotatedSteps.forEach((s) => {
@@ -337,11 +357,12 @@ function buildNotionBlocks({ sop, analysis }) {
       asArr(s.branches).forEach((b) => {
         blocks.push(bullet("If " + (b.if || "") + "  →  " + (b.then || "")));
       });
-      // AI Employee handoff chips
+      // Area handoff chips — light suggestion that this step could be automated
       const handoffs = employeesForStep(s.n);
       handoffs.forEach((e) => {
-        const tag = `${e.firstName || "AI Employee"} (${e.role || "AI Employee"}) takes this`;
-        blocks.push(callout(tag, { emoji: "⚡", color: "blue_background" }));
+        const title = e.title || e.role || e.firstName || "Area";
+        const tag = `Possible automation area: ${title}`;
+        blocks.push(callout(tag, { emoji: "💡", color: "blue_background" }));
       });
     });
   }
@@ -382,52 +403,55 @@ function buildNotionBlocks({ sop, analysis }) {
     asArr(analysis.whatsBrittle).forEach((x) => blocks.push(bullet(x)));
   }
 
-  // AI Employees (the headline deliverable)
+  // Areas we could automate together
   if (asArr(analysis.aiEmployees).length) {
     blocks.push(divider());
-    blocks.push(heading2("Your first suggested AI Employees"));
+    blocks.push(heading2("Areas we could automate together"));
     blocks.push(paragraph(
-      "Each one is a build we'd ship for you. Names you can remember. Roles you can point at. Things you can stop doing.",
+      "These are starting points for our conversation, not a final build plan. Each one is a place where automation could lift load off you. Read through, then tell us which feels like it would relieve the most pressure — that's where we'd start.",
       "gray"
     ));
     asArr(analysis.aiEmployees).forEach((emp) => {
       const rank = String(emp.rank || "").padStart(2, "0");
       const priority = emp.priority ? `  ·  ${emp.priority}` : "";
-      const firstName = emp.firstName || emp.name || "AI Employee";
-      const role = emp.role || "";
-      const heading = role
-        ? `#${rank} · ${firstName} · ${role}${priority}`
-        : `#${rank} · ${firstName}${priority}`;
-      blocks.push(heading3(heading));
-      if (emp.tagline) {
-        blocks.push(callout(emp.tagline, { emoji: "💬", color: "gray_background" }));
-      }
-      if (emp.whatTheyDo) blocks.push(paragraph("What they do: " + emp.whatTheyDo));
-      if (emp.whatYouSkip) blocks.push(paragraph("What you skip: " + emp.whatYouSkip));
+      // Support old + new schema gracefully
+      const title = emp.title || emp.role || emp.firstName || "Area";
+      blocks.push(heading3(`Area #${rank} · ${title}${priority}`));
+      if (emp.whatHappensToday) blocks.push(paragraph("What happens today: " + emp.whatHappensToday));
+      const whatWedExplore = emp.whatWedExplore || emp.whatTheyDo;
+      if (whatWedExplore) blocks.push(paragraph("What we'd explore: " + whatWedExplore));
+      if (emp.whatWedFigureOutTogether) blocks.push(paragraph("What we'd figure out together: " + emp.whatWedFigureOutTogether));
+      const lifts = emp.whatThisLiftsOffYou || emp.whatYouSkip;
+      if (lifts) blocks.push(paragraph("What this lifts off you: " + lifts));
       const metaFacts = [];
-      if (emp.timeSavings) metaFacts.push("Time savings: " + emp.timeSavings);
-      if (emp.estimatedDollarValue) metaFacts.push("Est. value: " + emp.estimatedDollarValue);
-      if (emp.buildEffort) metaFacts.push("Build effort: " + emp.buildEffort);
+      const impact = emp.estimatedImpact || emp.timeSavings || emp.estimatedDollarValue;
+      if (impact) metaFacts.push("Rough impact: " + impact);
+      if (emp.buildEffort) metaFacts.push("Rough build effort: " + emp.buildEffort);
       if (emp.complexity) metaFacts.push("Complexity: " + emp.complexity);
       if (asArr(emp.tools).length) metaFacts.push("Tools: " + asArr(emp.tools).join(", "));
       if (asArr(emp.appliesToSteps).length) metaFacts.push("Covers steps: " + asArr(emp.appliesToSteps).join(", "));
       if (metaFacts.length) blocks.push(paragraph(metaFacts.join("  ·  "), "gray"));
-      if (emp.humanInLoop) blocks.push(paragraph("You still own: " + emp.humanInLoop));
+      if (emp.humanInLoop) blocks.push(paragraph("What stays with you: " + emp.humanInLoop));
     });
+    blocks.push(callout(
+      "Which of these would lift the most off you? Tell Joe — that's the start of our next conversation.",
+      { emoji: "💬", color: "blue_background" }
+    ));
   }
 
-  // Where we'd start
+  // Where we'd start the conversation
   if (asArr(analysis.whereWedStart).length) {
     blocks.push(divider());
-    blocks.push(heading2("Where we'd start"));
+    blocks.push(heading2("Where we'd start the conversation"));
     blocks.push(paragraph(
-      "Our recommended build order. We don't ship them all at once — we ship one, prove it works, and roll into the next.",
+      "Our gut on which area to talk about first, and why. But you know best where the heaviest pressure is — pick the one that sounds like the most relief.",
       "gray"
     ));
     asArr(analysis.whereWedStart).forEach((w, i) => {
       const stepNum = i + 1;
-      const heading = w.name
-        ? `${stepNum}. ${w.name}` + (w.timeline ? ` · ${w.timeline}` : "")
+      const title = w.title || w.name || "";
+      const heading = title
+        ? `${stepNum}. ${title}` + (w.timeline ? ` · ${w.timeline}` : "")
         : `${stepNum}.`;
       blocks.push(heading3(heading));
       if (w.pitch) blocks.push(paragraph(w.pitch));
@@ -545,7 +569,10 @@ function renderEmailHtml({ sop, analysis, isJoe, businessName, firstName }) {
         : "";
       const handoffs = employeesForStepEmail(n);
       const handoffHtml = handoffs.length
-        ? handoffs.map((e) => `<div style="margin-top:8px;display:inline-block;background:rgba(36,86,255,0.10);border-left:3px solid #2456FF;padding:8px 12px;border-radius:6px;font-size:13.5px;color:#172033;"><b>⚡ ${esc(e.firstName || "AI Employee")}</b> (${esc(e.role || "AI Employee")}) takes this</div>`).join(" ")
+        ? handoffs.map((e) => {
+            const title = e.title || e.role || e.firstName || "Area";
+            return `<div style="margin-top:8px;display:inline-block;background:rgba(36,86,255,0.10);border-left:3px solid #2456FF;padding:8px 12px;border-radius:6px;font-size:13.5px;color:#172033;">💡 Possible automation area: <b>${esc(title)}</b></div>`;
+          }).join(" ")
         : "";
       const accent = handoffs.length ? "#2456FF" : "#E7DCCB";
       return `<div style="padding:16px 18px;background:#FFFDF8;border:1px solid #E7DCCB;border-left:4px solid ${accent};border-radius:12px;margin:12px 0;">
@@ -574,29 +601,28 @@ function renderEmailHtml({ sop, analysis, isJoe, businessName, firstName }) {
     if (!employees.length) return "";
     return employees.map((e) => {
       const rank = String(e.rank || "").padStart(2, "0");
-      const firstName = e.firstName || e.name || "AI Employee";
-      const role = e.role || "";
+      const title = e.title || e.role || e.firstName || "Area";
       const facts = [];
-      if (e.timeSavings) facts.push(["Time savings", e.timeSavings]);
-      if (e.estimatedDollarValue) facts.push(["Est. value", e.estimatedDollarValue]);
-      if (e.buildEffort) facts.push(["Build effort", e.buildEffort]);
+      const impact = e.estimatedImpact || e.timeSavings || e.estimatedDollarValue;
+      if (impact) facts.push(["Rough impact", impact]);
+      if (e.buildEffort) facts.push(["Rough build effort", e.buildEffort]);
       if (e.complexity) facts.push(["Complexity", e.complexity]);
       if (asArr(e.tools).length) facts.push(["Tools", asArr(e.tools).join(", ")]);
       if (asArr(e.appliesToSteps).length) facts.push(["Covers steps", asArr(e.appliesToSteps).join(", ")]);
       const factsHtml = facts.length
         ? `<div style="margin-top:10px;font-size:13px;color:#667085;line-height:1.7;">${facts.map(([l, v]) => `<b>${esc(l)}:</b> ${esc(v)}`).join("&nbsp; &middot; &nbsp;")}</div>`
         : "";
-      const tagline = e.tagline
-        ? `<div style="margin:4px 0 12px;font-style:italic;color:#667085;font-size:15px;line-height:1.5;">&ldquo;${esc(e.tagline)}&rdquo;</div>`
-        : "";
+      const whatWedExplore = e.whatWedExplore || e.whatTheyDo;
+      const lifts = e.whatThisLiftsOffYou || e.whatYouSkip;
       return `<div style="padding:20px 22px;background:#FFFDF8;border:1px solid #E7DCCB;border-radius:14px;margin:14px 0;">
-        <div style="font-size:11px;font-weight:900;color:#2456FF;letter-spacing:0.18em;text-transform:uppercase;margin-bottom:6px;">AI Employee #${rank}${priorityPillEmail(e.priority)}</div>
-        <div style="font-family:Georgia,serif;font-size:24px;font-weight:800;color:#172033;letter-spacing:-0.022em;line-height:1.15;">${esc(firstName)}<span style="color:#667085;font-size:16px;font-weight:600;margin-left:10px;">${esc(role)}</span></div>
-        ${tagline}
-        ${e.whatTheyDo ? `<div style="margin-top:10px;font-size:14.5px;line-height:1.55;"><b>What they do:</b> ${esc(e.whatTheyDo)}</div>` : ""}
-        ${e.whatYouSkip ? `<div style="margin-top:6px;font-size:14.5px;line-height:1.55;"><b>What you skip:</b> ${esc(e.whatYouSkip)}</div>` : ""}
+        <div style="font-size:11px;font-weight:900;color:#2456FF;letter-spacing:0.18em;text-transform:uppercase;margin-bottom:6px;">Area #${rank}${priorityPillEmail(e.priority)}</div>
+        <div style="font-family:Georgia,serif;font-size:22px;font-weight:800;color:#172033;letter-spacing:-0.022em;line-height:1.2;margin-bottom:10px;">${esc(title)}</div>
+        ${e.whatHappensToday ? `<div style="margin-top:6px;font-size:14.5px;line-height:1.55;"><b>What happens today:</b> ${esc(e.whatHappensToday)}</div>` : ""}
+        ${whatWedExplore ? `<div style="margin-top:6px;font-size:14.5px;line-height:1.55;"><b>What we'd explore:</b> ${esc(whatWedExplore)}</div>` : ""}
+        ${e.whatWedFigureOutTogether ? `<div style="margin-top:6px;font-size:14.5px;line-height:1.55;"><b>What we'd figure out together:</b> ${esc(e.whatWedFigureOutTogether)}</div>` : ""}
+        ${lifts ? `<div style="margin-top:6px;font-size:14.5px;line-height:1.55;"><b>What this lifts off you:</b> ${esc(lifts)}</div>` : ""}
         ${factsHtml}
-        ${e.humanInLoop ? `<div style="margin-top:8px;font-size:14px;color:#667085;line-height:1.55;"><b>You still own:</b> ${esc(e.humanInLoop)}</div>` : ""}
+        ${e.humanInLoop ? `<div style="margin-top:8px;font-size:14px;color:#667085;line-height:1.55;"><b>What stays with you:</b> ${esc(e.humanInLoop)}</div>` : ""}
       </div>`;
     }).join("");
   })();
@@ -606,9 +632,10 @@ function renderEmailHtml({ sop, analysis, isJoe, businessName, firstName }) {
     if (!items.length) return "";
     return items.map((w, i) => {
       const stepNum = i + 1;
+      const title = w.title || w.name || "";
       return `<div style="padding:18px 22px;background:rgba(36,86,255,0.04);border:1px solid #E7DCCB;border-radius:14px;margin:10px 0;">
-        <div style="font-size:11px;font-weight:900;color:#2456FF;letter-spacing:0.18em;text-transform:uppercase;margin-bottom:6px;">Build ${stepNum}${w.timeline ? `&nbsp; &middot; &nbsp;${esc(w.timeline)}` : ""}</div>
-        <div style="font-family:Georgia,serif;font-size:20px;font-weight:800;color:#172033;letter-spacing:-0.022em;margin-bottom:8px;">${esc(w.name || "")}</div>
+        <div style="font-size:11px;font-weight:900;color:#2456FF;letter-spacing:0.18em;text-transform:uppercase;margin-bottom:6px;">Suggestion ${stepNum}${w.timeline ? `&nbsp; &middot; &nbsp;${esc(w.timeline)}` : ""}</div>
+        <div style="font-family:Georgia,serif;font-size:20px;font-weight:800;color:#172033;letter-spacing:-0.022em;margin-bottom:8px;">${esc(title)}</div>
         ${w.pitch ? `<div style="font-size:14.5px;color:#172033;line-height:1.55;">${esc(w.pitch)}</div>` : ""}
       </div>`;
     }).join("");
@@ -656,8 +683,8 @@ function renderEmailHtml({ sop, analysis, isJoe, businessName, firstName }) {
     ${sop.trigger ? H2("Trigger") + P(sop.trigger) : ""}
     ${asArr(sop.dependencies).length ? H2("Dependencies") + UL(asArr(sop.dependencies)) : ""}
 
-    ${H2("The assembly line")}
-    ${P("Every step in order. Where an AI Employee would take over, you'll see them tagged.", { muted: true })}
+    ${H2("The assembly line — your process, on paper")}
+    ${P("This is the headline of this document. Every step of your process, in the order you described it. Read it. Where a step could be automated, you'll see a note pointing back to one of the areas below.", { muted: true })}
     ${stepsHtml}
 
     ${asArr(sop.decisions).length ? H2("Decision points") + UL(asArr(sop.decisions).map((d) => `If ${d.if || ""} → ${d.then || ""}`)) : ""}
@@ -668,9 +695,9 @@ function renderEmailHtml({ sop, analysis, isJoe, businessName, firstName }) {
     ${asArr(analysis.whatsWorking).length ? H3("What's working") + UL(asArr(analysis.whatsWorking)) : ""}
     ${asArr(analysis.whatsBrittle).length ? H3("What's brittle") + UL(asArr(analysis.whatsBrittle)) : ""}
 
-    ${asArr(analysis.aiEmployees).length ? H2("Your first suggested AI Employees") + P("Each one is a build we'd ship for you. Names you can remember, roles you can point at, things you can stop doing.", { muted: true }) + employeesHtml : ""}
+    ${asArr(analysis.aiEmployees).length ? H2("Areas we could automate together") + P("These are starting points for our conversation, not a final build plan. Read through and tell us which one would relieve the most pressure — that's where we'd start.", { muted: true }) + employeesHtml + calloutBlock("Which of these would lift the most off you? Tell Joe — that's the start of our next conversation.", { bg: "rgba(36,86,255,0.08)", border: "#2456FF" }) : ""}
 
-    ${asArr(analysis.whereWedStart).length ? H2("Where we'd start") + P("Our recommended build order. We ship one, prove it, then roll into the next.", { muted: true }) + whereWedStartHtml : ""}
+    ${asArr(analysis.whereWedStart).length ? H2("Where we'd start the conversation") + P("Our gut on which area to discuss first. But you know best — pick the one that sounds like the most relief.", { muted: true }) + whereWedStartHtml : ""}
 
     ${analysis.closingNote ? calloutBlock(analysis.closingNote, { bg: "rgba(47,143,91,0.08)", border: "#2F8F5B" }) : ""}
   `;
@@ -709,30 +736,38 @@ function renderPlainText({ sop, analysis }) {
     if (s.observation && s.observation.trim()) lines.push("       Note: " + s.observation);
     const handoffs = employeesForStepText(n);
     handoffs.forEach((e) => {
-      lines.push("       >> " + (e.firstName || "AI Employee") + " (" + (e.role || "AI Employee") + ") takes this");
+      const title = e.title || e.role || e.firstName || "Area";
+      lines.push("       >> Possible automation area: " + title);
     });
   });
   lines.push("");
   if (asArr(analysis.aiEmployees).length) {
-    lines.push("YOUR FIRST SUGGESTED AI EMPLOYEES");
+    lines.push("AREAS WE COULD AUTOMATE TOGETHER");
+    lines.push("These are starting points for our conversation, not a final build plan.");
+    lines.push("");
     asArr(analysis.aiEmployees).forEach((e) => {
       const rank = String(e.rank || "").padStart(2, "0");
-      const firstName = e.firstName || e.name || "AI Employee";
-      const role = e.role || "";
-      lines.push("  #" + rank + " " + firstName + (role ? " - " + role : ""));
-      if (e.tagline) lines.push("       \"" + e.tagline + "\"");
-      if (e.whatTheyDo) lines.push("       What they do: " + e.whatTheyDo);
-      if (e.whatYouSkip) lines.push("       What you skip: " + e.whatYouSkip);
-      if (e.timeSavings) lines.push("       Time savings: " + e.timeSavings);
-      if (e.estimatedDollarValue) lines.push("       Est. value: " + e.estimatedDollarValue);
-      if (e.buildEffort) lines.push("       Build effort: " + e.buildEffort);
+      const title = e.title || e.role || e.firstName || "Area";
+      lines.push("  Area #" + rank + ": " + title);
+      if (e.whatHappensToday) lines.push("       What happens today: " + e.whatHappensToday);
+      const whatWedExplore = e.whatWedExplore || e.whatTheyDo;
+      if (whatWedExplore) lines.push("       What we would explore: " + whatWedExplore);
+      if (e.whatWedFigureOutTogether) lines.push("       What we would figure out together: " + e.whatWedFigureOutTogether);
+      const lifts = e.whatThisLiftsOffYou || e.whatYouSkip;
+      if (lifts) lines.push("       What this lifts off you: " + lifts);
+      const impact = e.estimatedImpact || e.timeSavings || e.estimatedDollarValue;
+      if (impact) lines.push("       Rough impact: " + impact);
+      if (e.buildEffort) lines.push("       Rough build effort: " + e.buildEffort);
     });
+    lines.push("");
+    lines.push("Which of these would lift the most off you? Tell Joe.");
     lines.push("");
   }
   if (asArr(analysis.whereWedStart).length) {
-    lines.push("WHERE WE'D START");
+    lines.push("WHERE WE WOULD START THE CONVERSATION");
     asArr(analysis.whereWedStart).forEach((w, i) => {
-      lines.push("  " + (i + 1) + ". " + (w.name || "") + (w.timeline ? "  (" + w.timeline + ")" : ""));
+      const title = w.title || w.name || "";
+      lines.push("  " + (i + 1) + ". " + title + (w.timeline ? "  (" + w.timeline + ")" : ""));
       if (w.pitch) lines.push("       " + w.pitch);
     });
   }
@@ -745,9 +780,9 @@ function renderPlainText({ sop, analysis }) {
 function buildFallbackAnalysis(sop) {
   return {
     executiveSummary:
-      `Captured a working SOP for ${sop.processName || "this process"}. Below is the workflow as documented, ready to hand off.`,
+      `Your process is on paper. Below is everything you walked us through for ${sop.processName || "this process"}, in order.`,
     openingNote:
-      "Here's the process as we captured it together. We weren't able to run our strategic analysis pass this round, but everything you walked through is recorded faithfully below.",
+      "Here's your process as we captured it together. You just got something out of your head that has probably never lived anywhere outside it before. Read through, mark anything that's not quite right, and tell Joe — that's the start of our next conversation.",
     maturity: null,
     currentStateNarrative: sop.trigger || "",
     stepsAnnotated: asArr(sop.steps).map((s, i) => ({
@@ -763,7 +798,7 @@ function buildFallbackAnalysis(sop) {
     aiEmployees: [],
     whereWedStart: [],
     closingNote:
-      "Strategic analysis pass didn't run cleanly this session. Joe will review the captured SOP and follow up with observations and automation opportunities directly.",
+      "Our analysis pass didn't run cleanly this round, so we'll skip the automation suggestions for now. Joe will review the captured SOP and follow up directly with where we'd start.",
   };
 }
 
@@ -1001,9 +1036,9 @@ async function generateSopDocx({ sop, analysis, businessName, firstName }) {
     ? asArr(analysis.stepsAnnotated)
     : asArr(sop.steps);
   if (steps.length) {
-    children.push(docxHeading("The assembly line", 2));
+    children.push(docxHeading("The assembly line — your process, on paper", 2));
     children.push(docxParagraph(
-      "Every step in order. Where an AI Employee can take over, you'll see them tagged.",
+      "This is the headline. Every step of your process, in the order you described it. Read it. Make sure it matches how things actually run. Where a step could be automated, you'll see a note below it pointing back to one of the areas at the bottom of this document.",
       { italics: true, color: DOCX_MUTED, after: 160 }
     ));
     steps.forEach((s, i) => {
@@ -1045,12 +1080,11 @@ async function generateSopDocx({ sop, analysis, businessName, firstName }) {
           indent: { left: convertInchesToTwip(0.4) },
         }));
       });
-      // AI Employee handoff chips
+      // Area handoff chips — light suggestion that this step could be automated
       const handoffs = employeesForStepDocx(n);
       handoffs.forEach((e) => {
-        const name = e.firstName || e.name || "AI Employee";
-        const role = e.role || "AI Employee";
-        children.push(docxCallout(`⚡ ${name} (${role}) takes this step`, { color: DOCX_BLUE, fill: "EEF3FF" }));
+        const title = e.title || e.role || e.firstName || "Area";
+        children.push(docxCallout(`Possible automation area: ${title}`, { color: DOCX_BLUE, fill: "EEF3FF" }));
       });
     });
   }
@@ -1091,62 +1125,61 @@ async function generateSopDocx({ sop, analysis, businessName, firstName }) {
     asArr(analysis.whatsBrittle).forEach((x) => children.push(docxBullet(x)));
   }
 
-  // AI Employees
+  // Areas we could automate together
   if (asArr(analysis.aiEmployees).length) {
     children.push(docxDivider());
-    children.push(docxHeading("Your first suggested AI Employees", 2));
+    children.push(docxHeading("Areas we could automate together", 2));
     children.push(docxParagraph(
-      "Each one is a build we'd ship for you. Names you can remember, roles you can point at, things you can stop doing.",
+      "These are starting points for our conversation, not a final build plan. Read through and tell us which one would relieve the most pressure — that's where we'd start.",
       { italics: true, color: DOCX_MUTED, after: 200 }
     ));
     asArr(analysis.aiEmployees).forEach((e) => {
       const rank = String(e.rank || "").padStart(2, "0");
-      const firstName = e.firstName || e.name || "AI Employee";
-      const role = e.role || "";
-      // Rank tag + Name + Role on its own paragraph
+      const title = e.title || e.role || e.firstName || "Area";
       children.push(new Paragraph({
-        children: [docxText(`AI EMPLOYEE #${rank}` + (e.priority ? `  ·  ${e.priority.toUpperCase()}` : ""),
+        children: [docxText(`AREA #${rank}` + (e.priority ? `  ·  ${e.priority.toUpperCase()}` : ""),
           { bold: true, size: 16, color: DOCX_BLUE })],
         spacing: { before: 240, after: 60 },
       }));
       children.push(new Paragraph({
-        children: [
-          docxText(firstName, { bold: true, size: 32, color: DOCX_INK, font: "Georgia" }),
-          ...(role ? [docxText("   " + role, { size: 22, color: DOCX_MUTED })] : []),
-        ],
-        spacing: { before: 0, after: 80 },
+        children: [docxText(title, { bold: true, size: 28, color: DOCX_INK, font: "Georgia" })],
+        spacing: { before: 0, after: 120 },
       }));
-      if (e.tagline) {
-        children.push(new Paragraph({
-          children: [docxText(`"${e.tagline}"`, { italics: true, size: 22, color: DOCX_MUTED })],
-          spacing: { before: 0, after: 120 },
-        }));
-      }
-      if (e.whatTheyDo) children.push(docxKV("What they do", e.whatTheyDo));
-      if (e.whatYouSkip) children.push(docxKV("What you skip", e.whatYouSkip));
-      if (e.timeSavings) children.push(docxKV("Time savings", e.timeSavings));
-      if (e.estimatedDollarValue) children.push(docxKV("Est. value", e.estimatedDollarValue));
-      if (e.buildEffort) children.push(docxKV("Build effort", e.buildEffort));
+      if (e.whatHappensToday) children.push(docxKV("What happens today", e.whatHappensToday));
+      const whatWedExplore = e.whatWedExplore || e.whatTheyDo;
+      if (whatWedExplore) children.push(docxKV("What we'd explore", whatWedExplore));
+      if (e.whatWedFigureOutTogether) children.push(docxKV("What we'd figure out together", e.whatWedFigureOutTogether));
+      const lifts = e.whatThisLiftsOffYou || e.whatYouSkip;
+      if (lifts) children.push(docxKV("What this lifts off you", lifts));
+      const impact = e.estimatedImpact || e.timeSavings || e.estimatedDollarValue;
+      if (impact) children.push(docxKV("Rough impact", impact));
+      if (e.buildEffort) children.push(docxKV("Rough build effort", e.buildEffort));
       if (e.complexity) children.push(docxKV("Complexity", e.complexity));
       if (asArr(e.tools).length) children.push(docxKV("Tools", asArr(e.tools).join(", ")));
       if (asArr(e.appliesToSteps).length) children.push(docxKV("Covers steps", asArr(e.appliesToSteps).join(", ")));
-      if (e.humanInLoop) children.push(docxKV("You still own", e.humanInLoop));
+      if (e.humanInLoop) children.push(docxKV("What stays with you", e.humanInLoop));
     });
+    children.push(docxSpacer(200));
+    children.push(docxCallout(
+      "Which of these would lift the most off you? Tell Joe — that's the start of our next conversation.",
+      { color: DOCX_BLUE, fill: "EEF3FF" }
+    ));
   }
 
-  // Where we'd start
+  // Where we'd start the conversation
   if (asArr(analysis.whereWedStart).length) {
     children.push(docxDivider());
-    children.push(docxHeading("Where we'd start", 2));
+    children.push(docxHeading("Where we'd start the conversation", 2));
     children.push(docxParagraph(
-      "Our recommended build order. We ship one, prove it, then roll into the next.",
+      "Our gut on which area to discuss first. But you know best where the heaviest pressure is — pick the one that sounds like the most relief.",
       { italics: true, color: DOCX_MUTED, after: 160 }
     ));
     asArr(analysis.whereWedStart).forEach((w, i) => {
+      const title = w.title || w.name || "";
       children.push(new Paragraph({
         children: [
-          docxText(`Build ${i + 1}.  `, { bold: true, size: 22, color: DOCX_BLUE, font: "Georgia" }),
-          docxText(w.name || "", { bold: true, size: 22, color: DOCX_INK }),
+          docxText(`Suggestion ${i + 1}.  `, { bold: true, size: 22, color: DOCX_BLUE, font: "Georgia" }),
+          docxText(title, { bold: true, size: 22, color: DOCX_INK }),
           ...(w.timeline ? [docxText("    " + w.timeline, { size: 18, color: DOCX_MUTED })] : []),
         ],
         spacing: { before: 160, after: 60 },
