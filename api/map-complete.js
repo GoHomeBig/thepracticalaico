@@ -20,8 +20,8 @@ const Anthropic = require("@anthropic-ai/sdk");
 const { Client: NotionClient } = require("@notionhq/client");
 const { Resend } = require("resend");
 
-const MODEL = "claude-sonnet-4-20250514";
-const MAX_TOKENS = 8192;
+const MODEL = "claude-sonnet-4-6";
+const MAX_TOKENS = 16000;
 const SOP_LIBRARY_DB_ID = "362567cd-8712-8174-982d-ffa3a95e441c";
 const JOE_EMAIL = "joe@thepracticalai.co";
 const FROM = "Practical AI Co. <joe@thepracticalai.co>";
@@ -73,7 +73,7 @@ Output a single JSON object wrapped in <DELIVERABLES></DELIVERABLES> tags. The J
         "difficulty": "Low | Medium | High",
         "impact": "Low | Medium | High",
         "confidence": "Low | Medium | High",
-        "suggestedFirstStep": "concrete first action Practical AI Co. would take"
+        "suggestedFirstStep": "the first concrete action Practical AI Co. would take, written in first-person plural. WE take this step, not the client. Example: 'We would connect to your ServiceTitan account and map the current lead routing rules' or 'We would draft the Monday morning triage logic and walk through it with you.' Never assign research or homework to the client."
       }
     ],
     "bestFirstBuild": {
@@ -86,15 +86,58 @@ Output a single JSON object wrapped in <DELIVERABLES></DELIVERABLES> tags. The J
     },
     "whatNotToAutomateYet": "one honest recommendation",
     "thirtyDayPlan": {
-      "week1": "finalize process map and SOP, and what else",
-      "week2": "build first automation, and what else",
-      "week3": "test with real work, and what else",
-      "week4": "train the team and refine, and what else"
+      "week1": "what we do together in week 1",
+      "week2": "what we build in week 2",
+      "week3": "what we test with real work in week 3",
+      "week4": "what we refine and hand off in week 4"
     },
     "recommendedNextStep": "the recommended next step with Practical AI Co. (review the documentation, confirm open questions, scope the first build)"
+  },
+  "sopData": {
+    "businessOverview": "2 to 3 sentence plain-English summary of the business",
+    "workflows": [
+      {
+        "name": "workflow name matching the SOP",
+        "atAGlance": {
+          "purpose": "short phrase: what this workflow is designed to accomplish",
+          "owner": "primary role who owns this workflow",
+          "trigger": "what starts this workflow",
+          "time": "rough estimate of time per occurrence, or omit if unknown",
+          "tools": ["specific tool name", "specific tool name"],
+          "output": "what this workflow produces when done correctly",
+          "successMetric": "how you know this workflow went well"
+        },
+        "steps": [
+          {
+            "number": 1,
+            "title": "Short action title (or a yes/no question for decision steps)",
+            "whatToDo": "1 to 2 sentences describing the action. For decision steps, describe what the owner must determine.",
+            "doneWhen": "the completion condition for this step",
+            "owner": "role or name",
+            "tool": "tool, location, or method used",
+            "automatable": true,
+            "automationNote": "what Practical AI Co. could build here, in we language. null if not automatable.",
+            "isDecision": false,
+            "ifYes": null,
+            "ifNo": null
+          }
+        ],
+        "qualityChecks": ["check 1", "check 2"],
+        "commonMistakes": ["mistake or pitfall 1", "mistake or pitfall 2"]
+      }
+    ]
   }
 }
 </DELIVERABLES>
+
+IMPORTANT rules for sopData:
+- steps should be card-length, not document-length. Full detail lives in sopMarkdown.
+- isDecision: true for any step that requires a yes/no choice that changes what happens next. Title must be phrased as a question for decision steps.
+- ifYes and ifNo describe the two paths for decision steps (null for non-decision steps).
+- automatable: true only when AI or automation could genuinely reduce human effort on this specific step.
+- automationNote must use we language: "we would...", "we could build...", "where we'd start...". Never "you should" or "the client should".
+- Include 8 to 20 steps per workflow. Fewer is fine for simpler workflows.
+- qualityChecks: 3 to 5 items. commonMistakes: 2 to 4 items.
 
 ==========================================================
 DELIVERABLE 1: HERE'S YOUR FIRST PROCESS, MAPPED OUT
@@ -465,16 +508,15 @@ function esc(s) {
   );
 }
 
-function renderEmailHtml({ profile, notionUrl, gameplanMarkdown, isJoe }) {
-  const gameplanHtml = gameplanMarkdown
-    ? markdownToInlineHtml(gameplanMarkdown)
-    : "";
+function renderEmailHtml({ profile, notionUrl, gameplanMarkdown, sopData, isJoe }) {
+  const gameplanHtml = gameplanMarkdown ? markdownToInlineHtml(gameplanMarkdown) : "";
+  const sopHtml = sopData ? renderSopEmailHtml(sopData) : "";
   const notionBlock = notionUrl
-    ? `<p style="margin:16px 0;"><a href="${esc(notionUrl)}" style="display:inline-block;background:#2456FF;color:white;text-decoration:none;padding:12px 20px;border-radius:999px;font-weight:800;font-size:14px;">Open your process in Notion</a></p>`
-    : `<p style="margin:16px 0;color:#667085;font-size:14px;">Your process map is attached to this email. Joe will share the Notion link directly.</p>`;
+    ? `<p style="margin:16px 0;"><a href="${esc(notionUrl)}" style="display:inline-block;background:#2456FF;color:white;text-decoration:none;padding:12px 20px;border-radius:999px;font-weight:800;font-size:14px;">Open your process in Notion &rarr;</a></p>`
+    : `<p style="margin:16px 0;color:#667085;font-size:14px;">Your full process map is attached. Joe will share the Notion link directly.</p>`;
   const greeting = isJoe
     ? `<p>A new client just completed a process mapping session. Their deliverables are below.</p>`
-    : `<p>Thank you for taking the time to map this out with us. Below is your Practical AI Game Plan. Your Notion-ready process documentation is linked above.</p>`;
+    : `<p>You just mapped out how your business runs. Below is your process documentation and your Practical AI Game Plan.</p>`;
 
   return `<!DOCTYPE html>
 <html><body style="margin:0;padding:0;background:#FBF5EA;font-family:Helvetica,Arial,sans-serif;color:#172033;">
@@ -493,7 +535,11 @@ function renderEmailHtml({ profile, notionUrl, gameplanMarkdown, isJoe }) {
     </div>
     ${greeting}
     ${notionBlock}
+    ${sopHtml ? `
     <hr style="border:0;border-top:1px solid #E7DCCB;margin:24px 0;" />
+    <h2 style="font-family:Georgia,serif;font-size:22px;letter-spacing:-0.022em;color:#172033;margin:0 0 16px;">Your Process, Mapped Out</h2>
+    ${sopHtml}` : ""}
+    <hr style="border:0;border-top:1px solid #E7DCCB;margin:32px 0;" />
     <h2 style="font-family:Georgia,serif;font-size:22px;letter-spacing:-0.022em;color:#172033;margin:0 0 12px;">Your Practical AI Game Plan</h2>
     ${gameplanHtml || '<p style="color:#667085;font-style:italic;">(Game plan attached as Markdown.)</p>'}
     <hr style="border:0;border-top:1px solid #E7DCCB;margin:30px 0 18px;" />
@@ -542,6 +588,124 @@ function markdownToInlineHtml(md) {
     }
   }
   closeList();
+  return html;
+}
+
+// ============================================================
+// SOP visual renderer (table-based for email safety)
+// ============================================================
+function renderSopEmailHtml(sopData) {
+  if (!sopData || !Array.isArray(sopData.workflows) || !sopData.workflows.length) return "";
+
+  let html = "";
+
+  if (sopData.businessOverview) {
+    html += `<p style="margin:0 0 24px;line-height:1.6;color:#172033;font-size:15px;">${esc(sopData.businessOverview)}</p>`;
+  }
+
+  for (const workflow of sopData.workflows) {
+    html += `<h3 style="font-family:Georgia,serif;font-size:20px;letter-spacing:-0.02em;color:#172033;margin:32px 0 14px;padding-top:24px;border-top:2px solid #E7DCCB;">${esc(workflow.name || "")}</h3>`;
+
+    // At a Glance
+    const ag = workflow.atAGlance || {};
+    const glanceItems = [
+      { label: "Purpose",        value: ag.purpose },
+      { label: "Owner",          value: ag.owner },
+      { label: "Trigger",        value: ag.trigger },
+      { label: "Tools",          value: Array.isArray(ag.tools) ? ag.tools.join(", ") : ag.tools },
+      { label: "Output",         value: ag.output },
+      { label: "Success Metric", value: ag.successMetric },
+    ].filter((i) => i.value);
+
+    if (glanceItems.length) {
+      const pairs = [];
+      for (let i = 0; i < glanceItems.length; i += 2) pairs.push([glanceItems[i], glanceItems[i + 1]]);
+      html += `<table style="width:100%;border-collapse:collapse;margin:0 0 20px;" cellpadding="0" cellspacing="0"><tr><td style="background:#F5F0E8;border-radius:14px;padding:16px 20px;"><table style="width:100%;border-collapse:collapse;" cellpadding="0" cellspacing="0">`;
+      html += pairs.map(([l, r]) => `<tr>
+        <td style="width:48%;vertical-align:top;padding:0 12px 12px 0;">
+          <div style="font-size:10px;font-weight:900;color:#8A93A5;text-transform:uppercase;letter-spacing:0.12em;margin-bottom:3px;">${esc(l.label)}</div>
+          <div style="font-size:13px;color:#172033;line-height:1.4;">${esc(l.value || "")}</div>
+        </td>
+        <td style="width:4%;"></td>
+        <td style="width:48%;vertical-align:top;padding:0 0 12px 0;">
+          ${r ? `<div style="font-size:10px;font-weight:900;color:#8A93A5;text-transform:uppercase;letter-spacing:0.12em;margin-bottom:3px;">${esc(r.label)}</div><div style="font-size:13px;color:#172033;line-height:1.4;">${esc(r.value || "")}</div>` : ""}
+        </td>
+      </tr>`).join("");
+      html += `</table></td></tr></table>`;
+    }
+
+    // Steps
+    for (const step of (workflow.steps || [])) {
+      const dec = step.isDecision;
+      const numBg  = dec ? "#B45309" : "#2456FF";
+      const border = dec ? "border:2px solid #B45309;" : "border:1px solid #E7DCCB;";
+      const num    = dec ? "?" : esc(String(step.number || ""));
+
+      html += `<table style="width:100%;border-collapse:collapse;margin:0 0 8px;" cellpadding="0" cellspacing="0"><tr>
+        <td style="width:44px;vertical-align:top;padding:2px 10px 0 0;">
+          <div style="width:36px;height:36px;background:${numBg};border-radius:50%;text-align:center;line-height:36px;color:white;font-weight:900;font-size:${dec ? "18px" : "14px"};">${num}</div>
+        </td>
+        <td style="background:#FFFDF8;${border}border-radius:12px;padding:14px 16px;">`;
+
+      if (dec) html += `<div style="font-size:10px;font-weight:900;color:#B45309;text-transform:uppercase;letter-spacing:0.1em;margin:0 0 6px;">Decision Point</div>`;
+      html += `<div style="font-weight:800;color:#172033;font-size:15px;margin:0 0 4px;">${esc(step.title || "")}</div>`;
+
+      if (step.owner || step.tool) {
+        html += `<div style="font-size:12px;color:#8A93A5;margin:0 0 8px;">`;
+        if (step.owner) html += `Owner: ${esc(step.owner)}`;
+        if (step.owner && step.tool) html += ` &nbsp;|&nbsp; `;
+        if (step.tool)  html += `Tool: ${esc(step.tool)}`;
+        html += `</div>`;
+      }
+
+      if (step.whatToDo) html += `<div style="font-size:14px;color:#172033;margin:0 0 8px;line-height:1.5;">${esc(step.whatToDo)}</div>`;
+      if (step.doneWhen) html += `<div style="font-size:13px;color:#2F8F5B;font-weight:600;">Done when: ${esc(step.doneWhen)}</div>`;
+
+      if (dec && (step.ifYes || step.ifNo)) {
+        html += `<table style="width:100%;border-collapse:collapse;margin-top:12px;" cellpadding="0" cellspacing="0"><tr>
+          <td style="width:49%;background:#E8F5EE;border-radius:8px;padding:10px 12px;vertical-align:top;">
+            <div style="font-size:10px;font-weight:900;color:#2F8F5B;text-transform:uppercase;letter-spacing:0.08em;margin-bottom:4px;">YES</div>
+            <div style="font-size:13px;color:#172033;">${esc(step.ifYes || "")}</div>
+          </td>
+          <td style="width:2%;"></td>
+          <td style="width:49%;background:#FEF3E8;border-radius:8px;padding:10px 12px;vertical-align:top;">
+            <div style="font-size:10px;font-weight:900;color:#B45309;text-transform:uppercase;letter-spacing:0.08em;margin-bottom:4px;">NO</div>
+            <div style="font-size:13px;color:#172033;">${esc(step.ifNo || "")}</div>
+          </td>
+        </tr></table>`;
+      }
+
+      if (step.automatable && step.automationNote) {
+        html += `<div style="margin:10px 0 0;padding:10px 14px;background:rgba(36,86,255,0.07);border-left:3px solid #2456FF;border-radius:0 8px 8px 0;">
+          <span style="font-size:10px;font-weight:900;color:#2456FF;text-transform:uppercase;letter-spacing:0.1em;display:block;margin-bottom:3px;">Automate this</span>
+          <span style="font-size:13px;color:#172033;">${esc(step.automationNote)}</span>
+        </div>`;
+      }
+
+      html += `</td></tr></table>`;
+    }
+
+    // Quality checks
+    if (Array.isArray(workflow.qualityChecks) && workflow.qualityChecks.length) {
+      html += `<div style="background:#F5F0E8;border-radius:12px;padding:14px 18px;margin:14px 0 8px;">
+        <div style="font-size:11px;font-weight:900;color:#2456FF;text-transform:uppercase;letter-spacing:0.1em;margin-bottom:10px;">Quality Checks</div>`;
+      workflow.qualityChecks.forEach((c) => {
+        html += `<div style="font-size:13px;color:#172033;margin-bottom:6px;">&#10003;&nbsp; ${esc(c)}</div>`;
+      });
+      html += `</div>`;
+    }
+
+    // Common mistakes
+    if (Array.isArray(workflow.commonMistakes) && workflow.commonMistakes.length) {
+      html += `<div style="background:rgba(180,83,9,0.06);border-radius:12px;padding:14px 18px;margin:0 0 8px;">
+        <div style="font-size:11px;font-weight:900;color:#B45309;text-transform:uppercase;letter-spacing:0.1em;margin-bottom:10px;">Common Mistakes to Avoid</div>`;
+      workflow.commonMistakes.forEach((m) => {
+        html += `<div style="font-size:13px;color:#172033;margin-bottom:6px;">&#9747;&nbsp; ${esc(m)}</div>`;
+      });
+      html += `</div>`;
+    }
+  }
+
   return html;
 }
 
@@ -609,8 +773,9 @@ module.exports = async (req, res) => {
     const resend = new Resend(resendKey);
     const subjectClient = `Your Practical AI Co. process map: ${profile.businessName}`;
     const subjectJoe = `New /map session complete: ${profile.businessName}`;
-    const clientHtml = renderEmailHtml({ profile, notionUrl, gameplanMarkdown, isJoe: false });
-    const joeHtml = renderEmailHtml({ profile, notionUrl, gameplanMarkdown, isJoe: true });
+    const sopData = deliverables.sopData || null;
+    const clientHtml = renderEmailHtml({ profile, notionUrl, gameplanMarkdown, sopData, isJoe: false });
+    const joeHtml = renderEmailHtml({ profile, notionUrl, gameplanMarkdown, sopData, isJoe: true });
 
     // Attach the SOP Markdown as a .md file so the client always has a portable copy
     const slug = (s) => (s || "").toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, "").slice(0, 40);
@@ -661,6 +826,7 @@ module.exports = async (req, res) => {
     sopMarkdown,
     gameplanMarkdown,
     gameplanData: deliverables.gameplanData || null,
+    sopData: deliverables.sopData || null,
     notionUrl,
     errors: {
       notion: notionError,

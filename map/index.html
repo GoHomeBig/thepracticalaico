@@ -882,6 +882,107 @@
     }
     .footer .wordmark-title { color: var(--white); }
     .footer .wordmark-subtitle { color: rgba(255,255,255,0.55); }
+
+    /* SOP visual process map */
+    .sop-map { margin-top: 28px; }
+    .sop-workflow { margin-bottom: 52px; }
+    .sop-workflow-name {
+      font-family: Fraunces, Georgia, serif;
+      font-size: 22px;
+      font-weight: 800;
+      letter-spacing: -0.022em;
+      color: var(--charcoal);
+      margin: 0 0 16px;
+      padding-top: 28px;
+      border-top: 2px solid var(--line);
+    }
+    .sop-workflow:first-child .sop-workflow-name { border-top: none; padding-top: 0; }
+    .sop-at-a-glance {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+      gap: 12px;
+      background: #F5F0E8;
+      border-radius: 16px;
+      padding: 18px 20px;
+      margin-bottom: 24px;
+    }
+    .sop-glance-label {
+      font-size: 10px;
+      font-weight: 900;
+      color: var(--muted-2);
+      text-transform: uppercase;
+      letter-spacing: 0.12em;
+      margin-bottom: 4px;
+    }
+    .sop-glance-value { font-size: 13px; color: var(--charcoal); line-height: 1.4; }
+    .sop-steps { display: flex; flex-direction: column; gap: 8px; margin-bottom: 20px; }
+    .sop-step { display: flex; gap: 12px; align-items: flex-start; }
+    .sop-step-num {
+      flex-shrink: 0;
+      width: 36px; height: 36px;
+      border-radius: 999px;
+      background: var(--blue);
+      color: white;
+      font-weight: 900;
+      font-size: 14px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-top: 2px;
+    }
+    .sop-step.is-decision .sop-step-num { background: var(--amber); font-size: 18px; }
+    .sop-step-card {
+      flex: 1;
+      background: var(--paper);
+      border: 1px solid var(--line);
+      border-radius: 14px;
+      padding: 14px 18px;
+    }
+    .sop-step.is-decision .sop-step-card { border-color: var(--amber); border-width: 2px; }
+    .sop-decision-tag {
+      font-size: 10px;
+      font-weight: 900;
+      color: var(--amber);
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      margin-bottom: 6px;
+    }
+    .sop-step-title { font-weight: 800; color: var(--charcoal); font-size: 15px; margin-bottom: 4px; }
+    .sop-step-meta { font-size: 12px; color: var(--muted-2); margin-bottom: 8px; }
+    .sop-step-what { font-size: 14px; color: var(--charcoal); line-height: 1.5; margin-bottom: 8px; }
+    .sop-step-done { font-size: 13px; color: var(--green); font-weight: 600; }
+    .sop-decision-branches { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 12px; }
+    .sop-branch { border-radius: 10px; padding: 10px 14px; }
+    .sop-branch-label { font-size: 10px; font-weight: 900; text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 4px; }
+    .sop-branch.yes { background: rgba(47,143,91,0.10); }
+    .sop-branch.yes .sop-branch-label { color: var(--green); }
+    .sop-branch.no { background: rgba(180,83,9,0.10); }
+    .sop-branch.no .sop-branch-label { color: var(--amber); }
+    .sop-branch-text { font-size: 13px; color: var(--charcoal); }
+    .sop-automate {
+      margin-top: 10px;
+      padding: 10px 14px;
+      background: rgba(36,86,255,0.07);
+      border-left: 3px solid var(--blue);
+      border-radius: 0 8px 8px 0;
+    }
+    .sop-automate-label { font-size: 10px; font-weight: 900; color: var(--blue); text-transform: uppercase; letter-spacing: 0.1em; margin-bottom: 3px; }
+    .sop-automate-note { font-size: 13px; color: var(--charcoal); }
+    .sop-quality {
+      background: var(--cream);
+      border-radius: 12px;
+      padding: 14px 18px;
+      margin-bottom: 10px;
+    }
+    .sop-quality-label { font-size: 11px; font-weight: 900; color: var(--blue); text-transform: uppercase; letter-spacing: 0.1em; margin-bottom: 10px; }
+    .sop-quality-item { font-size: 13px; color: var(--charcoal); margin-bottom: 6px; }
+    .sop-mistakes { background: rgba(180,83,9,0.06); border-radius: 12px; padding: 14px 18px; margin-bottom: 10px; }
+    .sop-mistakes-label { font-size: 11px; font-weight: 900; color: var(--amber); text-transform: uppercase; letter-spacing: 0.1em; margin-bottom: 10px; }
+    .sop-mistakes-item { font-size: 13px; color: var(--charcoal); margin-bottom: 6px; }
+    @media (max-width: 640px) {
+      .sop-at-a-glance { grid-template-columns: 1fr 1fr; }
+      .sop-decision-branches { grid-template-columns: 1fr; }
+    }
   </style>
 </head>
 <body>
@@ -1112,9 +1213,9 @@
         <article class="deliverable-card">
           <div class="deliverable-label">Deliverable 01</div>
           <h3>Here's Your First Process, Mapped Out</h3>
-          <p>You now have a clear, organized version of how this work gets done today. It is formatted so it can live in Notion, be used by your team, and be edited as your process changes.</p>
+          <p>Every step, every decision point, every handoff — pulled out of your head and put on paper. Review it below, then open it in Notion to keep it with your team.</p>
           <div class="deliverable-actions">
-            <a class="button button-primary" id="openNotionBtn" target="_blank" rel="noopener" hidden>Open your process in Notion</a>
+            <a class="button button-primary" id="openNotionBtn" target="_blank" rel="noopener" hidden>Open in Notion</a>
             <button class="button button-light" id="copyNotionBtn" type="button">Copy for Notion</button>
             <button class="button button-light" id="downloadMdBtn" type="button">Download Markdown</button>
           </div>
@@ -1123,6 +1224,7 @@
             <span id="notionStatusText">Creating your Notion page&hellip;</span>
           </div>
           <div id="deliverable1Err" class="err" hidden></div>
+          <div class="sop-map" id="sopMapView" hidden></div>
         </article>
 
         <!-- Deliverable 2 -->
@@ -1196,7 +1298,7 @@
       workflowConversations: {},  // { workflowKey: [{ role, content }] }
       workflowSummaries: {},      // { workflowKey: summaryText }
       currentScreen: 'welcome',
-      deliverables: null,         // { sopMarkdown, gameplanMarkdown, gameplanData, notionUrl }
+      deliverables: null,         // { sopMarkdown, gameplanMarkdown, gameplanData, sopData, notionUrl }
       complete: false,
     };
 
@@ -1644,6 +1746,7 @@
           sopMarkdown: data.sopMarkdown || '',
           gameplanMarkdown: data.gameplanMarkdown || '',
           gameplanData: data.gameplanData || null,
+          sopData: data.sopData || null,
           notionUrl: data.notionUrl || null,
           notionError: data.errors && data.errors.notion ? data.errors.notion : null,
         };
@@ -1669,11 +1772,99 @@
     }
 
     // ============================================================
+    // SOP visual process map renderer
+    // ============================================================
+    function renderSopMap(sopData) {
+      if (!sopData || !Array.isArray(sopData.workflows) || !sopData.workflows.length) return '';
+      let html = '';
+      for (const workflow of sopData.workflows) {
+        html += '<div class="sop-workflow">';
+        html += '<div class="sop-workflow-name">' + escapeHtml(workflow.name || '') + '</div>';
+
+        // At a Glance
+        const ag = workflow.atAGlance || {};
+        const glanceItems = [
+          { label: 'Purpose',        value: ag.purpose },
+          { label: 'Owner',          value: ag.owner },
+          { label: 'Trigger',        value: ag.trigger },
+          { label: 'Tools',          value: Array.isArray(ag.tools) ? ag.tools.join(', ') : ag.tools },
+          { label: 'Output',         value: ag.output },
+          { label: 'Success Metric', value: ag.successMetric },
+        ].filter((i) => i.value);
+
+        if (glanceItems.length) {
+          html += '<div class="sop-at-a-glance">';
+          glanceItems.forEach((item) => {
+            html += '<div>'
+              + '<div class="sop-glance-label">' + escapeHtml(item.label) + '</div>'
+              + '<div class="sop-glance-value">' + escapeHtml(item.value) + '</div>'
+              + '</div>';
+          });
+          html += '</div>';
+        }
+
+        // Steps
+        html += '<div class="sop-steps">';
+        for (const step of (workflow.steps || [])) {
+          const dec = step.isDecision;
+          html += '<div class="sop-step' + (dec ? ' is-decision' : '') + '">';
+          html += '<div class="sop-step-num">' + (dec ? '?' : escapeHtml(String(step.number || ''))) + '</div>';
+          html += '<div class="sop-step-card">';
+          if (dec) html += '<div class="sop-decision-tag">Decision Point</div>';
+          html += '<div class="sop-step-title">' + escapeHtml(step.title || '') + '</div>';
+          if (step.owner || step.tool) {
+            html += '<div class="sop-step-meta">';
+            if (step.owner) html += 'Owner: ' + escapeHtml(step.owner);
+            if (step.owner && step.tool) html += ' &nbsp;|&nbsp; ';
+            if (step.tool)  html += 'Tool: ' + escapeHtml(step.tool);
+            html += '</div>';
+          }
+          if (step.whatToDo)  html += '<div class="sop-step-what">' + escapeHtml(step.whatToDo) + '</div>';
+          if (step.doneWhen)  html += '<div class="sop-step-done">Done when: ' + escapeHtml(step.doneWhen) + '</div>';
+          if (dec && (step.ifYes || step.ifNo)) {
+            html += '<div class="sop-decision-branches">'
+              + '<div class="sop-branch yes"><div class="sop-branch-label">YES</div><div class="sop-branch-text">' + escapeHtml(step.ifYes || '') + '</div></div>'
+              + '<div class="sop-branch no"><div class="sop-branch-label">NO</div><div class="sop-branch-text">' + escapeHtml(step.ifNo || '') + '</div></div>'
+              + '</div>';
+          }
+          if (step.automatable && step.automationNote) {
+            html += '<div class="sop-automate">'
+              + '<div class="sop-automate-label">Automate this</div>'
+              + '<div class="sop-automate-note">' + escapeHtml(step.automationNote) + '</div>'
+              + '</div>';
+          }
+          html += '</div></div>'; // close sop-step-card, sop-step
+        }
+        html += '</div>'; // close sop-steps
+
+        if (Array.isArray(workflow.qualityChecks) && workflow.qualityChecks.length) {
+          html += '<div class="sop-quality"><div class="sop-quality-label">Quality Checks</div>';
+          workflow.qualityChecks.forEach((c) => {
+            html += '<div class="sop-quality-item">&#10003;&nbsp; ' + escapeHtml(c) + '</div>';
+          });
+          html += '</div>';
+        }
+
+        if (Array.isArray(workflow.commonMistakes) && workflow.commonMistakes.length) {
+          html += '<div class="sop-mistakes"><div class="sop-mistakes-label">Common Mistakes to Avoid</div>';
+          workflow.commonMistakes.forEach((m) => {
+            html += '<div class="sop-mistakes-item">&#9747;&nbsp; ' + escapeHtml(m) + '</div>';
+          });
+          html += '</div>';
+        }
+
+        html += '</div>'; // close sop-workflow
+      }
+      return html;
+    }
+
+    // ============================================================
     // Deliverables view
     // ============================================================
     function renderDeliverables() {
       const d = state.deliverables;
       if (!d) return;
+
       // Notion link
       if (d.notionUrl) {
         $('openNotionBtn').hidden = false;
@@ -1684,6 +1875,14 @@
         $('notionStatusChip').hidden = false;
         $('notionStatusText').textContent = 'Notion publish didn\'t fully complete. Joe will follow up with the link.';
       }
+
+      // SOP visual map
+      if (d.sopData) {
+        const el = $('sopMapView');
+        el.innerHTML = renderSopMap(d.sopData);
+        el.hidden = false;
+      }
+
       // Game plan render
       if (d.gameplanMarkdown) {
         $('gameplanView').innerHTML = markdownToHtml(d.gameplanMarkdown);
