@@ -14,7 +14,7 @@ const MODEL = "claude-sonnet-4-5";
 const MAX_TOKENS = 16000;
 const FROM = "Practical AI Co. <joe@thepracticalai.co>";
 const JOE_EMAIL = "joe@thepracticalai.co";
-const BOOK_CALL_URL = "https://calendar.app.google/SnmSbP7hZCprCZ9B7";
+const BOOK_CALL_URL = "https://calendar.app.google/SBMCxMPv4Sd8VZRW9";
 
 const SYSTEM_PROMPT = `You are a practical business process mapper for small businesses, working on behalf of Practical AI Co.
 
@@ -150,73 +150,272 @@ function esc(s) {
   );
 }
 
+// Email-safe color and typography tokens
+const E = {
+  bg: "#FBF5EA", paper: "#FFFDF8", ink: "#172033", muted: "#667085",
+  muted2: "#8A93A5", line: "#E7DCCB", blue: "#2456FF", green: "#2F8F5B",
+  amber: "#B45309", red: "#B91C1C",
+};
+
+function emailHeader() {
+  return `<div style="font-family:Georgia,serif;font-weight:800;color:${E.ink};font-size:22px;letter-spacing:-0.025em;margin-bottom:4px;">
+    Practical <span style="color:${E.blue};">AI</span> Co.
+  </div>
+  <div style="font-size:10px;font-weight:900;letter-spacing:0.22em;color:${E.muted};text-transform:uppercase;margin-bottom:28px;">
+    Systems that run so you can lead
+  </div>`;
+}
+
+function ctaRow(notionUrl) {
+  const btn = (label, href, primary) => `<a href="${esc(href)}" style="display:inline-block;background:${primary ? E.blue : E.paper};color:${primary ? "white" : E.ink};text-decoration:none;padding:11px 18px;border-radius:999px;font-weight:800;font-size:13.5px;border:${primary ? "0" : "1px solid " + E.line};margin:0 6px 8px 0;">${esc(label)}</a>`;
+  const buttons = [];
+  if (notionUrl) buttons.push(btn("Open in Notion", notionUrl, true));
+  buttons.push(btn("Open in Google Docs", "https://docs.google.com/document/u/0/", false));
+  buttons.push(btn("Book a Build call", BOOK_CALL_URL, false));
+  return `<div style="margin:0 0 16px;">${buttons.join("")}</div>`;
+}
+
+function execSummaryBlock(es) {
+  if (!es) return "";
+  const rows = [];
+  if (es.biggest_bottleneck)            rows.push(`<tr><td style="padding:6px 0;font-size:14.5px;line-height:1.5;"><b style="color:${E.red};">Biggest bottleneck:</b> ${esc(es.biggest_bottleneck)}</td></tr>`);
+  if (es.biggest_time_drain)            rows.push(`<tr><td style="padding:6px 0;font-size:14.5px;line-height:1.5;"><b style="color:${E.amber};">Biggest time drain:</b> ${esc(es.biggest_time_drain)}</td></tr>`);
+  if (es.most_owner_dependent_step)     rows.push(`<tr><td style="padding:6px 0;font-size:14.5px;line-height:1.5;"><b style="color:${E.ink};">Most owner-dependent:</b> ${esc(es.most_owner_dependent_step)}</td></tr>`);
+  if (es.most_immediate_ai_opportunity) rows.push(`<tr><td style="padding:6px 0;font-size:14.5px;line-height:1.5;"><b style="color:${E.blue};">Most immediate AI opportunity:</b> ${esc(es.most_immediate_ai_opportunity)}</td></tr>`);
+  if (!rows.length) return "";
+  return `<h2 style="font-family:Georgia,serif;font-size:20px;letter-spacing:-0.022em;color:${E.ink};margin:24px 0 10px;">What we heard</h2>
+    <table style="width:100%;border-collapse:collapse;">${rows.join("")}</table>`;
+}
+
+function startHereBlock(fb) {
+  if (!fb || !fb.title) return "";
+  const impactLines = Array.isArray(fb.estimated_impact) ? fb.estimated_impact.slice(0, 4) : [];
+  const impactsHtml = impactLines.length
+    ? `<div style="margin-top:10px;">${impactLines.map((i) => `<div style="font-size:13.5px;color:${E.ink};margin:3px 0;">&#10003;&nbsp; ${esc(i)}</div>`).join("")}</div>`
+    : "";
+  return `<div style="margin:24px 0 0;padding:22px 24px;background:${E.paper};border:1px solid ${E.line};border-radius:14px;">
+    <div style="font-size:10px;font-weight:900;letter-spacing:0.18em;color:${E.blue};text-transform:uppercase;margin-bottom:8px;">Where we would start</div>
+    <h3 style="font-family:Georgia,serif;font-size:19px;letter-spacing:-0.02em;color:${E.ink};margin:0 0 8px;">${esc(fb.title)}</h3>
+    ${fb.why_this_first ? `<p style="margin:0 0 10px;font-size:14.5px;line-height:1.55;color:${E.ink};">${esc(fb.why_this_first)}</p>` : ""}
+    ${fb.what_practical_ai_would_build ? `<p style="margin:0 0 10px;font-size:13.5px;line-height:1.55;color:${E.muted};"><b style="color:${E.ink};">What we would build:</b> ${esc(fb.what_practical_ai_would_build)}</p>` : ""}
+    ${impactsHtml}
+  </div>`;
+}
+
+function processMapBlock(r) {
+  const steps = Array.isArray(r.process_steps) ? r.process_steps : [];
+  if (!steps.length) return "";
+  const branchMap = {};
+  (r.process_branches || []).forEach((b) => {
+    const key = String(b.after_step || "");
+    if (!branchMap[key]) branchMap[key] = [];
+    branchMap[key].push(b);
+  });
+  const ideas = Array.isArray(r.automation_ideas) ? r.automation_ideas : [];
+  function findAutomationFor(step) {
+    const key = String(step.step_number);
+    const title = (step.title || "").toLowerCase();
+    for (const a of ideas) {
+      const ref = String(a.recommended_process_step || "").toLowerCase();
+      if (ref === key) return a;
+      if (ref && title && ref.includes(title.slice(0, 12))) return a;
+      if (ref && ref.includes("step " + key)) return a;
+    }
+    return null;
+  }
+
+  const stepsHtml = steps.map((s) => {
+    const isAuto = !!s.automation_opportunity;
+    const numBg = isAuto ? E.blue : E.paper;
+    const numColor = isAuto ? "white" : E.ink;
+    const numBorder = isAuto ? E.blue : E.line;
+    const stepHtml = `<table style="width:100%;border-collapse:collapse;margin:0 0 14px;" cellpadding="0" cellspacing="0"><tr>
+      <td style="width:44px;vertical-align:top;padding-top:2px;">
+        <div style="width:34px;height:34px;background:${numBg};color:${numColor};border:1.5px solid ${numBorder};border-radius:50%;text-align:center;line-height:32px;font-weight:900;font-size:13px;">${esc(String(s.step_number || ""))}</div>
+      </td>
+      <td style="padding-left:14px;background:${E.paper};border:1px solid ${isAuto ? "rgba(36,86,255,0.30)" : E.line};border-radius:14px;padding:14px 18px;">
+        ${Array.isArray(s.inputs_from) && s.inputs_from.length ? `<div style="margin-bottom:10px;padding:9px 12px;background:#F5F0E8;border-radius:8px;">
+          <div style="font-size:10px;font-weight:900;color:${E.muted2};text-transform:uppercase;letter-spacing:0.1em;margin-bottom:6px;">Inputs from</div>
+          <div>${s.inputs_from.map((i) => `<span style="display:inline-block;font-size:12px;padding:2px 9px;background:${E.paper};border:1px solid ${E.line};border-radius:999px;color:${E.ink};margin:2px 4px 0 0;">${esc(i)}</span>`).join("")}</div>
+        </div>` : ""}
+        <div style="font-weight:800;color:${E.ink};font-size:15.5px;margin-bottom:4px;line-height:1.35;">${esc(s.title || "")}</div>
+        ${s.people_involved || s.tools_used ? `<div style="font-size:12.5px;color:${E.muted};margin-bottom:6px;">${[s.people_involved && "People: " + esc(s.people_involved), s.tools_used && "Tools: " + esc(s.tools_used)].filter(Boolean).join(" &middot; ")}</div>` : ""}
+        ${s.description ? `<div style="font-size:14px;color:${E.ink};line-height:1.55;margin:6px 0;">${esc(s.description)}</div>` : ""}
+        ${s.risk_or_friction ? `<div style="margin-top:8px;padding:9px 12px;background:rgba(180,83,9,0.06);border-left:3px solid ${E.amber};border-radius:0 8px 8px 0;font-size:13px;color:${E.ink};line-height:1.5;">${esc(s.risk_or_friction)}</div>` : ""}
+        ${isAuto ? (() => {
+          const idea = findAutomationFor(s);
+          const label = idea ? idea.title : "Automation opportunity";
+          return `<div style="margin-top:8px;padding:10px 14px;background:rgba(36,86,255,0.07);border-left:3px solid ${E.blue};border-radius:0 8px 8px 0;">
+            <div style="font-size:10px;font-weight:900;color:${E.blue};text-transform:uppercase;letter-spacing:0.1em;margin-bottom:3px;">Where AI can help</div>
+            <div style="font-size:13.5px;color:${E.ink};">${esc(label)}</div>
+          </div>`;
+        })() : ""}
+      </td>
+    </tr></table>`;
+
+    const branchesHtml = (branchMap[String(s.step_number)] || []).map((b) =>
+      `<table style="width:100%;border-collapse:collapse;margin:0 0 14px 44px;" cellpadding="0" cellspacing="0"><tr><td style="background:rgba(180,83,9,0.04);border:1px solid rgba(180,83,9,0.22);border-radius:10px;padding:12px 16px;">
+        <div style="font-size:10px;font-weight:900;color:${E.amber};letter-spacing:0.1em;text-transform:uppercase;margin-bottom:4px;">Decision</div>
+        <div style="font-weight:800;color:${E.ink};font-size:14px;margin-bottom:10px;">${esc(b.condition || "")}</div>
+        <table style="width:100%;border-collapse:collapse;"><tr>
+          <td style="width:48%;background:rgba(47,143,91,0.10);border-radius:8px;padding:9px 12px;vertical-align:top;">
+            <div style="font-size:10px;font-weight:900;color:${E.green};text-transform:uppercase;letter-spacing:0.08em;margin-bottom:3px;">If yes</div>
+            <div style="font-size:13px;color:${E.ink};">${esc(b.yes_path || "")}</div>
+          </td>
+          <td style="width:4%"></td>
+          <td style="width:48%;background:rgba(180,83,9,0.10);border-radius:8px;padding:9px 12px;vertical-align:top;">
+            <div style="font-size:10px;font-weight:900;color:${E.amber};text-transform:uppercase;letter-spacing:0.08em;margin-bottom:3px;">If no</div>
+            <div style="font-size:13px;color:${E.ink};">${esc(b.no_path || "")}</div>
+          </td>
+        </tr></table>
+      </td></tr></table>`
+    ).join("");
+
+    return stepHtml + branchesHtml;
+  }).join("");
+
+  return `<h2 style="font-family:Georgia,serif;font-size:20px;letter-spacing:-0.022em;color:${E.ink};margin:32px 0 14px;">Your process map</h2>
+    ${stepsHtml}`;
+}
+
+function opportunitiesBlock(r) {
+  const items = Array.isArray(r.automation_ideas) ? r.automation_ideas : [];
+  if (!items.length) return "";
+  const cards = items.map((a) => {
+    const diffColor = a.difficulty === "Easy" ? E.green : a.difficulty === "Advanced" ? E.amber : E.blue;
+    const diffBg    = a.difficulty === "Easy" ? "rgba(47,143,91,0.10)" : a.difficulty === "Advanced" ? "rgba(180,83,9,0.10)" : "rgba(36,86,255,0.10)";
+    const impacts = Array.isArray(a.estimated_impact) ? a.estimated_impact.slice(0, 4) : [];
+    return `<div style="background:${E.paper};border:1px solid ${E.line};border-radius:14px;padding:16px 20px;margin-bottom:12px;">
+      ${a.difficulty ? `<span style="display:inline-block;font-size:10.5px;font-weight:800;padding:3px 10px;border-radius:999px;letter-spacing:0.06em;text-transform:uppercase;background:${diffBg};color:${diffColor};margin-bottom:6px;">${esc(a.difficulty)}</span>` : ""}
+      <h3 style="font-family:Georgia,serif;font-size:17px;letter-spacing:-0.022em;color:${E.ink};margin:4px 0 8px;">${esc(a.title || "")}</h3>
+      ${a.plain_english_description ? `<p style="margin:0 0 8px;font-size:14px;color:${E.ink};line-height:1.55;">${esc(a.plain_english_description)}</p>` : ""}
+      ${a.why_it_matters ? `<p style="margin:0 0 6px;font-size:13px;color:${E.muted};line-height:1.55;"><b style="color:${E.ink};">Why it matters:</b> ${esc(a.why_it_matters)}</p>` : ""}
+      ${a.practical_ai_build_note ? `<p style="margin:0 0 6px;font-size:13px;color:${E.muted};line-height:1.55;"><b style="color:${E.ink};">What we would build:</b> ${esc(a.practical_ai_build_note)}</p>` : ""}
+      ${impacts.length ? `<div style="margin-top:8px;">${impacts.map((i) => `<span style="display:inline-block;font-size:12px;padding:3px 9px;background:#F5F0E8;border:1px solid ${E.line};border-radius:999px;color:${E.ink};margin:2px 5px 2px 0;">&#10003;&nbsp; ${esc(i)}</span>`).join("")}</div>` : ""}
+    </div>`;
+  }).join("");
+  return `<h2 style="font-family:Georgia,serif;font-size:20px;letter-spacing:-0.022em;color:${E.ink};margin:32px 0 14px;">AI opportunities</h2>${cards}`;
+}
+
+function listBlock(title, items, lineFn) {
+  if (!Array.isArray(items) || !items.length) return "";
+  const cards = items.map((x) =>
+    `<div style="background:${E.paper};border:1px solid ${E.line};border-radius:12px;padding:14px 18px;margin-bottom:10px;">${lineFn(x)}</div>`
+  ).join("");
+  return `<h2 style="font-family:Georgia,serif;font-size:20px;letter-spacing:-0.022em;color:${E.ink};margin:32px 0 14px;">${esc(title)}</h2>${cards}`;
+}
+
+function sopBlock(r) {
+  const items = Array.isArray(r.sop_sections) ? r.sop_sections : [];
+  if (!items.length) return "";
+  const sections = items.map((s) =>
+    `<div style="margin-bottom:14px;">
+       <h4 style="font-family:Georgia,serif;font-size:16px;letter-spacing:-0.02em;color:${E.ink};margin:0 0 4px;">${esc(s.section_title || "")}</h4>
+       ${s.content ? `<p style="margin:0;font-size:14px;color:${E.ink};line-height:1.6;">${esc(s.content).replace(/\n/g, "<br/>")}</p>` : ""}
+     </div>`
+  ).join("");
+  return `<h2 style="font-family:Georgia,serif;font-size:20px;letter-spacing:-0.022em;color:${E.ink};margin:32px 0 14px;">${esc(r.sop_title || "Full SOP")}</h2>${sections}`;
+}
+
+function dividerHr() {
+  return `<hr style="border:0;border-top:1px solid ${E.line};margin:28px 0;" />`;
+}
+
+function darkCtaBlock() {
+  return `<div style="background:${E.ink};color:white;border-radius:20px;padding:32px 36px;margin:32px 0 0;">
+    <div style="font-size:10px;font-weight:900;letter-spacing:0.22em;color:${E.blue};text-transform:uppercase;margin-bottom:10px;">Step 2 &middot; Build</div>
+    <h2 style="font-family:Georgia,serif;color:white;font-size:24px;letter-spacing:-0.025em;margin:0 0 10px;line-height:1.15;">Ready to build the first system?</h2>
+    <p style="color:rgba(255,255,255,0.78);font-size:14.5px;line-height:1.6;margin:0 0 18px;">The Build call is 45 minutes. We confirm the scope, talk through the trade-offs, and start building with you.</p>
+    <a href="${BOOK_CALL_URL}" style="display:inline-block;background:${E.blue};color:white;text-decoration:none;padding:12px 22px;border-radius:999px;font-weight:800;font-size:14px;">Book a Build call with Joe &rarr;</a>
+  </div>`;
+}
+
+function gdocsNote(hasWord) {
+  if (!hasWord) return "";
+  return `<p style="margin:8px 0 0;color:${E.muted};font-size:12.5px;line-height:1.55;">Your Word version is attached. To edit in Google Docs, open <a href="https://docs.google.com/document/u/0/" style="color:${E.blue};">docs.google.com</a> and use File &rarr; Open to upload the attachment.</p>`;
+}
+
 function renderCustomerEmail(profile, r, notionUrl, hasWord) {
   const fn = esc(profile.firstName || "");
   const proc = esc(profile.processName || "your process");
-  const es = r.executive_summary || {};
-  const fb = r.recommended_first_build || {};
-  const impactLines = Array.isArray(fb.estimated_impact) ? fb.estimated_impact.slice(0, 4) : [];
 
-  const notionBlock = notionUrl
-    ? `<p style="margin:18px 0;"><a href="${esc(notionUrl)}" style="display:inline-block;background:#2456FF;color:white;text-decoration:none;padding:13px 22px;border-radius:999px;font-weight:800;font-size:14px;">Open your process map in Notion &rarr;</a></p>`
-    : `<p style="margin:18px 0;color:#667085;font-size:14px;">The Notion page is still being set up. Joe will send the link separately.</p>`;
+  const html = `<!DOCTYPE html><html><body style="margin:0;padding:0;background:${E.bg};font-family:Helvetica,Arial,sans-serif;color:${E.ink};">
+  <div style="max-width:640px;margin:0 auto;padding:36px 24px 56px;">
 
-  const wordNote = hasWord
-    ? `<p style="margin:6px 0 0;color:#667085;font-size:13px;">A Word version of your full process map is attached to this email.</p>`
-    : ``;
+    ${emailHeader()}
 
-  const html = `<!DOCTYPE html><html><body style="margin:0;padding:0;background:#FBF5EA;font-family:Helvetica,Arial,sans-serif;color:#172033;">
-  <div style="max-width:600px;margin:0 auto;padding:36px 24px 56px;">
-
-    <div style="font-family:Georgia,serif;font-weight:800;color:#172033;font-size:22px;letter-spacing:-0.025em;margin-bottom:4px;">
-      Practical <span style="color:#2456FF;">AI</span> Co.
-    </div>
-    <div style="font-size:10px;font-weight:900;letter-spacing:0.22em;color:#667085;text-transform:uppercase;margin-bottom:30px;">
-      Systems that run so you can lead
-    </div>
-
-    <p style="font-size:16px;line-height:1.55;margin:0 0 14px;">Hi ${fn},</p>
-    <p style="font-size:16px;line-height:1.55;margin:0 0 22px;">
-      Thanks for walking us through your ${proc} process. Below is the short version of what we heard. Your full process map is in Notion and attached as a Word document.
+    <p style="font-size:16px;line-height:1.55;margin:0 0 12px;">Hi ${fn},</p>
+    <p style="font-size:16px;line-height:1.55;margin:0 0 20px;color:${E.ink};">
+      Below is the durable copy of your ${proc} capture session. It includes the executive summary, the full process map, AI opportunities, and a draft SOP. Use it however helps most.
     </p>
 
-    <h2 style="font-family:Georgia,serif;font-size:20px;letter-spacing:-0.022em;color:#172033;margin:24px 0 10px;">What we heard</h2>
-    <table style="width:100%;border-collapse:collapse;">
-      ${es.biggest_bottleneck            ? `<tr><td style="padding:6px 0;font-size:14.5px;line-height:1.5;"><b style="color:#B91C1C;">Biggest bottleneck:</b> ${esc(es.biggest_bottleneck)}</td></tr>` : ""}
-      ${es.biggest_time_drain            ? `<tr><td style="padding:6px 0;font-size:14.5px;line-height:1.5;"><b style="color:#B45309;">Biggest time drain:</b> ${esc(es.biggest_time_drain)}</td></tr>` : ""}
-      ${es.most_owner_dependent_step     ? `<tr><td style="padding:6px 0;font-size:14.5px;line-height:1.5;"><b style="color:#172033;">Most owner-dependent:</b> ${esc(es.most_owner_dependent_step)}</td></tr>` : ""}
-      ${es.most_immediate_ai_opportunity ? `<tr><td style="padding:6px 0;font-size:14.5px;line-height:1.5;"><b style="color:#2456FF;">Most immediate AI opportunity:</b> ${esc(es.most_immediate_ai_opportunity)}</td></tr>` : ""}
-    </table>
+    ${ctaRow(notionUrl)}
+    ${gdocsNote(hasWord)}
+    ${!notionUrl ? `<p style="margin:14px 0 0;color:${E.muted};font-size:13px;">The Notion page is still being set up. Joe will follow up with the link.</p>` : ""}
 
-    ${fb.title ? `
-    <div style="margin:30px 0 0;padding:22px 24px;background:#FFFDF8;border:1px solid #E7DCCB;border-radius:14px;">
-      <div style="font-size:10px;font-weight:900;letter-spacing:0.18em;color:#2456FF;text-transform:uppercase;margin-bottom:8px;">Where we would start</div>
-      <h3 style="font-family:Georgia,serif;font-size:19px;letter-spacing:-0.02em;color:#172033;margin:0 0 8px;">${esc(fb.title)}</h3>
-      ${fb.why_this_first ? `<p style="margin:0 0 10px;font-size:14.5px;line-height:1.55;">${esc(fb.why_this_first)}</p>` : ""}
-      ${impactLines.length ? `
-        <div style="margin-top:10px;">
-          ${impactLines.map((i) => `<div style="font-size:13.5px;color:#172033;margin:3px 0;">&#10003;&nbsp; ${esc(i)}</div>`).join("")}
-        </div>` : ""}
-    </div>` : ""}
+    ${dividerHr()}
+    ${execSummaryBlock(r.executive_summary)}
+    ${startHereBlock(r.recommended_first_build)}
 
-    ${notionBlock}
-    ${wordNote}
+    ${r.process_summary ? `${dividerHr()}<h2 style="font-family:Georgia,serif;font-size:20px;letter-spacing:-0.022em;color:${E.ink};margin:18px 0 8px;">Overview</h2><p style="margin:0;font-size:14.5px;line-height:1.6;color:${E.ink};">${esc(r.process_summary)}</p>` : ""}
 
-    <hr style="border:0;border-top:1px solid #E7DCCB;margin:32px 0 22px;" />
+    ${dividerHr()}
+    ${processMapBlock(r)}
 
-    <p style="font-size:15px;line-height:1.55;margin:0 0 14px;">When you are ready, the next step is a 45-minute Build call to scope the first system together.</p>
-    <p style="margin:0 0 30px;"><a href="${BOOK_CALL_URL}" style="display:inline-block;background:#2456FF;color:white;text-decoration:none;padding:13px 22px;border-radius:999px;font-weight:800;font-size:14px;">Book a Build call with Joe &rarr;</a></p>
+    ${dividerHr()}
+    ${opportunitiesBlock(r)}
 
-    <div style="font-size:12px;color:#8A93A5;border-top:1px solid #E7DCCB;padding-top:16px;">
-      Practical AI Co. &middot; Franklin, TN &middot; <a href="mailto:${JOE_EMAIL}" style="color:#2456FF;text-decoration:none;">${JOE_EMAIL}</a>
+    ${dividerHr()}
+    ${listBlock("Where work gets stuck", r.bottlenecks, (b) =>
+      `<h4 style="font-family:Georgia,serif;font-size:16px;letter-spacing:-0.02em;color:${E.ink};margin:0 0 4px;">${esc(b.title || "")}</h4>
+       ${b.description ? `<p style="margin:0 0 6px;font-size:14px;color:${E.ink};line-height:1.55;">${esc(b.description)}</p>` : ""}
+       ${b.why_it_matters ? `<p style="margin:0;font-size:13px;color:${E.muted};line-height:1.55;"><b style="color:${E.ink};">Why it matters:</b> ${esc(b.why_it_matters)}</p>` : ""}`
+    )}
+
+    ${listBlock("Where the owner steps in", r.owner_dependencies, (d) =>
+      `<h4 style="font-family:Georgia,serif;font-size:16px;letter-spacing:-0.02em;color:${E.ink};margin:0 0 4px;">${esc(d.title || "")}</h4>
+       ${d.description ? `<p style="margin:0;font-size:14px;color:${E.ink};line-height:1.55;">${esc(d.description)}</p>` : ""}`
+    )}
+
+    ${listBlock("Manual work", r.manual_work, (m) =>
+      `<h4 style="font-family:Georgia,serif;font-size:16px;letter-spacing:-0.02em;color:${E.ink};margin:0 0 4px;">${esc(m.title || "")}</h4>
+       ${m.description ? `<p style="margin:0;font-size:14px;color:${E.ink};line-height:1.55;">${esc(m.description)}</p>` : ""}`
+    )}
+
+    ${listBlock("Tools and systems", r.tools_and_systems, (t) =>
+      `<h4 style="font-family:Georgia,serif;font-size:16px;letter-spacing:-0.02em;color:${E.ink};margin:0 0 4px;">${esc(t.tool_name || "")}${t.system_role ? ` <span style="font-size:11px;font-weight:700;color:${E.muted};text-transform:uppercase;letter-spacing:0.06em;">(${esc(t.system_role.replace(/_/g, " "))})</span>` : ""}</h4>
+       ${t.purpose ? `<p style="margin:0 0 4px;font-size:14px;color:${E.ink};line-height:1.55;">${esc(t.purpose)}</p>` : ""}
+       ${t.used_by ? `<p style="margin:0 0 2px;font-size:12.5px;color:${E.muted};"><b style="color:${E.ink};">Used by:</b> ${esc(t.used_by)}</p>` : ""}
+       ${t.pain_points ? `<p style="margin:0;font-size:12.5px;color:${E.muted};"><b style="color:${E.ink};">Pain points:</b> ${esc(t.pain_points)}</p>` : ""}`
+    )}
+
+    ${listBlock("Where systems break down", r.systems_breakdown, (b) =>
+      `<h4 style="font-family:Georgia,serif;font-size:16px;letter-spacing:-0.02em;color:${E.ink};margin:0 0 4px;">${esc(b.title || "")}</h4>
+       ${b.description ? `<p style="margin:0 0 6px;font-size:14px;color:${E.ink};line-height:1.55;">${esc(b.description)}</p>` : ""}
+       ${b.impact ? `<p style="margin:0;font-size:13px;color:${E.muted};line-height:1.55;"><b style="color:${E.ink};">Impact:</b> ${esc(b.impact)}</p>` : ""}`
+    )}
+
+    ${dividerHr()}
+    ${sopBlock(r)}
+
+    ${darkCtaBlock()}
+
+    <div style="font-size:12px;color:${E.muted2};border-top:1px solid ${E.line};padding-top:16px;margin-top:32px;">
+      Practical AI Co. &middot; Franklin, TN &middot; <a href="mailto:${JOE_EMAIL}" style="color:${E.blue};text-decoration:none;">${JOE_EMAIL}</a>
     </div>
   </div>
   </body></html>`;
 
+  // Plain-text fallback (much terser; the HTML version is the deliverable)
+  const es = r.executive_summary || {};
+  const fb = r.recommended_first_build || {};
   const text = [
     `Hi ${profile.firstName || ""},`,
     ``,
-    `Thanks for walking us through your ${profile.processName || "process"}. Below is the short version of what we heard.`,
+    `Below is the durable copy of your ${profile.processName || "process"} capture session.`,
+    ``,
+    notionUrl ? `Notion: ${notionUrl}` : `Notion page is being set up. Joe will follow up with the link.`,
+    hasWord  ? `Word doc: attached. To edit in Google Docs, open docs.google.com and use File > Open.` : `Word doc: generation failed.`,
     ``,
     `WHAT WE HEARD`,
     es.biggest_bottleneck            ? `- Biggest bottleneck: ${es.biggest_bottleneck}` : null,
@@ -224,11 +423,8 @@ function renderCustomerEmail(profile, r, notionUrl, hasWord) {
     es.most_owner_dependent_step     ? `- Most owner-dependent: ${es.most_owner_dependent_step}` : null,
     es.most_immediate_ai_opportunity ? `- Most immediate AI opportunity: ${es.most_immediate_ai_opportunity}` : null,
     ``,
-    fb.title ? `WHERE WE WOULD START` : null,
-    fb.title ? `${fb.title}${fb.why_this_first ? "\n" + fb.why_this_first : ""}` : null,
-    ``,
-    notionUrl ? `Notion page: ${notionUrl}` : `The Notion page is being set up. Joe will share separately.`,
-    hasWord  ? `A Word version is attached.` : `Word document will follow.`,
+    fb.title ? `WHERE WE WOULD START: ${fb.title}` : null,
+    fb.why_this_first ? fb.why_this_first : null,
     ``,
     `Book a Build call with Joe: ${BOOK_CALL_URL}`,
     ``,

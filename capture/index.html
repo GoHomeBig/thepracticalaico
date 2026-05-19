@@ -460,6 +460,74 @@
       font-size: 14.5px;
       margin: 0;
     }
+    /* Alt section: tonal shift card for visual rhythm */
+    .res-section.alt {
+      background: var(--paper);
+      border: 1px solid var(--line);
+      border-radius: 24px;
+      padding: 40px 44px;
+      box-shadow: 0 12px 32px rgba(17, 24, 39, 0.04);
+    }
+    .res-section.alt .res-section-head { margin-bottom: 22px; }
+    @media (max-width: 640px) { .res-section.alt { padding: 28px 22px; } }
+
+    /* Action bar tweak: caption text under buttons */
+    .action-bar-hint {
+      width: 100%;
+      font-size: 12px;
+      color: var(--muted-2);
+      margin-top: 8px;
+      line-height: 1.4;
+    }
+
+    /* Dark navy CTA — bridges into the Build phase */
+    .dark-cta {
+      background: var(--charcoal);
+      color: var(--white);
+      border-radius: 28px;
+      padding: 56px 56px;
+      margin: 24px 0 32px;
+      box-shadow: var(--shadow);
+      position: relative;
+      overflow: hidden;
+    }
+    .dark-cta::after {
+      content: '';
+      position: absolute;
+      top: -60px; right: -60px;
+      width: 220px; height: 220px;
+      border-radius: 999px;
+      background: radial-gradient(circle, rgba(36, 86, 255, 0.22) 0%, transparent 70%);
+      pointer-events: none;
+    }
+    .dark-cta-eyebrow {
+      display: inline-block;
+      font-size: 11px;
+      font-weight: 900;
+      letter-spacing: 0.22em;
+      text-transform: uppercase;
+      color: var(--blue);
+      margin-bottom: 14px;
+    }
+    .dark-cta h2 {
+      font-family: Fraunces, Georgia, serif;
+      color: var(--white);
+      font-size: clamp(26px, 3.4vw, 36px);
+      letter-spacing: -0.025em;
+      margin: 0 0 12px;
+      line-height: 1.1;
+      max-width: 540px;
+    }
+    .dark-cta p {
+      color: rgba(255,255,255,0.78);
+      font-size: 16px;
+      line-height: 1.6;
+      margin: 0 0 24px;
+      max-width: 580px;
+    }
+    .dark-cta .button-primary { background: var(--blue); color: var(--white); }
+    .dark-cta .button-primary:hover:not(:disabled) { background: #3B6BFF; }
+    @media (max-width: 640px) { .dark-cta { padding: 36px 28px; } .dark-cta::after { display: none; } }
 
     /* Executive summary */
     .exec-grid {
@@ -563,11 +631,24 @@
 
     /* Process map */
     .map { position: relative; }
+    /* Subtle connector line behind step numbers */
+    .map::before {
+      content: '';
+      position: absolute;
+      left: 19px;
+      top: 24px;
+      bottom: 24px;
+      width: 1.5px;
+      background: var(--line);
+      z-index: 0;
+    }
     .map-step {
       display: flex;
       gap: 18px;
       align-items: flex-start;
       margin-bottom: 14px;
+      position: relative;
+      z-index: 1;
     }
     .map-step-num {
       flex-shrink: 0;
@@ -582,11 +663,15 @@
       justify-content: center;
       margin-top: 4px;
       border: 1.5px solid var(--line);
+      position: relative;
+      z-index: 2;
+      box-shadow: 0 2px 6px rgba(17, 24, 39, 0.04);
     }
     .map-step.has-auto .map-step-num {
       background: var(--blue);
       color: white;
       border-color: var(--blue);
+      box-shadow: 0 6px 14px rgba(36, 86, 255, 0.22);
     }
     .map-step-card {
       flex: 1;
@@ -594,6 +679,10 @@
       border: 1px solid var(--line);
       border-radius: 16px;
       padding: 20px 24px;
+    }
+    .map-step.has-auto .map-step-card {
+      border-color: rgba(36, 86, 255, 0.32);
+      box-shadow: 0 6px 18px rgba(36, 86, 255, 0.06);
     }
     .map-step-title {
       font-weight: 800;
@@ -1026,11 +1115,15 @@
       <div class="container action-bar-inner">
         <a id="notionOpenBtn" class="button button-primary" target="_blank" rel="noopener" hidden>Open in Notion</a>
         <button id="notionBtn" class="button button-primary" type="button" hidden>Push to Notion</button>
+        <button id="gdocsBtn" class="button button-light" type="button">Open in Google Docs</button>
         <button id="docxBtn" class="button button-light" type="button">Download Word</button>
-        <a class="button button-light" href="https://calendar.app.google/SnmSbP7hZCprCZ9B7" target="_blank" rel="noopener">Book a Build call</a>
+        <a class="button button-light" href="https://calendar.app.google/SBMCxMPv4Sd8VZRW9" target="_blank" rel="noopener">Book a Build call</a>
         <div id="emailStatus" class="email-status" hidden>
           <span class="dot"></span>
           <span id="emailStatusText"></span>
+        </div>
+        <div id="gdocsHint" class="action-bar-hint" hidden>
+          Your Word file is downloading. Google Docs is opening in a new tab. Use File &rarr; Open and drag the file in to keep editing.
         </div>
       </div>
     </div>
@@ -1060,7 +1153,7 @@
             <p id="startHereWhy"></p>
             <p id="startHereWhat" style="color:var(--muted); font-size:15px;"></p>
             <div class="impact-list" id="startHereImpact"></div>
-            <a class="button button-primary" href="https://calendar.app.google/SnmSbP7hZCprCZ9B7" target="_blank" rel="noopener">Book a Build call with Joe</a>
+            <a class="button button-primary" href="https://calendar.app.google/SBMCxMPv4Sd8VZRW9" target="_blank" rel="noopener">Book a Build call with Joe</a>
           </div>
         </div>
 
@@ -1074,7 +1167,7 @@
         </div>
 
         <!-- AI opportunities -->
-        <div class="res-section" id="opportunitiesSection" hidden>
+        <div class="res-section alt" id="opportunitiesSection" hidden>
           <div class="res-section-head">
             <h2>AI opportunities</h2>
             <p class="subhead">Where AI can take work off your plate. Tap any card for more.</p>
@@ -1113,6 +1206,14 @@
             <summary><span id="sopTitleLabel">Full SOP</span> <span class="count" id="sopCount"></span></summary>
             <div class="more-details-body" id="sopBody"></div>
           </details>
+        </div>
+
+        <!-- Dark navy bottom CTA — bridge into Build phase -->
+        <div class="dark-cta">
+          <div class="dark-cta-eyebrow">Step 2 &middot; Build</div>
+          <h2>Ready to build the first system?</h2>
+          <p>The Build call is 45 minutes. We confirm the scope, talk through the trade-offs, and start building with you. You stay in your business.</p>
+          <a class="button button-primary" href="https://calendar.app.google/SBMCxMPv4Sd8VZRW9" target="_blank" rel="noopener">Book a Build call with Joe</a>
         </div>
 
         <div id="exportErr" class="err" hidden></div>
@@ -1738,6 +1839,28 @@
       }
     });
 
+    async function downloadDocx() {
+      const res = await fetch('/api/capture-export', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ profile: state.profile, results: state.results, format: 'docx' }),
+      });
+      if (!res.ok) {
+        const body = await res.json().catch(() => ({ error: 'Word export failed' }));
+        throw new Error(body.error || ('HTTP ' + res.status));
+      }
+      const blob = await res.blob();
+      const disp = res.headers.get('Content-Disposition') || '';
+      const m = disp.match(/filename="([^"]+)"/);
+      const name = (m && m[1]) || ((state.profile && state.profile.processName) || 'process').toLowerCase().replace(/[^a-z0-9]+/g, '-') + '-sop.docx';
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url; a.download = name;
+      document.body.appendChild(a); a.click();
+      document.body.removeChild(a);
+      setTimeout(() => URL.revokeObjectURL(url), 4000);
+    }
+
     $('docxBtn').addEventListener('click', async () => {
       hideError($('exportErr'));
       const btn = $('docxBtn');
@@ -1745,28 +1868,35 @@
       btn.disabled = true;
       btn.textContent = 'Preparing Word doc...';
       try {
-        const res = await fetch('/api/capture-export', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ profile: state.profile, results: state.results, format: 'docx' }),
-        });
-        if (!res.ok) {
-          const body = await res.json().catch(() => ({ error: 'Word export failed' }));
-          throw new Error(body.error || ('HTTP ' + res.status));
-        }
-        const blob = await res.blob();
-        const disp = res.headers.get('Content-Disposition') || '';
-        const m = disp.match(/filename="([^"]+)"/);
-        const name = (m && m[1]) || ((state.profile && state.profile.processName) || 'process').toLowerCase().replace(/[^a-z0-9]+/g, '-') + '-sop.docx';
-        const url = URL.createObjectURL(blob);
-        const a = document.createElement('a');
-        a.href = url; a.download = name;
-        document.body.appendChild(a); a.click();
-        document.body.removeChild(a);
-        setTimeout(() => URL.revokeObjectURL(url), 4000);
+        await downloadDocx();
       } catch (err) {
         console.error(err);
         showError($('exportErr'), 'Could not download Word doc. ' + (err.message || ''));
+      } finally {
+        btn.disabled = false;
+        btn.textContent = original;
+      }
+    });
+
+    // Open in Google Docs: trigger the docx download AND open Google Docs in a
+    // new tab. The user drags the downloaded file into Docs to keep editing.
+    // (Google does not expose a public URL for opening a docx directly. This
+    // is the cleanest lightweight V1.)
+    $('gdocsBtn').addEventListener('click', async () => {
+      hideError($('exportErr'));
+      const btn = $('gdocsBtn');
+      const original = btn.textContent;
+      btn.disabled = true;
+      btn.textContent = 'Preparing...';
+      // Open Google Docs first (popup blockers are less aggressive when triggered by user click).
+      const gdocsTab = window.open('https://docs.google.com/document/u/0/', '_blank', 'noopener');
+      try {
+        await downloadDocx();
+        $('gdocsHint').hidden = false;
+      } catch (err) {
+        console.error(err);
+        if (gdocsTab) gdocsTab.close && gdocsTab.close();
+        showError($('exportErr'), 'Could not prepare the Word file. ' + (err.message || ''));
       } finally {
         btn.disabled = false;
         btn.textContent = original;
