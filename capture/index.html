@@ -33,6 +33,7 @@
       --radius: 24px;
     }
     * { box-sizing: border-box; }
+    [hidden] { display: none !important; }
     html { scroll-behavior: smooth; }
     body {
       margin: 0;
@@ -379,174 +380,478 @@
     .processing-checklist li.done .dot { background: var(--green); border-color: var(--green); color: white; }
     .processing-checklist li.done .dot::after { content: "✓"; }
 
-    /* Results */
-    .results-hero {
-      background: var(--paper);
-      border: 1px solid var(--line);
-      border-radius: var(--radius);
-      padding: 32px 36px;
-      margin-bottom: 28px;
-      box-shadow: var(--shadow-soft);
-    }
-    .results-hero .biz { color: var(--muted); font-weight: 700; font-size: 13px; letter-spacing: 0.04em; text-transform: uppercase; margin-bottom: 8px; }
-    .results-hero h1 { margin-bottom: 12px; font-size: clamp(28px, 4vw, 38px); }
-    .results-hero p { color: var(--charcoal); font-size: 16px; line-height: 1.6; margin: 0; }
+    /* =========================
+       Results page redesign
+       Linear / Stripe / Apple-setup feel
+       Heavy use of whitespace, hairline dividers, calmer hierarchy
+       ========================= */
 
-    .section {
+    /* Hero */
+    .results-hero {
+      padding: 24px 0 8px;
+      margin-bottom: 0;
+    }
+    .results-hero .biz {
+      color: var(--muted-2);
+      font-weight: 700;
+      font-size: 12.5px;
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+      margin-bottom: 10px;
+    }
+    .results-hero h1 {
+      margin-bottom: 14px;
+      font-size: clamp(32px, 4.5vw, 44px);
+      line-height: 1.08;
+    }
+    .results-hero p {
+      color: var(--charcoal);
+      font-size: 16.5px;
+      line-height: 1.6;
+      margin: 0;
+      max-width: 640px;
+    }
+
+    /* Sticky action bar */
+    .action-bar {
+      position: sticky;
+      top: 0;
+      z-index: 50;
+      background: rgba(251, 245, 234, 0.92);
+      backdrop-filter: blur(14px);
+      border-top: 1px solid rgba(231, 220, 203, 0.5);
+      border-bottom: 1px solid rgba(231, 220, 203, 0.78);
+      margin: 28px 0 56px;
+      padding: 14px 0;
+    }
+    .action-bar-inner {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+      align-items: center;
+    }
+    .action-bar .button { min-height: 44px; padding: 0 18px; font-size: 14px; }
+    .action-bar .email-status {
+      margin-left: auto;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 12.5px;
+      color: var(--muted);
+      font-weight: 600;
+    }
+    .action-bar .email-status .dot {
+      width: 7px; height: 7px; border-radius: 999px; background: var(--green);
+    }
+    .action-bar .email-status.fail .dot { background: var(--amber); }
+    @media (max-width: 640px) {
+      .action-bar .email-status { width: 100%; margin-left: 0; margin-top: 4px; }
+    }
+
+    /* Section blocks */
+    .res-section { margin-bottom: 64px; }
+    .res-section-head { margin-bottom: 24px; }
+    .res-section-head h2 {
+      font-size: clamp(22px, 2.8vw, 28px);
+      margin: 0 0 4px;
+    }
+    .res-section-head .subhead {
+      color: var(--muted);
+      font-size: 14.5px;
+      margin: 0;
+    }
+
+    /* Executive summary */
+    .exec-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1px;
+      background: var(--line);
+      border: 1px solid var(--line);
+      border-radius: 16px;
+      overflow: hidden;
+    }
+    .exec-cell {
+      background: var(--paper);
+      padding: 22px 26px;
+    }
+    .exec-cell-label {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 11.5px;
+      font-weight: 800;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      color: var(--muted);
+      margin-bottom: 10px;
+    }
+    .exec-cell-label .dot {
+      width: 7px; height: 7px; border-radius: 999px;
+    }
+    .exec-cell.red    .dot { background: #B91C1C; }
+    .exec-cell.amber  .dot { background: var(--amber); }
+    .exec-cell.ink    .dot { background: var(--charcoal); }
+    .exec-cell.blue   .dot { background: var(--blue); }
+    .exec-cell-text {
+      font-size: 15.5px;
+      line-height: 1.55;
+      color: var(--charcoal);
+    }
+    @media (max-width: 640px) {
+      .exec-grid { grid-template-columns: 1fr; }
+    }
+
+    /* Start Here card */
+    .start-here {
+      background: linear-gradient(180deg, rgba(36, 86, 255, 0.07), rgba(36, 86, 255, 0.02));
+      border: 1px solid rgba(36, 86, 255, 0.25);
+      border-radius: 20px;
+      padding: 32px 36px;
+    }
+    .start-here .badge {
+      display: inline-block;
+      background: var(--blue);
+      color: white;
+      font-size: 11px;
+      font-weight: 900;
+      padding: 5px 12px;
+      border-radius: 999px;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      margin-bottom: 14px;
+    }
+    .start-here h2 {
+      font-family: Fraunces, Georgia, serif;
+      font-size: clamp(24px, 3vw, 30px);
+      letter-spacing: -0.024em;
+      color: var(--charcoal);
+      margin: 0 0 12px;
+    }
+    .start-here p {
+      font-size: 16px;
+      line-height: 1.6;
+      color: var(--charcoal);
+      margin: 0 0 16px;
+      max-width: 640px;
+    }
+    .impact-list {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin: 14px 0 22px;
+    }
+    .impact-chip {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 8px 14px;
       background: var(--paper);
       border: 1px solid var(--line);
-      border-radius: 18px;
-      padding: 28px 30px;
-      margin-bottom: 18px;
-      box-shadow: 0 8px 22px rgba(17, 24, 39, 0.04);
+      border-radius: 999px;
+      font-size: 13px;
+      color: var(--charcoal);
+      font-weight: 600;
     }
-    .section h2 { margin: 0 0 6px; font-size: 22px; }
-    .section .subhead { color: var(--muted); font-size: 14px; margin: 0 0 18px; }
+    .impact-chip::before {
+      content: "✓";
+      color: var(--green);
+      font-weight: 900;
+      font-size: 13px;
+    }
+    @media (max-width: 640px) { .start-here { padding: 24px 22px; } }
 
     /* Process map */
     .map { position: relative; }
     .map-step {
       display: flex;
-      gap: 14px;
+      gap: 18px;
       align-items: flex-start;
-      margin-bottom: 10px;
+      margin-bottom: 14px;
     }
     .map-step-num {
       flex-shrink: 0;
-      width: 38px; height: 38px;
+      width: 40px; height: 40px;
       border-radius: 999px;
-      background: var(--blue);
-      color: white;
+      background: var(--paper);
+      color: var(--charcoal);
       font-weight: 900;
       font-size: 14px;
       display: flex;
       align-items: center;
       justify-content: center;
-      margin-top: 2px;
+      margin-top: 4px;
+      border: 1.5px solid var(--line);
+    }
+    .map-step.has-auto .map-step-num {
+      background: var(--blue);
+      color: white;
+      border-color: var(--blue);
     }
     .map-step-card {
       flex: 1;
-      background: var(--cream);
+      background: var(--paper);
       border: 1px solid var(--line);
-      border-radius: 14px;
-      padding: 16px 18px;
+      border-radius: 16px;
+      padding: 20px 24px;
     }
-    .map-step-title { font-weight: 800; font-size: 16px; color: var(--charcoal); margin-bottom: 6px; }
-    .map-step-desc { font-size: 14.5px; color: var(--charcoal); line-height: 1.55; margin-bottom: 10px; }
-    .map-step-meta { display: grid; gap: 6px; margin-top: 6px; }
-    .map-step-meta div { font-size: 13px; color: var(--muted); }
-    .map-step-meta b { color: var(--charcoal); font-weight: 700; }
+    .map-step-title {
+      font-weight: 800;
+      font-size: 17px;
+      color: var(--charcoal);
+      margin-bottom: 4px;
+      line-height: 1.35;
+    }
+    .map-step-people {
+      font-size: 12.5px;
+      color: var(--muted);
+      margin-bottom: 10px;
+    }
     .map-step-friction {
       margin-top: 10px;
-      padding: 9px 12px;
-      background: rgba(180, 83, 9, 0.07);
+      padding: 10px 14px;
+      background: rgba(180, 83, 9, 0.06);
       border-left: 3px solid var(--amber);
       border-radius: 0 8px 8px 0;
-      font-size: 13px;
+      font-size: 13.5px;
+      color: var(--charcoal);
+      line-height: 1.5;
+    }
+    .map-inputs {
+      margin-bottom: 12px;
+      padding: 10px 14px;
+      background: #F5F0E8;
+      border-radius: 10px;
+    }
+    .map-inputs-label {
+      font-size: 10.5px;
+      font-weight: 900;
+      color: var(--muted-2);
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      margin-bottom: 6px;
+    }
+    .map-inputs-items {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+    }
+    .map-inputs-items span {
+      font-size: 12.5px;
+      padding: 3px 10px;
+      background: var(--paper);
+      border: 1px solid var(--line);
+      border-radius: 999px;
       color: var(--charcoal);
     }
-    .map-step-friction b { color: var(--amber); font-weight: 800; text-transform: uppercase; letter-spacing: 0.08em; font-size: 11px; display: block; margin-bottom: 3px; }
-    .map-inputs {
-      margin-bottom: 10px;
-      padding: 9px 12px;
-      background: var(--paper);
-      border: 1px dashed var(--line);
-      border-radius: 8px;
-      font-size: 13px;
-    }
-    .map-inputs b { color: var(--blue); font-weight: 800; text-transform: uppercase; letter-spacing: 0.08em; font-size: 11px; display: block; margin-bottom: 4px; }
-    .map-inputs ul { margin: 0; padding-left: 18px; color: var(--charcoal); }
-    .map-inputs li { margin: 2px 0; }
     .automation-chip {
-      margin-top: 10px;
+      margin-top: 12px;
       display: flex;
-      align-items: center;
-      gap: 10px;
-      padding: 10px 14px;
+      align-items: flex-start;
+      gap: 12px;
+      padding: 12px 16px;
       background: rgba(36, 86, 255, 0.07);
       border-left: 3px solid var(--blue);
       border-radius: 0 10px 10px 0;
     }
     .automation-chip .logo {
-      width: 22px; height: 22px;
+      width: 24px; height: 24px;
       flex-shrink: 0;
       color: var(--blue);
+      margin-top: 1px;
     }
-    .automation-chip .text { font-size: 13.5px; color: var(--charcoal); }
-    .automation-chip .text b { color: var(--blue); font-weight: 800; text-transform: uppercase; letter-spacing: 0.08em; font-size: 11px; display: block; margin-bottom: 2px; }
+    .automation-chip .text { font-size: 14px; color: var(--charcoal); line-height: 1.5; }
+    .automation-chip .text b {
+      color: var(--blue);
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      font-size: 10.5px;
+      display: block;
+      margin-bottom: 4px;
+    }
+
+    /* Native <details> expander for step detail */
+    .step-detail {
+      margin-top: 12px;
+      padding-top: 12px;
+      border-top: 1px solid var(--line);
+    }
+    .step-detail summary {
+      cursor: pointer;
+      list-style: none;
+      font-size: 12.5px;
+      color: var(--muted);
+      font-weight: 700;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      user-select: none;
+    }
+    .step-detail summary::-webkit-details-marker { display: none; }
+    .step-detail summary::after {
+      content: "▾";
+      font-size: 10px;
+      transition: transform 160ms ease;
+    }
+    .step-detail[open] summary::after { transform: rotate(180deg); }
+    .step-detail summary:hover { color: var(--blue); }
+    .step-detail-body {
+      margin-top: 10px;
+      font-size: 14px;
+      color: var(--charcoal);
+      line-height: 1.6;
+    }
+    .step-detail-body p { margin: 0 0 8px; }
+    .step-detail-body .label { font-weight: 700; color: var(--muted); margin-right: 4px; }
 
     /* Branch card */
     .branch {
-      margin: 6px 0 6px 52px;
-      background: rgba(180, 83, 9, 0.05);
-      border: 1px solid rgba(180, 83, 9, 0.25);
+      margin: 4px 0 14px 58px;
+      background: rgba(180, 83, 9, 0.04);
+      border: 1px solid rgba(180, 83, 9, 0.20);
       border-radius: 14px;
-      padding: 14px 16px;
+      padding: 16px 20px;
     }
     .branch-label { font-size: 10.5px; font-weight: 900; color: var(--amber); text-transform: uppercase; letter-spacing: 0.1em; margin-bottom: 6px; }
-    .branch-question { font-weight: 800; color: var(--charcoal); margin-bottom: 10px; }
+    .branch-question { font-weight: 800; color: var(--charcoal); margin-bottom: 12px; font-size: 15px; }
     .branch-paths { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
-    @media (max-width: 540px) { .branch-paths { grid-template-columns: 1fr; } }
-    .branch-path { padding: 10px 12px; border-radius: 10px; }
-    .branch-path.yes { background: rgba(47, 143, 91, 0.10); }
-    .branch-path.no  { background: rgba(180, 83, 9, 0.10); }
+    @media (max-width: 540px) { .branch-paths { grid-template-columns: 1fr; } .branch { margin-left: 0; } }
+    .branch-path { padding: 12px 14px; border-radius: 10px; background: var(--paper); }
     .branch-path-label { font-size: 10.5px; font-weight: 900; text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 4px; }
     .branch-path.yes .branch-path-label { color: var(--green); }
     .branch-path.no  .branch-path-label { color: var(--amber); }
-    .branch-path-text { font-size: 13.5px; color: var(--charcoal); }
+    .branch-path-text { font-size: 13.5px; color: var(--charcoal); line-height: 1.5; }
 
-    /* Generic cards */
-    .stack { display: grid; gap: 14px; }
-    .item-card {
-      background: var(--cream);
+    /* Opportunity cards */
+    .opps-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 14px;
+    }
+    .opp {
+      background: var(--paper);
+      border: 1px solid var(--line);
+      border-radius: 16px;
+      padding: 22px 24px;
+    }
+    .opp-head { display: flex; align-items: flex-start; gap: 8px; flex-wrap: wrap; margin-bottom: 8px; }
+    .opp h3 {
+      font-family: Fraunces, Georgia, serif;
+      font-size: 18px;
+      letter-spacing: -0.022em;
+      margin: 0;
+      flex: 1 1 auto;
+      min-width: 0;
+    }
+    .pill {
+      display: inline-block;
+      font-size: 10.5px;
+      font-weight: 800;
+      padding: 3px 10px;
+      border-radius: 999px;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      background: rgba(36, 86, 255, 0.08);
+      color: var(--blue);
+    }
+    .pill.diff-Easy     { background: rgba(47,143,91,0.10);  color: var(--green); }
+    .pill.diff-Medium   { background: rgba(36,86,255,0.10);  color: var(--blue); }
+    .pill.diff-Advanced { background: rgba(180,83,9,0.10);   color: var(--amber); }
+
+    /* Bottleneck cards */
+    .bottleneck {
+      background: var(--paper);
       border: 1px solid var(--line);
       border-radius: 14px;
-      padding: 16px 18px;
+      padding: 18px 22px;
+      margin-bottom: 10px;
     }
-    .item-card h4 { margin: 0 0 6px; font-family: Fraunces, Georgia, serif; font-size: 17px; letter-spacing: -0.02em; color: var(--charcoal); font-weight: 800; }
-    .item-card p { margin: 0 0 8px; font-size: 14.5px; color: var(--charcoal); line-height: 1.55; }
-    .item-card .pill { display: inline-block; background: rgba(36,86,255,0.08); color: var(--blue); font-size: 11px; font-weight: 800; padding: 3px 10px; border-radius: 999px; letter-spacing: 0.06em; text-transform: uppercase; margin-right: 6px; margin-bottom: 4px; }
-    .item-card .pill.role { background: rgba(180,83,9,0.10); color: var(--amber); }
-    .item-card .pill.diff { background: rgba(47,143,91,0.10); color: var(--green); }
-    .item-card .meta { font-size: 13px; color: var(--muted); margin-top: 6px; }
-    .item-card .meta b { color: var(--charcoal); font-weight: 700; }
-
-    /* SOP rendering */
-    .sop-block { margin-bottom: 14px; }
-    .sop-block h4 { font-family: Fraunces, Georgia, serif; font-size: 18px; letter-spacing: -0.018em; color: var(--charcoal); margin: 0 0 6px; }
-    .sop-block p { font-size: 15px; line-height: 1.6; margin: 0 0 8px; color: var(--charcoal); }
-
-    /* Recommended first build */
-    .first-build {
-      background: linear-gradient(180deg, rgba(36, 86, 255, 0.07), rgba(36, 86, 255, 0.02));
-      border: 1px solid rgba(36, 86, 255, 0.25);
+    .bottleneck h3 {
+      font-family: Fraunces, Georgia, serif;
+      font-size: 17px;
+      letter-spacing: -0.02em;
+      margin: 0 0 4px;
     }
-    .first-build .pill-large { display: inline-block; background: var(--blue); color: white; font-size: 11px; font-weight: 900; padding: 5px 12px; border-radius: 999px; letter-spacing: 0.1em; text-transform: uppercase; margin-bottom: 12px; }
+    .bottleneck .one-line { font-size: 14.5px; color: var(--charcoal); line-height: 1.5; margin: 0; }
 
-    /* Action footer */
-    .actions-footer {
-      background: var(--charcoal);
-      color: var(--white);
-      border-radius: var(--radius);
-      padding: 32px 36px;
-      margin-top: 28px;
-      box-shadow: var(--shadow);
+    /* Collapsed details sections */
+    .more-details { border-top: 1px solid var(--line); padding-top: 32px; margin-top: 32px; }
+    .more-details > details {
+      border-bottom: 1px solid var(--line);
+      padding: 0;
     }
-    .actions-footer h3 { color: var(--white); font-size: 22px; margin: 0 0 8px; }
-    .actions-footer p { color: rgba(255,255,255,0.78); font-size: 14.5px; margin: 0 0 18px; }
-    .actions-footer .button-row { gap: 12px; }
-    .notion-status {
-      display: inline-flex;
+    .more-details > details > summary {
+      cursor: pointer;
+      list-style: none;
+      padding: 20px 0;
+      font-family: Fraunces, Georgia, serif;
+      font-size: 19px;
+      font-weight: 800;
+      letter-spacing: -0.02em;
+      color: var(--charcoal);
+      display: flex;
       align-items: center;
-      gap: 10px;
-      margin-top: 14px;
-      padding: 10px 14px;
-      background: rgba(255,255,255,0.08);
-      border-radius: 999px;
-      font-size: 13px;
-      color: rgba(255,255,255,0.85);
+      justify-content: space-between;
+      user-select: none;
     }
-    .notion-status .dot { width: 8px; height: 8px; border-radius: 999px; background: var(--green); }
+    .more-details > details > summary::-webkit-details-marker { display: none; }
+    .more-details > details > summary::after {
+      content: "+";
+      font-size: 22px;
+      font-weight: 400;
+      color: var(--muted);
+      transition: transform 160ms ease;
+      line-height: 1;
+    }
+    .more-details > details[open] > summary::after {
+      transform: rotate(45deg);
+    }
+    .more-details > details > summary .count {
+      margin-left: auto;
+      margin-right: 12px;
+      font-family: Inter, sans-serif;
+      font-size: 12px;
+      font-weight: 700;
+      color: var(--muted-2);
+      letter-spacing: 0.04em;
+    }
+    .more-details > details[open] > summary { padding-bottom: 8px; }
+    .more-details-body { padding: 8px 0 24px; }
+
+    /* Inner item cards inside collapsed sections */
+    .mini-card {
+      background: var(--paper);
+      border: 1px solid var(--line);
+      border-radius: 12px;
+      padding: 14px 18px;
+      margin-bottom: 10px;
+    }
+    .mini-card h4 {
+      font-family: Fraunces, Georgia, serif;
+      font-size: 16px;
+      letter-spacing: -0.02em;
+      margin: 0 0 4px;
+      font-weight: 800;
+    }
+    .mini-card p {
+      margin: 0 0 6px;
+      font-size: 14px;
+      color: var(--charcoal);
+      line-height: 1.5;
+    }
+    .mini-card .meta {
+      font-size: 12.5px;
+      color: var(--muted);
+      margin-top: 6px;
+    }
+    .mini-card .meta b { color: var(--charcoal); font-weight: 700; }
+    .mini-card .pill { margin-right: 6px; margin-bottom: 4px; }
+
+    /* SOP rendering inside the collapsed section */
+    .sop-block { margin-bottom: 18px; }
+    .sop-block h4 { font-family: Fraunces, Georgia, serif; font-size: 17px; letter-spacing: -0.02em; color: var(--charcoal); margin: 0 0 6px; }
+    .sop-block p { font-size: 14.5px; line-height: 1.6; margin: 0; color: var(--charcoal); }
 
     .err {
       margin-top: 14px;
@@ -706,88 +1011,111 @@
 
       <!-- ============================================================ RESULTS ============================================================ -->
       <section id="resultsView" class="screen" hidden>
+
+        <!-- Hero -->
         <div class="results-hero">
           <div class="biz" id="resultsBiz"></div>
           <h1 id="resultsTitle"></h1>
           <p id="resultsSummary"></p>
         </div>
+      </section>
+    </div>
+
+    <!-- Sticky action bar (lives outside the inner container so it can be full-width sticky) -->
+    <div id="actionBar" class="action-bar" hidden>
+      <div class="container action-bar-inner">
+        <a id="notionOpenBtn" class="button button-primary" target="_blank" rel="noopener" hidden>Open in Notion</a>
+        <button id="notionBtn" class="button button-primary" type="button" hidden>Push to Notion</button>
+        <button id="docxBtn" class="button button-light" type="button">Download Word</button>
+        <a class="button button-light" href="https://calendar.app.google/SnmSbP7hZCprCZ9B7" target="_blank" rel="noopener">Book a Build call</a>
+        <div id="emailStatus" class="email-status" hidden>
+          <span class="dot"></span>
+          <span id="emailStatusText"></span>
+        </div>
+      </div>
+    </div>
+
+    <div class="container">
+      <section id="resultsBody" class="screen" hidden>
+
+        <!-- Executive summary -->
+        <div class="res-section" id="execSection" hidden>
+          <div class="res-section-head">
+            <h2>What we heard</h2>
+            <p class="subhead">The four lines that matter most.</p>
+          </div>
+          <div class="exec-grid">
+            <div class="exec-cell red"   id="execBottleneck"   hidden><div class="exec-cell-label"><span class="dot"></span>Biggest bottleneck</div><div class="exec-cell-text"></div></div>
+            <div class="exec-cell amber" id="execTimeDrain"    hidden><div class="exec-cell-label"><span class="dot"></span>Biggest time drain</div><div class="exec-cell-text"></div></div>
+            <div class="exec-cell ink"   id="execOwner"        hidden><div class="exec-cell-label"><span class="dot"></span>Most owner-dependent</div><div class="exec-cell-text"></div></div>
+            <div class="exec-cell blue"  id="execAi"           hidden><div class="exec-cell-label"><span class="dot"></span>Most immediate AI opportunity</div><div class="exec-cell-text"></div></div>
+          </div>
+        </div>
+
+        <!-- Start Here -->
+        <div class="res-section" id="startHereSection" hidden>
+          <div class="start-here">
+            <div class="badge">Start here</div>
+            <h2 id="startHereTitle"></h2>
+            <p id="startHereWhy"></p>
+            <p id="startHereWhat" style="color:var(--muted); font-size:15px;"></p>
+            <div class="impact-list" id="startHereImpact"></div>
+            <a class="button button-primary" href="https://calendar.app.google/SnmSbP7hZCprCZ9B7" target="_blank" rel="noopener">Book a Build call with Joe</a>
+          </div>
+        </div>
 
         <!-- Process map -->
-        <div class="section">
-          <h2>Your process map</h2>
-          <p class="subhead">How the work actually flows today. Look for the repeat-arrow icon to see where AI can help.</p>
+        <div class="res-section">
+          <div class="res-section-head">
+            <h2>Your process map</h2>
+            <p class="subhead">How the work flows today. Each step is collapsible. Look for the repeat-arrow icon to see where AI can help.</p>
+          </div>
           <div class="map" id="mapView"></div>
         </div>
 
-        <!-- Tools & systems -->
-        <div class="section" id="toolsSection" hidden>
-          <h2>Current tools and systems</h2>
-          <p class="subhead">Including the shadow systems that quietly run the business.</p>
-          <div class="stack" id="toolsList"></div>
-        </div>
-
-        <!-- Systems breakdown -->
-        <div class="section" id="breakdownSection" hidden>
-          <h2>Where systems break down</h2>
-          <p class="subhead">The seams between tools where work falls through.</p>
-          <div class="stack" id="breakdownList"></div>
+        <!-- AI opportunities -->
+        <div class="res-section" id="opportunitiesSection" hidden>
+          <div class="res-section-head">
+            <h2>AI opportunities</h2>
+            <p class="subhead">Where AI can take work off your plate. Tap any card for more.</p>
+          </div>
+          <div class="opps-grid" id="opportunitiesList"></div>
         </div>
 
         <!-- Bottlenecks -->
-        <div class="section" id="bottlenecksSection" hidden>
-          <h2>Where work gets stuck</h2>
-          <p class="subhead">The places that consistently slow this process down.</p>
-          <div class="stack" id="bottlenecksList"></div>
-        </div>
-
-        <!-- Owner dependencies -->
-        <div class="section" id="ownerSection" hidden>
-          <h2>Where the owner steps in</h2>
-          <p class="subhead">Moments where everything routes through you.</p>
-          <div class="stack" id="ownerList"></div>
-        </div>
-
-        <!-- Manual work -->
-        <div class="section" id="manualSection" hidden>
-          <h2>Manual work that adds up</h2>
-          <p class="subhead">Repetitive tasks happening today by hand.</p>
-          <div class="stack" id="manualList"></div>
-        </div>
-
-        <!-- Draft SOP -->
-        <div class="section" id="sopSection" hidden>
-          <h2 id="sopTitle">Draft SOP</h2>
-          <p class="subhead">A clean version your team can actually use.</p>
-          <div id="sopBody"></div>
-        </div>
-
-        <!-- AI opportunities -->
-        <div class="section" id="opportunitiesSection" hidden>
-          <h2>AI opportunities</h2>
-          <p class="subhead">Practical places AI can help, sequenced from easy to advanced.</p>
-          <div class="stack" id="opportunitiesList"></div>
-        </div>
-
-        <!-- Recommended first build -->
-        <div class="section first-build" id="firstBuildSection" hidden>
-          <span class="pill-large">Start here</span>
-          <h2 id="firstBuildTitle"></h2>
-          <p id="firstBuildWhy" style="font-size:16px; line-height:1.6;"></p>
-          <p id="firstBuildWhat" style="font-size:15px; color:var(--muted); line-height:1.6;"></p>
-        </div>
-
-        <!-- Actions -->
-        <div class="actions-footer">
-          <h3>Take it with you.</h3>
-          <p>Push the SOP into Notion or download a Word version to share with your team.</p>
-          <div class="button-row">
-            <button id="notionBtn" class="button button-primary" type="button">Push to Notion</button>
-            <a id="notionOpenBtn" class="button button-light" target="_blank" rel="noopener" hidden>Open in Notion</a>
-            <button id="docxBtn" class="button button-light" type="button">Download Word</button>
-            <a class="button button-ghost" href="https://calendar.app.google/SnmSbP7hZCprCZ9B7" target="_blank" rel="noopener">Book a build call with Joe</a>
+        <div class="res-section" id="bottlenecksSection" hidden>
+          <div class="res-section-head">
+            <h2>Where work gets stuck</h2>
+            <p class="subhead">The places that consistently slow this process down.</p>
           </div>
-          <div id="exportErr" class="err" hidden></div>
+          <div id="bottlenecksList"></div>
         </div>
+
+        <!-- Collapsed-by-default supporting detail -->
+        <div class="more-details">
+          <details id="toolsDetails" hidden>
+            <summary>Tools and systems <span class="count" id="toolsCount"></span></summary>
+            <div class="more-details-body" id="toolsList"></div>
+          </details>
+          <details id="breakdownDetails" hidden>
+            <summary>Where systems break down <span class="count" id="breakdownCount"></span></summary>
+            <div class="more-details-body" id="breakdownList"></div>
+          </details>
+          <details id="ownerDetails" hidden>
+            <summary>Owner dependencies <span class="count" id="ownerCount"></span></summary>
+            <div class="more-details-body" id="ownerList"></div>
+          </details>
+          <details id="manualDetails" hidden>
+            <summary>Manual work <span class="count" id="manualCount"></span></summary>
+            <div class="more-details-body" id="manualList"></div>
+          </details>
+          <details id="sopDetails" hidden>
+            <summary><span id="sopTitleLabel">Full SOP</span> <span class="count" id="sopCount"></span></summary>
+            <div class="more-details-body" id="sopBody"></div>
+          </details>
+        </div>
+
+        <div id="exportErr" class="err" hidden></div>
 
       </section>
 
@@ -814,7 +1142,8 @@
       conversation: [],          // [{role, content}]
       interviewComplete: false,
       results: null,             // structured JSON from /api/capture-complete
-      notionUrl: null,
+      notionUrl: null,           // populated by capture-complete (auto-push) or capture-export (retry)
+      emailSent: null,           // null = not yet known, true = both/customer sent, false = failed
     });
     let state = initialState();
 
@@ -845,6 +1174,10 @@
       state.step = name;
       saveState();
       SCREENS.forEach((s) => { $(SCREEN_VIEWS[s]).hidden = s !== name; });
+      // Results page has three top-level elements that show together
+      const onResults = name === 'results';
+      $('actionBar').hidden = !onResults;
+      $('resultsBody').hidden = !onResults;
       window.scrollTo({ top: 0, behavior: 'instant' });
     }
 
@@ -1069,6 +1402,8 @@
         }
         const data = await res.json();
         state.results = data.results;
+        state.notionUrl = data.notionUrl || null;
+        state.emailSent = !!data.emailSent;
         saveState();
 
         clearInterval(ticker);
@@ -1092,15 +1427,33 @@
       if (!r) return;
       const p = state.profile || {};
 
+      // Hero
       $('resultsBiz').textContent = [p.businessName, p.processName].filter(Boolean).join(' · ');
       $('resultsTitle').textContent = r.sop_title || (p.processName + ' SOP');
       $('resultsSummary').textContent = r.process_summary || '';
 
+      // Sticky bar — Notion + email status
+      updateActionBar();
+
+      // Executive summary
+      renderExecSummary(r);
+
+      // Start Here
+      renderStartHere(r);
+
+      // Process map
       renderMap(r);
 
-      renderList('toolsSection', 'toolsList', r.tools_and_systems, (t) => {
+      // AI opportunities
+      renderOpportunities(r);
+
+      // Bottlenecks
+      renderBottlenecks(r);
+
+      // Collapsed supporting detail
+      renderCollapsed('toolsDetails', 'toolsList', 'toolsCount', r.tools_and_systems, (t) => {
         const pills = [];
-        if (t.system_role) pills.push('<span class="pill role">' + escapeHtml(t.system_role.replace(/_/g, ' ')) + '</span>');
+        if (t.system_role) pills.push('<span class="pill">' + escapeHtml(t.system_role.replace(/_/g, ' ')) + '</span>');
         const meta = [];
         if (t.used_by)     meta.push('<div><b>Used by:</b> ' + escapeHtml(t.used_by) + '</div>');
         if (t.pain_points) meta.push('<div><b>Pain points:</b> ' + escapeHtml(t.pain_points) + '</div>');
@@ -1110,74 +1463,146 @@
           + (meta.length ? '<div class="meta">' + meta.join('') + '</div>' : '');
       });
 
-      renderList('breakdownSection', 'breakdownList', r.systems_breakdown, (b) => {
+      renderCollapsed('breakdownDetails', 'breakdownList', 'breakdownCount', r.systems_breakdown, (b) => {
         return '<h4>' + escapeHtml(b.title || '') + '</h4>'
           + (b.description ? '<p>' + escapeHtml(b.description) + '</p>' : '')
           + (b.impact ? '<div class="meta"><b>Impact:</b> ' + escapeHtml(b.impact) + '</div>' : '');
       });
 
-      renderList('bottlenecksSection', 'bottlenecksList', r.bottlenecks, (b) => {
-        return '<h4>' + escapeHtml(b.title || '') + '</h4>'
-          + (b.description ? '<p>' + escapeHtml(b.description) + '</p>' : '')
-          + (b.why_it_matters ? '<div class="meta"><b>Why it matters:</b> ' + escapeHtml(b.why_it_matters) + '</div>' : '');
-      });
-
-      renderList('ownerSection', 'ownerList', r.owner_dependencies, (d) => {
+      renderCollapsed('ownerDetails', 'ownerList', 'ownerCount', r.owner_dependencies, (d) => {
         return '<h4>' + escapeHtml(d.title || '') + '</h4>'
           + (d.description ? '<p>' + escapeHtml(d.description) + '</p>' : '');
       });
 
-      renderList('manualSection', 'manualList', r.manual_work, (m) => {
+      renderCollapsed('manualDetails', 'manualList', 'manualCount', r.manual_work, (m) => {
         return '<h4>' + escapeHtml(m.title || '') + '</h4>'
           + (m.description ? '<p>' + escapeHtml(m.description) + '</p>' : '');
       });
 
-      // SOP
       if (Array.isArray(r.sop_sections) && r.sop_sections.length) {
-        $('sopSection').hidden = false;
-        $('sopTitle').textContent = r.sop_title || 'Draft SOP';
-        const body = $('sopBody');
-        body.innerHTML = r.sop_sections.map((s) => {
-          return '<div class="sop-block">'
-            + '<h4>' + escapeHtml(s.section_title || '') + '</h4>'
-            + (s.content ? '<p>' + escapeHtml(s.content).replace(/\n/g, '<br/>') + '</p>' : '')
-            + '</div>';
-        }).join('');
-      }
-
-      // AI Opportunities
-      renderList('opportunitiesSection', 'opportunitiesList', r.automation_ideas, (a) => {
-        const pills = [];
-        if (a.difficulty) pills.push('<span class="pill diff">' + escapeHtml(a.difficulty) + '</span>');
-        if (a.recommended_process_step) pills.push('<span class="pill">' + escapeHtml(a.recommended_process_step) + '</span>');
-        return '<h4>' + escapeHtml(a.title || '') + '</h4>'
-          + pills.join('')
-          + (a.plain_english_description ? '<p>' + escapeHtml(a.plain_english_description) + '</p>' : '')
-          + (a.why_it_matters ? '<div class="meta"><b>Why it matters:</b> ' + escapeHtml(a.why_it_matters) + '</div>' : '')
-          + (a.practical_ai_build_note ? '<div class="meta"><b>We would build:</b> ' + escapeHtml(a.practical_ai_build_note) + '</div>' : '');
-      });
-
-      // First build
-      if (r.recommended_first_build && r.recommended_first_build.title) {
-        $('firstBuildSection').hidden = false;
-        $('firstBuildTitle').textContent = r.recommended_first_build.title;
-        $('firstBuildWhy').textContent = r.recommended_first_build.why_this_first || '';
-        $('firstBuildWhat').textContent = r.recommended_first_build.what_practical_ai_would_build || '';
-      }
-
-      // Notion link if we already have one
-      if (state.notionUrl) {
-        $('notionBtn').textContent = 'Pushed to Notion';
-        $('notionBtn').disabled = true;
-        $('notionOpenBtn').hidden = false;
-        $('notionOpenBtn').href = state.notionUrl;
+        $('sopDetails').hidden = false;
+        $('sopTitleLabel').textContent = r.sop_title || 'Full SOP';
+        $('sopCount').textContent = r.sop_sections.length + ' section' + (r.sop_sections.length === 1 ? '' : 's');
+        $('sopBody').innerHTML = r.sop_sections.map((s) =>
+          '<div class="sop-block">'
+          + '<h4>' + escapeHtml(s.section_title || '') + '</h4>'
+          + (s.content ? '<p>' + escapeHtml(s.content).replace(/\n/g, '<br/>') + '</p>' : '')
+          + '</div>'
+        ).join('');
       }
     }
 
-    function renderList(sectionId, listId, items, itemFn) {
+    function renderCollapsed(detailsId, listId, countId, items, itemFn) {
       if (!Array.isArray(items) || !items.length) return;
-      $(sectionId).hidden = false;
-      $(listId).innerHTML = items.map((x) => '<div class="item-card">' + itemFn(x) + '</div>').join('');
+      $(detailsId).hidden = false;
+      $(countId).textContent = items.length + ' item' + (items.length === 1 ? '' : 's');
+      $(listId).innerHTML = items.map((x) => '<div class="mini-card">' + itemFn(x) + '</div>').join('');
+    }
+
+    function updateActionBar() {
+      // Notion button: Open if URL exists, otherwise Push (retry)
+      if (state.notionUrl) {
+        $('notionOpenBtn').hidden = false;
+        $('notionOpenBtn').href = state.notionUrl;
+        $('notionBtn').hidden = true;
+      } else {
+        $('notionOpenBtn').hidden = true;
+        $('notionBtn').hidden = false;
+      }
+      // Email status
+      const es = $('emailStatus');
+      if (state.emailSent) {
+        es.hidden = false;
+        es.classList.remove('fail');
+        $('emailStatusText').textContent = 'Sent to ' + ((state.profile && state.profile.firstName) || 'you') + ' and Joe';
+      } else if (state.emailSent === false) {
+        es.hidden = false;
+        es.classList.add('fail');
+        $('emailStatusText').textContent = 'Email did not send. You can still use Notion and Word.';
+      } else {
+        es.hidden = true;
+      }
+    }
+
+    function renderExecSummary(r) {
+      const e = (r && r.executive_summary) || {};
+      const setCell = (id, value) => {
+        const el = $(id);
+        if (!value) { el.hidden = true; return; }
+        el.hidden = false;
+        el.querySelector('.exec-cell-text').textContent = value;
+      };
+      setCell('execBottleneck', e.biggest_bottleneck);
+      setCell('execTimeDrain',  e.biggest_time_drain);
+      setCell('execOwner',      e.most_owner_dependent_step);
+      setCell('execAi',         e.most_immediate_ai_opportunity);
+      const any = e.biggest_bottleneck || e.biggest_time_drain || e.most_owner_dependent_step || e.most_immediate_ai_opportunity;
+      $('execSection').hidden = !any;
+    }
+
+    function renderStartHere(r) {
+      const fb = r && r.recommended_first_build;
+      if (!fb || !fb.title) { $('startHereSection').hidden = true; return; }
+      $('startHereSection').hidden = false;
+      $('startHereTitle').textContent = fb.title;
+      $('startHereWhy').textContent = fb.why_this_first || '';
+      $('startHereWhat').textContent = fb.what_practical_ai_would_build || '';
+      const impactEl = $('startHereImpact');
+      impactEl.innerHTML = '';
+      if (Array.isArray(fb.estimated_impact)) {
+        fb.estimated_impact.slice(0, 4).forEach((i) => {
+          const c = document.createElement('div');
+          c.className = 'impact-chip';
+          c.textContent = i;
+          impactEl.appendChild(c);
+        });
+      }
+    }
+
+    function renderOpportunities(r) {
+      const ideas = Array.isArray(r.automation_ideas) ? r.automation_ideas : [];
+      if (!ideas.length) { $('opportunitiesSection').hidden = true; return; }
+      $('opportunitiesSection').hidden = false;
+      $('opportunitiesList').innerHTML = ideas.map((a) => {
+        const diffClass = a.difficulty ? ('diff-' + a.difficulty) : '';
+        const impactHtml = Array.isArray(a.estimated_impact) && a.estimated_impact.length
+          ? '<div class="impact-list">' + a.estimated_impact.slice(0, 4).map((i) =>
+              '<div class="impact-chip">' + escapeHtml(i) + '</div>').join('') + '</div>'
+          : '';
+        const detail = '<details class="step-detail">'
+          + '<summary>Tell me more</summary>'
+          + '<div class="step-detail-body">'
+          + (a.plain_english_description ? '<p>' + escapeHtml(a.plain_english_description) + '</p>' : '')
+          + (a.why_it_matters ? '<p><span class="label">Why it matters:</span>' + escapeHtml(a.why_it_matters) + '</p>' : '')
+          + (a.practical_ai_build_note ? '<p><span class="label">We would build:</span>' + escapeHtml(a.practical_ai_build_note) + '</p>' : '')
+          + (a.recommended_process_step ? '<p><span class="label">Connects to:</span>' + escapeHtml(a.recommended_process_step) + '</p>' : '')
+          + '</div></details>';
+        return '<article class="opp">'
+          + '<div class="opp-head">'
+          + (a.difficulty ? '<span class="pill ' + diffClass + '">' + escapeHtml(a.difficulty) + '</span>' : '')
+          + '<h3>' + escapeHtml(a.title || '') + '</h3>'
+          + '</div>'
+          + impactHtml
+          + detail
+          + '</article>';
+      }).join('');
+    }
+
+    function renderBottlenecks(r) {
+      const items = Array.isArray(r.bottlenecks) ? r.bottlenecks : [];
+      if (!items.length) { $('bottlenecksSection').hidden = true; return; }
+      $('bottlenecksSection').hidden = false;
+      $('bottlenecksList').innerHTML = items.map((b) => {
+        const oneLine = b.description || b.why_it_matters || '';
+        const hasMore = b.description && b.why_it_matters;
+        return '<article class="bottleneck">'
+          + '<h3>' + escapeHtml(b.title || '') + '</h3>'
+          + (oneLine ? '<p class="one-line">' + escapeHtml(oneLine) + '</p>' : '')
+          + (hasMore
+              ? '<details class="step-detail"><summary>More</summary><div class="step-detail-body"><p><span class="label">Why it matters:</span>' + escapeHtml(b.why_it_matters) + '</p></div></details>'
+              : '')
+          + '</article>';
+      }).join('');
     }
 
     function renderMap(r) {
@@ -1186,7 +1611,6 @@
       const steps = Array.isArray(r.process_steps) ? r.process_steps : [];
       const branches = Array.isArray(r.process_branches) ? r.process_branches : [];
 
-      // Index branches by after_step
       const branchMap = {};
       branches.forEach((b) => {
         const key = String(b.after_step || '');
@@ -1194,7 +1618,6 @@
         branchMap[key].push(b);
       });
 
-      // Index automation ideas by recommended_process_step (title or number) for badge text
       const ideas = Array.isArray(r.automation_ideas) ? r.automation_ideas : [];
       function findAutomationFor(step) {
         const key = String(step.step_number);
@@ -1210,7 +1633,7 @@
 
       steps.forEach((s) => {
         const stepEl = document.createElement('div');
-        stepEl.className = 'map-step';
+        stepEl.className = 'map-step' + (s.automation_opportunity ? ' has-auto' : '');
 
         const num = document.createElement('div');
         num.className = 'map-step-num';
@@ -1220,32 +1643,45 @@
         const card = document.createElement('div');
         card.className = 'map-step-card';
 
+        // Merge point inputs
         if (Array.isArray(s.inputs_from) && s.inputs_from.length) {
-          card.innerHTML += '<div class="map-inputs"><b>Inputs from</b><ul>'
-            + s.inputs_from.map((i) => '<li>' + escapeHtml(i) + '</li>').join('')
-            + '</ul></div>';
+          card.innerHTML += '<div class="map-inputs"><div class="map-inputs-label">Inputs from</div>'
+            + '<div class="map-inputs-items">'
+            + s.inputs_from.map((i) => '<span>' + escapeHtml(i) + '</span>').join('')
+            + '</div></div>';
         }
 
+        // Title + people
         card.innerHTML += '<div class="map-step-title">' + escapeHtml(s.title || '') + '</div>';
-        if (s.description) card.innerHTML += '<div class="map-step-desc">' + escapeHtml(s.description) + '</div>';
-
-        const meta = [];
-        if (s.people_involved) meta.push('<div><b>People:</b> ' + escapeHtml(s.people_involved) + '</div>');
-        if (s.tools_used)      meta.push('<div><b>Tools:</b> ' + escapeHtml(s.tools_used) + '</div>');
-        if (meta.length) card.innerHTML += '<div class="map-step-meta">' + meta.join('') + '</div>';
-
-        if (s.risk_or_friction) {
-          card.innerHTML += '<div class="map-step-friction"><b>Friction</b>' + escapeHtml(s.risk_or_friction) + '</div>';
+        if (s.people_involved) {
+          card.innerHTML += '<div class="map-step-people">' + escapeHtml(s.people_involved) + '</div>';
         }
 
+        // Friction (one line)
+        if (s.risk_or_friction) {
+          card.innerHTML += '<div class="map-step-friction">' + escapeHtml(s.risk_or_friction) + '</div>';
+        }
+
+        // Automation chip
         if (s.automation_opportunity) {
           const idea = findAutomationFor(s);
           const label = idea ? idea.title : 'Automation opportunity';
-          const desc  = idea ? (idea.plain_english_description || '') : '';
           card.innerHTML += '<div class="automation-chip">'
             + '<svg class="logo"><use href="#repeat-logo-symbol"></use></svg>'
-            + '<div class="text"><b>Where AI can help</b>' + escapeHtml(label) + (desc ? '. ' + escapeHtml(desc) : '') + '</div>'
+            + '<div class="text"><b>Where AI can help</b>' + escapeHtml(label) + '</div>'
             + '</div>';
+        }
+
+        // Expandable detail (description, tools)
+        const hasDetail = s.description || s.tools_used;
+        if (hasDetail) {
+          card.innerHTML += '<details class="step-detail">'
+            + '<summary>Details</summary>'
+            + '<div class="step-detail-body">'
+            + (s.description ? '<p>' + escapeHtml(s.description) + '</p>' : '')
+            + (s.tools_used ? '<p><span class="label">Tools:</span>' + escapeHtml(s.tools_used) + '</p>' : '')
+            + '</div>'
+            + '</details>';
         }
 
         stepEl.appendChild(card);
@@ -1257,7 +1693,7 @@
           after.forEach((b) => {
             const br = document.createElement('div');
             br.className = 'branch';
-            br.innerHTML = '<div class="branch-label">Decision after this step</div>'
+            br.innerHTML = '<div class="branch-label">Decision</div>'
               + '<div class="branch-question">' + escapeHtml(b.condition || '') + '</div>'
               + '<div class="branch-paths">'
               +   '<div class="branch-path yes"><div class="branch-path-label">If yes</div><div class="branch-path-text">' + escapeHtml(b.yes_path || '') + '</div></div>'
@@ -1270,7 +1706,9 @@
     }
 
     // ============================================================
-    // Exports (Notion / Word)
+    // Exports (Notion retry / Word download)
+    // Notion is auto-pushed by /api/capture-complete; this button is a
+    // retry path for the rare case where the initial push failed.
     // ============================================================
     $('notionBtn').addEventListener('click', async () => {
       hideError($('exportErr'));
@@ -1291,11 +1729,7 @@
         const data = await res.json();
         state.notionUrl = data.url || null;
         saveState();
-        btn.textContent = 'Pushed to Notion';
-        if (state.notionUrl) {
-          $('notionOpenBtn').hidden = false;
-          $('notionOpenBtn').href = state.notionUrl;
-        }
+        updateActionBar();
       } catch (err) {
         console.error(err);
         btn.disabled = false;
