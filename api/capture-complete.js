@@ -9,6 +9,8 @@
 const Anthropic = require("@anthropic-ai/sdk");
 const { Resend } = require("resend");
 const { pushToNotion, buildDocxBuffer, docxFilename } = require("./_lib/sop-builders");
+const { callAnthropicWithRetry } = require("./_lib/anthropic-retry");
+const { saveSession, buildResultsUrl } = require("./_lib/supabase");
 
 const MODEL = "claude-sonnet-4-5";
 const MAX_TOKENS = 16000;
@@ -62,6 +64,9 @@ Return ONLY valid JSON wrapped in <RESULTS></RESULTS> tags. No other text before
     "most_owner_dependent_step":      "one sentence",
     "most_immediate_ai_opportunity":  "one sentence"
   },
+  "estimated_operational_impact": [
+    "3 to 5 short phrases describing the HOLISTIC impact of completing this whole map's automation roadmap. NOT per-opportunity. Focus on what small business owners actually buy: time, clarity, fewer dropped balls, mental overhead reduction, owner unblocking. Examples: '~8 to 12 hours/month reduced manual coordination', 'Faster affiliate close-out and invoicing', 'Reduced owner dependency on evenings and weekends', 'Clearer visibility into outstanding work'."
+  ],
   "process_summary": "2 to 4 sentence warm summary of how the process actually runs today",
   "process_steps": [
     {
@@ -138,6 +143,7 @@ GUIDANCE
 - recommended_first_build: pick one. Highest impact, lowest friction.
 - sop_sections: 4 to 8 clean sections (Purpose, When to use, Roles, Inputs, Steps, Handoffs, Common issues, Done when).
 - executive_summary: REQUIRED. All four fields. One sentence each. Sharp and specific.
+- estimated_operational_impact: REQUIRED. 3 to 5 short phrases. Holistic view of completing the whole roadmap, not just the first build. Speak in language small business owners actually use: hours saved, faster response, fewer dropped balls, clearer visibility, owner unblocked.
 
 Output ONLY the JSON in <RESULTS></RESULTS> tags. No commentary.`;
 
@@ -166,12 +172,12 @@ function emailHeader() {
   </div>`;
 }
 
-function ctaRow(notionUrl) {
-  const btn = (label, href, primary) => `<a href="${esc(href)}" style="display:inline-block;background:${primary ? E.blue : E.paper};color:${primary ? "white" : E.ink};text-decoration:none;padding:11px 18px;border-radius:999px;font-weight:800;font-size:13.5px;border:${primary ? "0" : "1px solid " + E.line};margin:0 6px 8px 0;">${esc(label)}</a>`;
+function ctaRow({ resultsUrl, notionUrl, isJoe }) {
+  const btn = (label, href, primary) => `<a href="${esc(href)}" style="display:inline-block;background:${primary ? E.blue : E.paper};color:${primary ? "white" : E.ink};text-decoration:none;padding:12px 20px;border-radius:999px;font-weight:900;font-size:14px;border:${primary ? "0" : "1px solid " + E.line};margin:0 6px 8px 0;">${esc(label)}</a>`;
   const buttons = [];
-  if (notionUrl) buttons.push(btn("Open in Notion", notionUrl, true));
-  buttons.push(btn("Open in Google Docs", "https://docs.google.com/document/u/0/", false));
-  buttons.push(btn("Book a Build call", BOOK_CALL_URL, false));
+  if (resultsUrl) buttons.push(btn(isJoe ? "Open Full Capture Results" : "Open Your Full Results", resultsUrl, true));
+  if (notionUrl)  buttons.push(btn("Open in Notion", notionUrl, !resultsUrl));
+  buttons.push(btn("Plan the first build", BOOK_CALL_URL, false));
   return `<div style="margin:0 0 16px;">${buttons.join("")}</div>`;
 }
 
@@ -321,23 +327,45 @@ function dividerHr() {
   return `<hr style="border:0;border-top:1px solid ${E.line};margin:28px 0;" />`;
 }
 
+function progressBar() {
+  // ✓ Capture → Build ○ Automate
+  return `<table role="presentation" style="width:100%;border-collapse:collapse;margin:18px 0 6px;" cellpadding="0" cellspacing="0"><tr>
+    <td style="padding:0 8px 0 0;font-size:13px;color:${E.green};font-weight:800;letter-spacing:0.06em;text-transform:uppercase;">&#10003;&nbsp; Capture</td>
+    <td style="padding:0 8px;font-size:13px;color:${E.blue};font-weight:800;letter-spacing:0.06em;text-transform:uppercase;">&rarr;&nbsp; Build</td>
+    <td style="padding:0;font-size:13px;color:${E.muted2};font-weight:700;letter-spacing:0.06em;text-transform:uppercase;">&#9675;&nbsp; Automate</td>
+  </tr></table>
+  <p style="margin:4px 0 0;color:${E.muted};font-size:13px;line-height:1.55;">You completed the Capture phase. Next, we review the findings together and decide what Practical AI Co. should build first.</p>`;
+}
+
 function darkCtaBlock() {
   return `<div style="background:${E.ink};color:white;border-radius:20px;padding:32px 36px;margin:32px 0 0;">
     <div style="font-size:10px;font-weight:900;letter-spacing:0.22em;color:${E.blue};text-transform:uppercase;margin-bottom:10px;">Step 2 &middot; Build</div>
-    <h2 style="font-family:Georgia,serif;color:white;font-size:24px;letter-spacing:-0.025em;margin:0 0 10px;line-height:1.15;">Ready to build the first system?</h2>
-    <p style="color:rgba(255,255,255,0.78);font-size:14.5px;line-height:1.6;margin:0 0 18px;">The Build call is 45 minutes. We confirm the scope, talk through the trade-offs, and start building with you.</p>
-    <a href="${BOOK_CALL_URL}" style="display:inline-block;background:${E.blue};color:white;text-decoration:none;padding:12px 22px;border-radius:999px;font-weight:800;font-size:14px;">Book a Build call with Joe &rarr;</a>
+    <h2 style="font-family:Georgia,serif;color:white;font-size:24px;letter-spacing:-0.025em;margin:0 0 10px;line-height:1.15;">Plan the first build.</h2>
+    <p style="color:rgba(255,255,255,0.78);font-size:14.5px;line-height:1.6;margin:0 0 18px;">A 45 minute call to review what we heard, confirm the scope, and decide what Practical AI Co. should build first.</p>
+    <a href="${BOOK_CALL_URL}" style="display:inline-block;background:${E.blue};color:white;text-decoration:none;padding:12px 22px;border-radius:999px;font-weight:900;font-size:14px;">Plan the first build &rarr;</a>
   </div>`;
 }
 
-function gdocsNote(hasWord) {
-  if (!hasWord) return "";
-  return `<p style="margin:8px 0 0;color:${E.muted};font-size:12.5px;line-height:1.55;">Your Word version is attached. To edit in Google Docs, open <a href="https://docs.google.com/document/u/0/" style="color:${E.blue};">docs.google.com</a> and use File &rarr; Open to upload the attachment.</p>`;
+function impactBlock(impactArray) {
+  if (!Array.isArray(impactArray) || !impactArray.length) return "";
+  const items = impactArray.slice(0, 5).map((i) =>
+    `<div style="font-size:14px;color:${E.ink};margin:5px 0;line-height:1.5;">&#10003;&nbsp; ${esc(i)}</div>`
+  ).join("");
+  return `<div style="margin:24px 0 0;padding:22px 24px;background:${E.paper};border:1px solid ${E.line};border-radius:14px;">
+    <div style="font-size:10px;font-weight:900;letter-spacing:0.18em;color:${E.blue};text-transform:uppercase;margin-bottom:10px;">Estimated operational impact</div>
+    ${items}
+  </div>`;
 }
 
-function renderCustomerEmail(profile, r, notionUrl, hasWord) {
+function renderCustomerEmail(profile, r, notionUrl, hasWord, resultsUrl) {
   const fn = esc(profile.firstName || "");
   const proc = esc(profile.processName || "your process");
+  const wordNote = hasWord
+    ? `<p style="margin:6px 0 0;color:${E.muted};font-size:12.5px;line-height:1.55;">A Word version is also attached to this email.</p>`
+    : "";
+  const noPermaNote = !resultsUrl
+    ? `<p style="margin:14px 0 0;color:${E.amber};font-size:13px;">The permanent results page is still being set up. We will follow up with the link shortly.</p>`
+    : "";
 
   const html = `<!DOCTYPE html><html><body style="margin:0;padding:0;background:${E.bg};font-family:Helvetica,Arial,sans-serif;color:${E.ink};">
   <div style="max-width:640px;margin:0 auto;padding:36px 24px 56px;">
@@ -345,16 +373,20 @@ function renderCustomerEmail(profile, r, notionUrl, hasWord) {
     ${emailHeader()}
 
     <p style="font-size:16px;line-height:1.55;margin:0 0 12px;">Hi ${fn},</p>
-    <p style="font-size:16px;line-height:1.55;margin:0 0 20px;color:${E.ink};">
-      Below is the durable copy of your ${proc} capture session. It includes the executive summary, the full process map, AI opportunities, and a draft SOP. Use it however helps most.
+    <p style="font-size:16px;line-height:1.55;margin:0 0 12px;color:${E.ink};">
+      Your ${proc} capture is complete. The full results page is yours to keep, share, and revisit any time.
     </p>
 
-    ${ctaRow(notionUrl)}
-    ${gdocsNote(hasWord)}
-    ${!notionUrl ? `<p style="margin:14px 0 0;color:${E.muted};font-size:13px;">The Notion page is still being set up. Joe will follow up with the link.</p>` : ""}
+    ${progressBar()}
+
+    ${ctaRow({ resultsUrl, notionUrl, isJoe: false })}
+    ${wordNote}
+    ${noPermaNote}
+    ${!notionUrl ? `<p style="margin:8px 0 0;color:${E.muted};font-size:12.5px;">The Notion page is still being set up. Joe will follow up with the link.</p>` : ""}
 
     ${dividerHr()}
     ${execSummaryBlock(r.executive_summary)}
+    ${impactBlock(r.estimated_operational_impact)}
     ${startHereBlock(r.recommended_first_build)}
 
     ${r.process_summary ? `${dividerHr()}<h2 style="font-family:Georgia,serif;font-size:20px;letter-spacing:-0.022em;color:${E.ink};margin:18px 0 8px;">Overview</h2><p style="margin:0;font-size:14.5px;line-height:1.6;color:${E.ink};">${esc(r.process_summary)}</p>` : ""}
@@ -409,13 +441,15 @@ function renderCustomerEmail(profile, r, notionUrl, hasWord) {
   // Plain-text fallback (much terser; the HTML version is the deliverable)
   const es = r.executive_summary || {};
   const fb = r.recommended_first_build || {};
+  const impact = Array.isArray(r.estimated_operational_impact) ? r.estimated_operational_impact : [];
   const text = [
     `Hi ${profile.firstName || ""},`,
     ``,
-    `Below is the durable copy of your ${profile.processName || "process"} capture session.`,
+    `Your ${profile.processName || "process"} capture is complete. The full results page is yours to keep.`,
     ``,
-    notionUrl ? `Notion: ${notionUrl}` : `Notion page is being set up. Joe will follow up with the link.`,
-    hasWord  ? `Word doc: attached. To edit in Google Docs, open docs.google.com and use File > Open.` : `Word doc: generation failed.`,
+    resultsUrl ? `Open your full results: ${resultsUrl}` : `Permanent results URL: pending. We will follow up shortly.`,
+    notionUrl  ? `Notion: ${notionUrl}` : null,
+    hasWord    ? `Word doc: attached.` : null,
     ``,
     `WHAT WE HEARD`,
     es.biggest_bottleneck            ? `- Biggest bottleneck: ${es.biggest_bottleneck}` : null,
@@ -423,10 +457,13 @@ function renderCustomerEmail(profile, r, notionUrl, hasWord) {
     es.most_owner_dependent_step     ? `- Most owner-dependent: ${es.most_owner_dependent_step}` : null,
     es.most_immediate_ai_opportunity ? `- Most immediate AI opportunity: ${es.most_immediate_ai_opportunity}` : null,
     ``,
+    impact.length ? `ESTIMATED OPERATIONAL IMPACT` : null,
+    ...impact.map((i) => `- ${i}`),
+    impact.length ? `` : null,
     fb.title ? `WHERE WE WOULD START: ${fb.title}` : null,
     fb.why_this_first ? fb.why_this_first : null,
     ``,
-    `Book a Build call with Joe: ${BOOK_CALL_URL}`,
+    `Plan the first build: ${BOOK_CALL_URL}`,
     ``,
     `Practical AI Co.`,
   ].filter((l) => l !== null).join("\n");
@@ -434,7 +471,7 @@ function renderCustomerEmail(profile, r, notionUrl, hasWord) {
   return { html, text };
 }
 
-function renderJoeEmail(profile, r, notionUrl, hasWord) {
+function renderJoeEmail(profile, r, notionUrl, hasWord, resultsUrl) {
   const es = r.executive_summary || {};
   const fb = r.recommended_first_build || {};
   const topBottlenecks = (r.bottlenecks || []).slice(0, 3);
@@ -446,7 +483,9 @@ function renderJoeEmail(profile, r, notionUrl, hasWord) {
 
     <div style="font-size:10px;font-weight:900;letter-spacing:0.22em;color:#2456FF;text-transform:uppercase;margin-bottom:10px;">New capture session</div>
     <h1 style="font-family:Georgia,serif;font-size:24px;letter-spacing:-0.025em;color:#172033;margin:0 0 6px;">${esc(profile.businessName || "")}</h1>
-    <div style="color:#667085;font-size:13.5px;margin-bottom:24px;">${esc(profile.processName || "")} &middot; ${esc(profile.firstName || "")} &middot; <a href="mailto:${esc(profile.email || "")}" style="color:#2456FF;text-decoration:none;">${esc(profile.email || "")}</a></div>
+    <div style="color:#667085;font-size:13.5px;margin-bottom:18px;">${esc(profile.processName || "")} &middot; ${esc(profile.firstName || "")} &middot; <a href="mailto:${esc(profile.email || "")}" style="color:#2456FF;text-decoration:none;">${esc(profile.email || "")}</a></div>
+
+    ${resultsUrl ? `<div style="margin:0 0 22px;"><a href="${esc(resultsUrl)}" style="display:inline-block;background:#2456FF;color:white;text-decoration:none;padding:12px 20px;border-radius:999px;font-weight:900;font-size:14px;">Open Full Capture Results &rarr;</a></div>` : `<div style="margin:0 0 22px;padding:10px 14px;background:rgba(180,83,9,0.08);border:1px solid rgba(180,83,9,0.30);border-radius:10px;font-size:13px;color:#B45309;">Permanent results URL could not be created. Check Supabase config.</div>`}
 
     <h2 style="font-family:Georgia,serif;font-size:18px;color:#172033;margin:24px 0 8px;">Executive summary</h2>
     <table style="width:100%;border-collapse:collapse;margin-bottom:8px;">
@@ -455,6 +494,12 @@ function renderJoeEmail(profile, r, notionUrl, hasWord) {
       ${es.most_owner_dependent_step     ? `<tr><td style="padding:5px 0;font-size:14px;line-height:1.5;"><b style="color:#172033;">Owner-dependent:</b> ${esc(es.most_owner_dependent_step)}</td></tr>` : ""}
       ${es.most_immediate_ai_opportunity ? `<tr><td style="padding:5px 0;font-size:14px;line-height:1.5;"><b style="color:#2456FF;">AI opportunity:</b> ${esc(es.most_immediate_ai_opportunity)}</td></tr>` : ""}
     </table>
+
+    ${Array.isArray(r.estimated_operational_impact) && r.estimated_operational_impact.length ? `
+    <div style="margin:18px 0 0;padding:16px 20px;background:#FFFDF8;border:1px solid #E7DCCB;border-radius:12px;">
+      <div style="font-size:10px;font-weight:900;letter-spacing:0.18em;color:#2456FF;text-transform:uppercase;margin-bottom:8px;">Estimated operational impact</div>
+      ${r.estimated_operational_impact.slice(0, 5).map((i) => `<div style="font-size:13.5px;color:#172033;margin:3px 0;line-height:1.5;">&#10003;&nbsp; ${esc(i)}</div>`).join("")}
+    </div>` : ""}
 
     ${fb.title ? `
     <div style="margin:22px 0 0;padding:18px 22px;background:#FFFDF8;border:1px solid #E7DCCB;border-radius:12px;">
@@ -484,11 +529,12 @@ function renderJoeEmail(profile, r, notionUrl, hasWord) {
       </div>`).join("")}` : ""}
 
     <hr style="border:0;border-top:1px solid #E7DCCB;margin:30px 0 18px;" />
+    ${resultsUrl ? `<p style="margin:0 0 6px;font-size:13.5px;color:#172033;"><b>Full results:</b> <a href="${esc(resultsUrl)}" style="color:#2456FF;">${esc(resultsUrl)}</a></p>` : ""}
     <p style="margin:0 0 6px;font-size:13.5px;color:#172033;">${notionUrl ? `<b>Notion:</b> <a href="${esc(notionUrl)}" style="color:#2456FF;">${esc(notionUrl)}</a>` : `<b>Notion:</b> push failed, full Word attached.`}</p>
     <p style="margin:0;font-size:13.5px;color:#172033;">${hasWord ? `<b>Word doc:</b> attached to this email.` : `<b>Word doc:</b> generation failed, Notion has the full content.`}</p>
 
     <div style="margin-top:30px;font-size:11.5px;color:#8A93A5;">
-      Talking points for the Build call: confirm the bottleneck, walk the first-build scope, confirm budget and timeline.
+      Talking points for the next call: confirm the bottleneck, walk the first build scope, confirm budget and timeline.
     </div>
   </div>
   </body></html>`;
@@ -553,15 +599,14 @@ module.exports = async (req, res) => {
     `INTERVIEW TRANSCRIPT:\n\n${transcript}\n\n` +
     `Generate the structured results per your system prompt. Output ONLY the JSON in <RESULTS></RESULTS> tags. Do not use em dashes anywhere.`;
 
-  // 1. Generate the JSON
+  // 1. Generate the JSON (with retry on Anthropic overload / transient errors)
   let results;
   try {
-    const response = await anthropic.messages.create({
-      model: MODEL,
-      max_tokens: MAX_TOKENS,
-      system: SYSTEM_PROMPT,
-      messages: [{ role: "user", content: userMessage }],
-    });
+    const response = await callAnthropicWithRetry(
+      anthropic,
+      { model: MODEL, max_tokens: MAX_TOKENS, system: SYSTEM_PROMPT, messages: [{ role: "user", content: userMessage }] },
+      { label: "capture-complete", maxRetries: 2 }
+    );
     const text = (response.content || []).filter((b) => b.type === "text").map((b) => b.text).join("");
     const match = text.match(/<RESULTS>([\s\S]*?)<\/RESULTS>/);
     if (!match) {
@@ -572,7 +617,11 @@ module.exports = async (req, res) => {
     results = JSON.parse(match[1].trim());
   } catch (err) {
     console.error("capture-complete generation error:", err);
-    return res.status(500).json({ error: err.message || "Generation failed" });
+    const status = err.isRetryableOverload ? 503 : 500;
+    return res.status(status).json({
+      error: err.message || "Generation failed",
+      retryable: !!err.isRetryableOverload,
+    });
   }
 
   // 2. Notion + Word in parallel (fail soft)
@@ -588,7 +637,26 @@ module.exports = async (req, res) => {
   if (notionError) console.error("Notion push failed:", notionError);
   if (wordError)   console.error("Word generation failed:", wordError);
 
-  // 3. Emails (fail soft per recipient)
+  // 3. Save to Supabase to create the permanent results URL (fail soft).
+  // The permanent URL is now the primary deliverable, so we attempt the save
+  // BEFORE sending the emails so the URL can be included in them.
+  let resultsUrl = null;
+  let sessionError = null;
+  try {
+    const saved = await saveSession({
+      profile,
+      results,
+      notionUrl,
+      notionError,
+      emailStatus: "pending",
+    });
+    resultsUrl = buildResultsUrl(req, saved.slug);
+  } catch (err) {
+    console.error("Supabase save failed:", err);
+    sessionError = err.message || "Session save failed";
+  }
+
+  // 4. Emails (fail soft per recipient). resultsUrl threaded through both.
   let customerEmailError = null;
   let joeEmailError = null;
   const resendKey = process.env.RESEND_API_KEY;
@@ -599,15 +667,15 @@ module.exports = async (req, res) => {
       ? [{ filename, content: wordBuffer.toString("base64") }]
       : [];
 
-    const customerEmail = renderCustomerEmail(profile, results, notionUrl, !!wordBuffer);
-    const joeEmail      = renderJoeEmail(profile, results, notionUrl, !!wordBuffer);
+    const customerEmail = renderCustomerEmail(profile, results, notionUrl, !!wordBuffer, resultsUrl);
+    const joeEmail      = renderJoeEmail(profile, results, notionUrl, !!wordBuffer, resultsUrl);
 
     const [c, j] = await Promise.allSettled([
       resend.emails.send({
         from: FROM,
         to: profile.email,
         reply_to: JOE_EMAIL,
-        subject: `Your process map + AI opportunities: ${profile.processName}`,
+        subject: `Your process map + first build plan: ${profile.processName}`,
         html: customerEmail.html,
         text: customerEmail.text,
         attachments,
@@ -636,10 +704,12 @@ module.exports = async (req, res) => {
   return res.status(200).json({
     results,
     notionUrl,
+    resultsUrl,
     emailSent: !customerEmailError,
     errors: {
       notion: notionError,
       word: wordError,
+      session: sessionError,
       customerEmail: customerEmailError,
       joeEmail: joeEmailError,
     },

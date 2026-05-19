@@ -1,0 +1,5 @@
+{
+  "rewrites": [
+    { "source": "/capture/results/:slug", "destination": "/capture/results/index.html" }
+  ]
+}

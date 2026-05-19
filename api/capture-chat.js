@@ -4,6 +4,7 @@
 // marker INTERVIEW_COMPLETE on a line by itself.
 
 const Anthropic = require("@anthropic-ai/sdk");
+const { callAnthropicWithRetry, isRetryable } = require("./_lib/anthropic-retry");
 
 const MODEL = "claude-sonnet-4-5";
 const MAX_TOKENS = 1024;
@@ -89,12 +90,11 @@ module.exports = async (req, res) => {
   });
 
   try {
-    const response = await anthropic.messages.create({
-      model: MODEL,
-      max_tokens: MAX_TOKENS,
-      system: SYSTEM_PROMPT,
-      messages,
-    });
+    const response = await callAnthropicWithRetry(
+      anthropic,
+      { model: MODEL, max_tokens: MAX_TOKENS, system: SYSTEM_PROMPT, messages },
+      { label: "capture-chat", maxRetries: 2 }
+    );
     const text = (response.content || [])
       .filter((b) => b.type === "text")
       .map((b) => b.text)
@@ -103,6 +103,10 @@ module.exports = async (req, res) => {
     return res.status(200).json({ message: text });
   } catch (err) {
     console.error("capture-chat error:", err);
-    return res.status(500).json({ error: err.message || "Chat failed" });
+    const status = err.isRetryableOverload ? 503 : 500;
+    return res.status(status).json({
+      error: err.message || "Chat failed",
+      retryable: !!err.isRetryableOverload,
+    });
   }
 };

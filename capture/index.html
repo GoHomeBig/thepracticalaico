@@ -54,28 +54,71 @@
       backdrop-filter: blur(16px);
       border-bottom: 1px solid rgba(231, 220, 203, 0.78);
     }
-    .nav-inner { min-height: 72px; display: flex; align-items: center; justify-content: space-between; gap: 16px; }
+    .nav-inner { min-height: 84px; display: flex; align-items: center; justify-content: space-between; gap: 24px; }
     .brand { display: inline-flex; align-items: center; gap: 12px; }
+
+    /* Brand mark — homepage spec (46x46, 14px radius, paper bg, subtle border + shadow) */
     .brand-mark {
-      width: 42px; height: 42px;
-      border-radius: 12px;
+      width: 46px; height: 46px;
+      border-radius: 14px;
       background: var(--paper);
       border: 1px solid rgba(23, 32, 51, 0.10);
-      box-shadow: 0 8px 20px rgba(17, 24, 39, 0.06);
+      box-shadow: 0 10px 24px rgba(17, 24, 39, 0.08);
       display: grid;
       place-items: center;
-      color: var(--blue);
+      flex: 0 0 auto;
+      overflow: hidden;
     }
-    .repeat-logo { width: 26px; height: 26px; }
+    .brand-mark.dark {
+      background: rgba(255,255,255,0.10);
+      border-color: rgba(255,255,255,0.12);
+      box-shadow: none;
+    }
+    .repeat-logo { width: 31px; height: 31px; overflow: visible; }
+    .repeat-logo .arrow-a, .repeat-logo .head-a { stroke: var(--blue); }
+    .repeat-logo .arrow-b, .repeat-logo .head-b { stroke: var(--charcoal); }
+    .brand-mark.dark .repeat-logo .arrow-b,
+    .brand-mark.dark .repeat-logo .head-b { stroke: var(--white); }
+    .repeat-logo .arrow-a, .repeat-logo .arrow-b,
+    .repeat-logo .head-a,  .repeat-logo .head-b {
+      fill: none;
+      stroke-width: 5.6;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+      vector-effect: non-scaling-stroke;
+    }
+    .repeat-logo .top-loop    { transform-origin: 32px 32px; animation: logoNudgeA 3.8s ease-in-out infinite; }
+    .repeat-logo .bottom-loop { transform-origin: 32px 32px; animation: logoNudgeB 3.8s ease-in-out infinite; }
+    @keyframes logoNudgeA {
+      0%, 100% { transform: rotate(0deg); }
+      50%      { transform: rotate(-3deg); }
+    }
+    @keyframes logoNudgeB {
+      0%, 100% { transform: rotate(0deg); }
+      50%      { transform: rotate(3deg); }
+    }
+
+    /* Wordmark — homepage spec (Fraunces 800, -0.035em, 28px) */
+    .wordmark { display: inline-flex; flex-direction: column; gap: 5px; }
     .wordmark-title {
       font-family: Fraunces, Georgia, serif;
       font-weight: 800;
-      letter-spacing: -0.03em;
+      letter-spacing: -0.035em;
       color: var(--charcoal);
-      font-size: 22px;
-      line-height: 1;
+      font-size: 28px;
+      line-height: 1.05;
     }
     .wordmark-title .ai { color: var(--blue); }
+    .wordmark-subtitle {
+      color: var(--muted);
+      font-size: 9px;
+      font-weight: 900;
+      text-transform: uppercase;
+      letter-spacing: 0.26em;
+      line-height: 1;
+    }
+    @media (max-width: 540px) { .wordmark-subtitle { display: none; } .wordmark-title { font-size: 22px; } }
+
     .nav-tag {
       font-size: 11px;
       font-weight: 900;
@@ -88,36 +131,41 @@
     }
     @media (max-width: 540px) { .nav-tag { display: none; } }
 
-    /* Buttons */
+    /* Buttons — homepage spec (font-weight 900, hover translateY(-2px), refined shadows) */
     .button {
       display: inline-flex;
       align-items: center;
       justify-content: center;
       gap: 8px;
-      min-height: 48px;
+      min-height: 50px;
       padding: 0 22px;
       border-radius: 999px;
       border: 0;
       font-family: inherit;
       font-size: 15px;
-      font-weight: 800;
+      font-weight: 900;
       cursor: pointer;
-      transition: transform 160ms ease, background 160ms ease, box-shadow 160ms ease, opacity 160ms ease;
+      transition: transform 180ms ease, background 180ms ease, box-shadow 180ms ease, opacity 180ms ease;
       white-space: nowrap;
     }
-    .button:hover { transform: translateY(-1px); }
+    .button:hover { transform: translateY(-2px); }
     .button:disabled { opacity: 0.5; cursor: not-allowed; transform: none; }
     .button-primary {
       background: var(--blue);
       color: var(--white);
-      box-shadow: 0 12px 28px rgba(36, 86, 255, 0.22);
+      box-shadow: 0 18px 38px rgba(36, 86, 255, 0.25);
     }
     .button-primary:hover:not(:disabled) { background: var(--blue-dark); }
     .button-light {
       background: var(--paper);
       color: var(--charcoal);
       border: 1px solid var(--line);
-      box-shadow: 0 8px 20px rgba(17, 24, 39, 0.06);
+      box-shadow: 0 14px 32px rgba(17, 24, 39, 0.07);
+    }
+    .button-dark {
+      background: var(--charcoal);
+      color: var(--white);
+      box-shadow: 0 18px 38px rgba(23, 32, 51, 0.18);
     }
     .button-ghost { background: transparent; color: var(--muted); box-shadow: none; }
     .button-row { display: flex; gap: 10px; flex-wrap: wrap; }
@@ -960,26 +1008,270 @@
     }
     .footer-inner { display: flex; align-items: center; justify-content: space-between; gap: 14px; flex-wrap: wrap; }
     footer a { color: rgba(255,255,255,0.85); text-decoration: underline; }
+
+    /* =========================================
+       Layered hero treatment for the results page
+       (mirrors homepage grid + radial recipe at low opacity)
+       ========================================= */
+    .results-hero-wrap {
+      position: relative;
+      isolation: isolate;
+      background:
+        linear-gradient(90deg, rgba(23, 32, 51, 0.045) 1px, transparent 1px),
+        linear-gradient(rgba(23, 32, 51, 0.045) 1px, transparent 1px),
+        radial-gradient(circle at 8% 12%, rgba(36, 86, 255, 0.09), transparent 32%),
+        radial-gradient(circle at 92% 18%, rgba(47, 143, 91, 0.07), transparent 30%),
+        var(--cream);
+      background-size: 44px 44px, 44px 44px, auto, auto, auto;
+      padding-bottom: 24px;
+    }
+
+    /* Progress bar — Capture → Build → Automate */
+    .progress-bar {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      flex-wrap: wrap;
+      padding: 12px 18px;
+      background: var(--paper);
+      border: 1px solid var(--line);
+      border-radius: 999px;
+      box-shadow: 0 8px 20px rgba(17, 24, 39, 0.04);
+      width: fit-content;
+      max-width: 100%;
+      margin: 0 0 22px;
+    }
+    .progress-step {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 12px;
+      font-weight: 900;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--muted-2);
+    }
+    .progress-step.done    { color: var(--green); }
+    .progress-step.current { color: var(--blue); }
+    .progress-step .dot {
+      width: 18px; height: 18px;
+      border-radius: 999px;
+      background: rgba(23, 32, 51, 0.08);
+      display: inline-grid;
+      place-items: center;
+      font-size: 11px;
+      font-weight: 900;
+      color: var(--muted-2);
+    }
+    .progress-step.done .dot    { background: var(--green); color: white; }
+    .progress-step.current .dot { background: var(--blue);  color: white; }
+    .progress-arrow {
+      color: var(--muted-2);
+      font-size: 12px;
+      font-weight: 900;
+    }
+    .progress-supporting {
+      font-size: 14px;
+      color: var(--charcoal);
+      line-height: 1.55;
+      margin: 0 0 18px;
+      max-width: 640px;
+    }
+
+    /* Estimated operational impact */
+    .impact-section {
+      background: linear-gradient(180deg, rgba(36, 86, 255, 0.05), rgba(36, 86, 255, 0.01));
+      border: 1px solid rgba(36, 86, 255, 0.20);
+      border-radius: 24px;
+      padding: 28px 32px;
+    }
+    .impact-section .impact-label {
+      display: inline-block;
+      font-size: 11px;
+      font-weight: 900;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: var(--blue);
+      margin-bottom: 14px;
+    }
+    .impact-section h2 {
+      font-family: Fraunces, Georgia, serif;
+      font-size: clamp(22px, 2.6vw, 28px);
+      letter-spacing: -0.024em;
+      margin: 0 0 14px;
+    }
+    .impact-row {
+      display: flex;
+      align-items: flex-start;
+      gap: 12px;
+      font-size: 15.5px;
+      color: var(--charcoal);
+      line-height: 1.5;
+      padding: 6px 0;
+    }
+    .impact-tick {
+      flex-shrink: 0;
+      width: 22px; height: 22px;
+      border-radius: 999px;
+      background: rgba(47, 143, 91, 0.15);
+      color: var(--green);
+      font-weight: 900;
+      font-size: 12px;
+      display: inline-grid;
+      place-items: center;
+      margin-top: 2px;
+    }
+    @media (max-width: 640px) { .impact-section { padding: 22px 22px; } }
+
+    /* Permanent results URL row + copy interaction */
+    .results-url-row {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      flex-wrap: wrap;
+      margin-top: 10px;
+      padding: 10px 14px;
+      background: var(--paper);
+      border: 1px solid var(--line);
+      border-radius: 12px;
+      max-width: 720px;
+    }
+    .results-url-row .label {
+      font-size: 11px;
+      font-weight: 900;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--muted);
+    }
+    .results-url-row input {
+      flex: 1;
+      min-width: 200px;
+      border: 0;
+      background: transparent;
+      font: inherit;
+      font-size: 13px;
+      color: var(--charcoal);
+      outline: none;
+      padding: 4px 0;
+    }
+    .results-url-row button {
+      background: var(--charcoal);
+      color: white;
+      border: 0;
+      font: inherit;
+      font-weight: 800;
+      font-size: 12px;
+      padding: 6px 12px;
+      border-radius: 999px;
+      cursor: pointer;
+      letter-spacing: 0.04em;
+    }
+    .results-url-row button.copied { background: var(--green); }
+    .results-url-row a.open {
+      font-size: 12.5px;
+      font-weight: 800;
+      color: var(--blue);
+      text-decoration: none;
+      padding: 4px 10px;
+      border-radius: 999px;
+      border: 1px solid rgba(36, 86, 255, 0.25);
+    }
+
+    /* Map pills (replaces inline people/tools text) */
+    .map-pill-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+      margin: 4px 0 10px;
+    }
+    .map-pill {
+      display: inline-block;
+      font-size: 11.5px;
+      font-weight: 700;
+      padding: 3px 10px;
+      border-radius: 999px;
+      letter-spacing: 0.02em;
+    }
+    .map-pill.person { background: rgba(180, 83, 9, 0.10);  color: var(--amber); }
+    .map-pill.tool   { background: rgba(36, 86, 255, 0.10); color: var(--blue); }
+
+    /* Friendly retry banner (chat overload UX) */
+    .retry-banner {
+      margin-top: 14px;
+      padding: 14px 18px;
+      background: rgba(36, 86, 255, 0.05);
+      border: 1px solid rgba(36, 86, 255, 0.18);
+      border-radius: 14px;
+      color: var(--charcoal);
+      font-size: 14px;
+      line-height: 1.55;
+    }
+    .retry-banner .retry-headline {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-weight: 800;
+      color: var(--blue);
+      margin-bottom: 4px;
+    }
+    .retry-banner .retry-spinner {
+      width: 14px; height: 14px;
+      border: 2px solid rgba(36, 86, 255, 0.20);
+      border-top-color: var(--blue);
+      border-radius: 999px;
+      animation: spin 0.9s linear infinite;
+    }
+    .retry-banner .retry-actions {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+      margin-top: 12px;
+    }
+    .retry-banner .retry-actions button {
+      background: var(--paper);
+      border: 1px solid var(--line);
+      font: inherit;
+      font-size: 13px;
+      font-weight: 700;
+      color: var(--charcoal);
+      padding: 7px 14px;
+      border-radius: 999px;
+      cursor: pointer;
+    }
+    .retry-banner .retry-actions button.primary {
+      background: var(--blue);
+      color: white;
+      border-color: var(--blue);
+    }
+    .retry-banner.fail .retry-headline { color: var(--amber); }
+    .retry-banner.fail { background: rgba(180, 83, 9, 0.06); border-color: rgba(180, 83, 9, 0.25); }
   </style>
 </head>
 <body>
-  <!-- Repeat-arrows logo symbol, used as <use> below -->
-  <svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <!-- Repeat-arrows logo symbol — exact homepage asset, two animated loops -->
+  <svg width="0" height="0" style="position:absolute;visibility:hidden" aria-hidden="true" focusable="false">
     <symbol id="repeat-logo-symbol" viewBox="0 0 64 64">
-      <g fill="none" stroke="currentColor" stroke-width="5.6" stroke-linecap="round" stroke-linejoin="round">
-        <path d="M17 30 C17 20 25 13 35 13 H49"/>
-        <path d="M42 6 L50 13 L42 20"/>
-        <path d="M47 34 C47 44 39 51 29 51 H15"/>
-        <path d="M22 58 L14 51 L22 44"/>
+      <g class="top-loop">
+        <path class="arrow-a" d="M17 30 C17 20 25 13 35 13 H49" />
+        <path class="head-a" d="M42 6 L50 13 L42 20" />
+      </g>
+      <g class="bottom-loop">
+        <path class="arrow-b" d="M47 34 C47 44 39 51 29 51 H15" />
+        <path class="head-b" d="M22 58 L14 51 L22 44" />
       </g>
     </symbol>
   </svg>
 
   <nav class="nav">
     <div class="container nav-inner">
-      <a class="brand" href="/">
-        <div class="brand-mark"><svg class="repeat-logo"><use href="#repeat-logo-symbol"></use></svg></div>
-        <div class="wordmark-title">Practical <span class="ai">AI</span> Co.</div>
+      <a class="brand" href="/" aria-label="Practical AI Co. home">
+        <div class="brand-mark" aria-hidden="true">
+          <svg class="repeat-logo" viewBox="0 0 64 64"><use href="#repeat-logo-symbol"></use></svg>
+        </div>
+        <div class="wordmark">
+          <div class="wordmark-title">Practical <span class="ai">AI</span> Co.</div>
+          <div class="wordmark-subtitle">Systems that run so you can lead</div>
+        </div>
       </a>
       <div class="nav-tag">Capture</div>
     </div>
@@ -1100,27 +1392,46 @@
 
       <!-- ============================================================ RESULTS ============================================================ -->
       <section id="resultsView" class="screen" hidden>
+      </section>
+    </div>
 
-        <!-- Hero -->
+    <!-- Hero wrapper with the layered grid + radial background -->
+    <div id="resultsHeroWrap" class="results-hero-wrap" hidden>
+      <div class="container">
         <div class="results-hero">
+          <div class="progress-bar" aria-label="Workshop progress">
+            <span class="progress-step done"><span class="dot">✓</span>Capture</span>
+            <span class="progress-arrow">&rarr;</span>
+            <span class="progress-step current"><span class="dot"></span>Build</span>
+            <span class="progress-arrow">&rarr;</span>
+            <span class="progress-step"><span class="dot"></span>Automate</span>
+          </div>
+          <p class="progress-supporting">You completed the Capture phase. Next, we review the findings together and decide what Practical AI Co. should build first.</p>
+
           <div class="biz" id="resultsBiz"></div>
           <h1 id="resultsTitle"></h1>
           <p id="resultsSummary"></p>
         </div>
-      </section>
+      </div>
     </div>
 
     <!-- Sticky action bar (lives outside the inner container so it can be full-width sticky) -->
     <div id="actionBar" class="action-bar" hidden>
       <div class="container action-bar-inner">
-        <a id="notionOpenBtn" class="button button-primary" target="_blank" rel="noopener" hidden>Open in Notion</a>
-        <button id="notionBtn" class="button button-primary" type="button" hidden>Push to Notion</button>
+        <a id="openResultsBtn" class="button button-primary" target="_blank" rel="noopener" hidden>Open Full Results</a>
+        <a id="notionOpenBtn" class="button button-light" target="_blank" rel="noopener" hidden>Open in Notion</a>
+        <button id="notionBtn" class="button button-light" type="button" hidden>Push to Notion</button>
         <button id="gdocsBtn" class="button button-light" type="button">Open in Google Docs</button>
         <button id="docxBtn" class="button button-light" type="button">Download Word</button>
-        <a class="button button-light" href="https://calendar.app.google/SBMCxMPv4Sd8VZRW9" target="_blank" rel="noopener">Book a Build call</a>
+        <a class="button button-light" href="https://calendar.app.google/SBMCxMPv4Sd8VZRW9" target="_blank" rel="noopener">Plan the first build</a>
         <div id="emailStatus" class="email-status" hidden>
           <span class="dot"></span>
           <span id="emailStatusText"></span>
+        </div>
+        <div id="resultsUrlRow" class="results-url-row" hidden>
+          <span class="label">Permanent link</span>
+          <input id="resultsUrlField" type="text" readonly />
+          <button id="copyResultsUrlBtn" type="button">Copy</button>
         </div>
         <div id="gdocsHint" class="action-bar-hint" hidden>
           Your Word file is downloading. Google Docs is opening in a new tab. Use File &rarr; Open and drag the file in to keep editing.
@@ -1145,6 +1456,15 @@
           </div>
         </div>
 
+        <!-- Estimated operational impact (high-level, separate from per-opportunity impact) -->
+        <div class="res-section" id="impactSection" hidden>
+          <div class="impact-section">
+            <div class="impact-label">Estimated operational impact</div>
+            <h2>What completing this roadmap unlocks.</h2>
+            <div id="impactList"></div>
+          </div>
+        </div>
+
         <!-- Start Here -->
         <div class="res-section" id="startHereSection" hidden>
           <div class="start-here">
@@ -1153,7 +1473,7 @@
             <p id="startHereWhy"></p>
             <p id="startHereWhat" style="color:var(--muted); font-size:15px;"></p>
             <div class="impact-list" id="startHereImpact"></div>
-            <a class="button button-primary" href="https://calendar.app.google/SBMCxMPv4Sd8VZRW9" target="_blank" rel="noopener">Book a Build call with Joe</a>
+            <a class="button button-primary" href="https://calendar.app.google/SBMCxMPv4Sd8VZRW9" target="_blank" rel="noopener">Plan the first build</a>
           </div>
         </div>
 
@@ -1211,9 +1531,9 @@
         <!-- Dark navy bottom CTA — bridge into Build phase -->
         <div class="dark-cta">
           <div class="dark-cta-eyebrow">Step 2 &middot; Build</div>
-          <h2>Ready to build the first system?</h2>
-          <p>The Build call is 45 minutes. We confirm the scope, talk through the trade-offs, and start building with you. You stay in your business.</p>
-          <a class="button button-primary" href="https://calendar.app.google/SBMCxMPv4Sd8VZRW9" target="_blank" rel="noopener">Book a Build call with Joe</a>
+          <h2>Plan the first build.</h2>
+          <p>A 45 minute call to review what we heard, confirm the scope, and decide what Practical AI Co. should build first. You stay in your business.</p>
+          <a class="button button-primary" href="https://calendar.app.google/SBMCxMPv4Sd8VZRW9" target="_blank" rel="noopener">Plan the first build</a>
         </div>
 
         <div id="exportErr" class="err" hidden></div>
@@ -1230,6 +1550,7 @@
     </div>
   </footer>
 
+  <script src="/capture/assets/results-render.js"></script>
   <script>
     // ============================================================
     // State + persistence
@@ -1244,6 +1565,7 @@
       interviewComplete: false,
       results: null,             // structured JSON from /api/capture-complete
       notionUrl: null,           // populated by capture-complete (auto-push) or capture-export (retry)
+      resultsUrl: null,          // permanent /capture/results/{slug} URL from Supabase save
       emailSent: null,           // null = not yet known, true = both/customer sent, false = failed
     });
     let state = initialState();
@@ -1277,6 +1599,7 @@
       SCREENS.forEach((s) => { $(SCREEN_VIEWS[s]).hidden = s !== name; });
       // Results page has three top-level elements that show together
       const onResults = name === 'results';
+      $('resultsHeroWrap').hidden = !onResults;
       $('actionBar').hidden = !onResults;
       $('resultsBody').hidden = !onResults;
       window.scrollTo({ top: 0, behavior: 'instant' });
@@ -1407,24 +1730,101 @@
       if (t) t.remove();
     }
 
-    async function callChat() {
+    // ============================================================
+    // Friendly retry banner for Claude overload (529/503/timeout).
+    // The server already retried 2x silently; this is the visible
+    // fallback. Reassures the user that nothing was lost.
+    // ============================================================
+    function clearRetryBanner() {
+      const existing = document.getElementById('retryBanner');
+      if (existing) existing.remove();
+    }
+    function showRetryBanner({ retrying, attempt, total, onRetry, onCopy }) {
+      clearRetryBanner();
+      const log = $('chatLog');
+      const div = document.createElement('div');
+      div.id = 'retryBanner';
+      div.className = 'retry-banner' + (retrying ? '' : ' fail');
+      const headline = retrying
+        ? `<div class="retry-headline"><span class="retry-spinner"></span><span>Claude is a little busy right now. Retrying automatically (${attempt} of ${total})...</span></div>`
+        : `<div class="retry-headline"><span>Claude is experiencing unusually high traffic right now.</span></div>`;
+      const body = retrying
+        ? `<div>Your work is safe. We'll pick up where you left off as soon as Claude responds.</div>`
+        : `<div>Your session is saved locally. Try again in a few minutes, or copy your conversation so far so you don't lose anything.</div>`;
+      const actions = retrying
+        ? ``
+        : `<div class="retry-actions">
+             <button type="button" class="primary" data-action="retry">Try again</button>
+             <button type="button" data-action="copy">Copy conversation</button>
+           </div>`;
+      div.innerHTML = headline + body + actions;
+      log.appendChild(div);
+      log.scrollTop = log.scrollHeight;
+      if (!retrying) {
+        const retryBtn = div.querySelector('[data-action="retry"]');
+        const copyBtn  = div.querySelector('[data-action="copy"]');
+        if (retryBtn) retryBtn.addEventListener('click', () => { clearRetryBanner(); onRetry && onRetry(); });
+        if (copyBtn)  copyBtn.addEventListener('click',  () => onCopy && onCopy());
+      }
+    }
+
+    async function copyConversationToClipboard() {
+      const lines = state.conversation
+        .filter((m) => m && (m.role === 'assistant' || m.role === 'user') && m.content)
+        .map((m) => (m.role === 'assistant' ? 'Practical AI Co.: ' : 'You: ') + m.content);
+      const text = lines.join('\n\n');
+      try { await navigator.clipboard.writeText(text); } catch (_) {}
+    }
+
+    function isRetryableChatResponse(status, body) {
+      if (status === 503) return true;
+      if (body && body.retryable) return true;
+      if (status === 429 || status === 502 || status === 504 || status === 529) return true;
+      return false;
+    }
+
+    async function callChat(retryAttempt) {
+      retryAttempt = retryAttempt || 0;
+      const CLIENT_MAX_RETRIES = 1; // server already retries 2x; we cover the gap
+      const CLIENT_BACKOFFS = [3000, 6000];
       hideError($('chatErr'));
+      if (retryAttempt === 0) clearRetryBanner();
       $('sendBtn').disabled = true;
       $('chatInput').disabled = true;
-      addTyping();
+      if (retryAttempt === 0) addTyping();
+
       try {
         const res = await fetch('/api/capture-chat', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({ profile: state.profile, conversation: state.conversation }),
         });
+        const body = await res.json().catch(() => ({}));
         if (!res.ok) {
-          const body = await res.json().catch(() => ({ error: 'Request failed' }));
+          const retryable = isRetryableChatResponse(res.status, body);
+          if (retryable && retryAttempt < CLIENT_MAX_RETRIES) {
+            removeTyping();
+            showRetryBanner({ retrying: true, attempt: retryAttempt + 1, total: CLIENT_MAX_RETRIES });
+            const delay = CLIENT_BACKOFFS[Math.min(retryAttempt, CLIENT_BACKOFFS.length - 1)];
+            await new Promise((r) => setTimeout(r, delay));
+            clearRetryBanner();
+            addTyping();
+            return callChat(retryAttempt + 1);
+          }
+          if (retryable) {
+            removeTyping();
+            showRetryBanner({
+              retrying: false,
+              onRetry: () => callChat(0),
+              onCopy:  () => copyConversationToClipboard(),
+            });
+            return;
+          }
           throw new Error(body.error || ('HTTP ' + res.status));
         }
-        const data = await res.json();
         removeTyping();
-        const text = (data.message || '').trim();
+        clearRetryBanner();
+        const text = (body.message || '').trim();
 
         if (text.includes('INTERVIEW_COMPLETE')) {
           const before = text.split('INTERVIEW_COMPLETE')[0].trim();
@@ -1434,7 +1834,6 @@
           }
           state.interviewComplete = true;
           saveState();
-          // brief pause so user can read the summary, then process
           setTimeout(() => triggerProcessing(), 2200);
         } else {
           state.conversation.push({ role: 'assistant', content: text });
@@ -1444,7 +1843,7 @@
       } catch (err) {
         console.error(err);
         removeTyping();
-        showError($('chatErr'), 'Connection hiccup. Try sending again. (' + (err.message || 'unknown') + ')');
+        showError($('chatErr'), 'Something went off. Your work is saved. Try sending again. (' + (err.message || 'unknown') + ')');
       } finally {
         $('sendBtn').disabled = false;
         $('chatInput').disabled = false;
@@ -1504,6 +1903,7 @@
         const data = await res.json();
         state.results = data.results;
         state.notionUrl = data.notionUrl || null;
+        state.resultsUrl = data.resultsUrl || null;
         state.emailSent = !!data.emailSent;
         saveState();
 
@@ -1520,291 +1920,11 @@
       }
     }
 
-    // ============================================================
-    // Results rendering
-    // ============================================================
-    function renderResults() {
-      const r = state.results;
-      if (!r) return;
-      const p = state.profile || {};
-
-      // Hero
-      $('resultsBiz').textContent = [p.businessName, p.processName].filter(Boolean).join(' · ');
-      $('resultsTitle').textContent = r.sop_title || (p.processName + ' SOP');
-      $('resultsSummary').textContent = r.process_summary || '';
-
-      // Sticky bar — Notion + email status
-      updateActionBar();
-
-      // Executive summary
-      renderExecSummary(r);
-
-      // Start Here
-      renderStartHere(r);
-
-      // Process map
-      renderMap(r);
-
-      // AI opportunities
-      renderOpportunities(r);
-
-      // Bottlenecks
-      renderBottlenecks(r);
-
-      // Collapsed supporting detail
-      renderCollapsed('toolsDetails', 'toolsList', 'toolsCount', r.tools_and_systems, (t) => {
-        const pills = [];
-        if (t.system_role) pills.push('<span class="pill">' + escapeHtml(t.system_role.replace(/_/g, ' ')) + '</span>');
-        const meta = [];
-        if (t.used_by)     meta.push('<div><b>Used by:</b> ' + escapeHtml(t.used_by) + '</div>');
-        if (t.pain_points) meta.push('<div><b>Pain points:</b> ' + escapeHtml(t.pain_points) + '</div>');
-        return '<h4>' + escapeHtml(t.tool_name || '') + '</h4>'
-          + pills.join('')
-          + (t.purpose ? '<p>' + escapeHtml(t.purpose) + '</p>' : '')
-          + (meta.length ? '<div class="meta">' + meta.join('') + '</div>' : '');
-      });
-
-      renderCollapsed('breakdownDetails', 'breakdownList', 'breakdownCount', r.systems_breakdown, (b) => {
-        return '<h4>' + escapeHtml(b.title || '') + '</h4>'
-          + (b.description ? '<p>' + escapeHtml(b.description) + '</p>' : '')
-          + (b.impact ? '<div class="meta"><b>Impact:</b> ' + escapeHtml(b.impact) + '</div>' : '');
-      });
-
-      renderCollapsed('ownerDetails', 'ownerList', 'ownerCount', r.owner_dependencies, (d) => {
-        return '<h4>' + escapeHtml(d.title || '') + '</h4>'
-          + (d.description ? '<p>' + escapeHtml(d.description) + '</p>' : '');
-      });
-
-      renderCollapsed('manualDetails', 'manualList', 'manualCount', r.manual_work, (m) => {
-        return '<h4>' + escapeHtml(m.title || '') + '</h4>'
-          + (m.description ? '<p>' + escapeHtml(m.description) + '</p>' : '');
-      });
-
-      if (Array.isArray(r.sop_sections) && r.sop_sections.length) {
-        $('sopDetails').hidden = false;
-        $('sopTitleLabel').textContent = r.sop_title || 'Full SOP';
-        $('sopCount').textContent = r.sop_sections.length + ' section' + (r.sop_sections.length === 1 ? '' : 's');
-        $('sopBody').innerHTML = r.sop_sections.map((s) =>
-          '<div class="sop-block">'
-          + '<h4>' + escapeHtml(s.section_title || '') + '</h4>'
-          + (s.content ? '<p>' + escapeHtml(s.content).replace(/\n/g, '<br/>') + '</p>' : '')
-          + '</div>'
-        ).join('');
-      }
-    }
-
-    function renderCollapsed(detailsId, listId, countId, items, itemFn) {
-      if (!Array.isArray(items) || !items.length) return;
-      $(detailsId).hidden = false;
-      $(countId).textContent = items.length + ' item' + (items.length === 1 ? '' : 's');
-      $(listId).innerHTML = items.map((x) => '<div class="mini-card">' + itemFn(x) + '</div>').join('');
-    }
-
-    function updateActionBar() {
-      // Notion button: Open if URL exists, otherwise Push (retry)
-      if (state.notionUrl) {
-        $('notionOpenBtn').hidden = false;
-        $('notionOpenBtn').href = state.notionUrl;
-        $('notionBtn').hidden = true;
-      } else {
-        $('notionOpenBtn').hidden = true;
-        $('notionBtn').hidden = false;
-      }
-      // Email status
-      const es = $('emailStatus');
-      if (state.emailSent) {
-        es.hidden = false;
-        es.classList.remove('fail');
-        $('emailStatusText').textContent = 'Sent to ' + ((state.profile && state.profile.firstName) || 'you') + ' and Joe';
-      } else if (state.emailSent === false) {
-        es.hidden = false;
-        es.classList.add('fail');
-        $('emailStatusText').textContent = 'Email did not send. You can still use Notion and Word.';
-      } else {
-        es.hidden = true;
-      }
-    }
-
-    function renderExecSummary(r) {
-      const e = (r && r.executive_summary) || {};
-      const setCell = (id, value) => {
-        const el = $(id);
-        if (!value) { el.hidden = true; return; }
-        el.hidden = false;
-        el.querySelector('.exec-cell-text').textContent = value;
-      };
-      setCell('execBottleneck', e.biggest_bottleneck);
-      setCell('execTimeDrain',  e.biggest_time_drain);
-      setCell('execOwner',      e.most_owner_dependent_step);
-      setCell('execAi',         e.most_immediate_ai_opportunity);
-      const any = e.biggest_bottleneck || e.biggest_time_drain || e.most_owner_dependent_step || e.most_immediate_ai_opportunity;
-      $('execSection').hidden = !any;
-    }
-
-    function renderStartHere(r) {
-      const fb = r && r.recommended_first_build;
-      if (!fb || !fb.title) { $('startHereSection').hidden = true; return; }
-      $('startHereSection').hidden = false;
-      $('startHereTitle').textContent = fb.title;
-      $('startHereWhy').textContent = fb.why_this_first || '';
-      $('startHereWhat').textContent = fb.what_practical_ai_would_build || '';
-      const impactEl = $('startHereImpact');
-      impactEl.innerHTML = '';
-      if (Array.isArray(fb.estimated_impact)) {
-        fb.estimated_impact.slice(0, 4).forEach((i) => {
-          const c = document.createElement('div');
-          c.className = 'impact-chip';
-          c.textContent = i;
-          impactEl.appendChild(c);
-        });
-      }
-    }
-
-    function renderOpportunities(r) {
-      const ideas = Array.isArray(r.automation_ideas) ? r.automation_ideas : [];
-      if (!ideas.length) { $('opportunitiesSection').hidden = true; return; }
-      $('opportunitiesSection').hidden = false;
-      $('opportunitiesList').innerHTML = ideas.map((a) => {
-        const diffClass = a.difficulty ? ('diff-' + a.difficulty) : '';
-        const impactHtml = Array.isArray(a.estimated_impact) && a.estimated_impact.length
-          ? '<div class="impact-list">' + a.estimated_impact.slice(0, 4).map((i) =>
-              '<div class="impact-chip">' + escapeHtml(i) + '</div>').join('') + '</div>'
-          : '';
-        const detail = '<details class="step-detail">'
-          + '<summary>Tell me more</summary>'
-          + '<div class="step-detail-body">'
-          + (a.plain_english_description ? '<p>' + escapeHtml(a.plain_english_description) + '</p>' : '')
-          + (a.why_it_matters ? '<p><span class="label">Why it matters:</span>' + escapeHtml(a.why_it_matters) + '</p>' : '')
-          + (a.practical_ai_build_note ? '<p><span class="label">We would build:</span>' + escapeHtml(a.practical_ai_build_note) + '</p>' : '')
-          + (a.recommended_process_step ? '<p><span class="label">Connects to:</span>' + escapeHtml(a.recommended_process_step) + '</p>' : '')
-          + '</div></details>';
-        return '<article class="opp">'
-          + '<div class="opp-head">'
-          + (a.difficulty ? '<span class="pill ' + diffClass + '">' + escapeHtml(a.difficulty) + '</span>' : '')
-          + '<h3>' + escapeHtml(a.title || '') + '</h3>'
-          + '</div>'
-          + impactHtml
-          + detail
-          + '</article>';
-      }).join('');
-    }
-
-    function renderBottlenecks(r) {
-      const items = Array.isArray(r.bottlenecks) ? r.bottlenecks : [];
-      if (!items.length) { $('bottlenecksSection').hidden = true; return; }
-      $('bottlenecksSection').hidden = false;
-      $('bottlenecksList').innerHTML = items.map((b) => {
-        const oneLine = b.description || b.why_it_matters || '';
-        const hasMore = b.description && b.why_it_matters;
-        return '<article class="bottleneck">'
-          + '<h3>' + escapeHtml(b.title || '') + '</h3>'
-          + (oneLine ? '<p class="one-line">' + escapeHtml(oneLine) + '</p>' : '')
-          + (hasMore
-              ? '<details class="step-detail"><summary>More</summary><div class="step-detail-body"><p><span class="label">Why it matters:</span>' + escapeHtml(b.why_it_matters) + '</p></div></details>'
-              : '')
-          + '</article>';
-      }).join('');
-    }
-
-    function renderMap(r) {
-      const view = $('mapView');
-      view.innerHTML = '';
-      const steps = Array.isArray(r.process_steps) ? r.process_steps : [];
-      const branches = Array.isArray(r.process_branches) ? r.process_branches : [];
-
-      const branchMap = {};
-      branches.forEach((b) => {
-        const key = String(b.after_step || '');
-        if (!branchMap[key]) branchMap[key] = [];
-        branchMap[key].push(b);
-      });
-
-      const ideas = Array.isArray(r.automation_ideas) ? r.automation_ideas : [];
-      function findAutomationFor(step) {
-        const key = String(step.step_number);
-        const title = (step.title || '').toLowerCase();
-        for (const a of ideas) {
-          const ref = String(a.recommended_process_step || '').toLowerCase();
-          if (ref === key) return a;
-          if (ref && title && ref.includes(title.slice(0, 12))) return a;
-          if (ref && ref.includes('step ' + key)) return a;
-        }
-        return null;
-      }
-
-      steps.forEach((s) => {
-        const stepEl = document.createElement('div');
-        stepEl.className = 'map-step' + (s.automation_opportunity ? ' has-auto' : '');
-
-        const num = document.createElement('div');
-        num.className = 'map-step-num';
-        num.textContent = String(s.step_number || '');
-        stepEl.appendChild(num);
-
-        const card = document.createElement('div');
-        card.className = 'map-step-card';
-
-        // Merge point inputs
-        if (Array.isArray(s.inputs_from) && s.inputs_from.length) {
-          card.innerHTML += '<div class="map-inputs"><div class="map-inputs-label">Inputs from</div>'
-            + '<div class="map-inputs-items">'
-            + s.inputs_from.map((i) => '<span>' + escapeHtml(i) + '</span>').join('')
-            + '</div></div>';
-        }
-
-        // Title + people
-        card.innerHTML += '<div class="map-step-title">' + escapeHtml(s.title || '') + '</div>';
-        if (s.people_involved) {
-          card.innerHTML += '<div class="map-step-people">' + escapeHtml(s.people_involved) + '</div>';
-        }
-
-        // Friction (one line)
-        if (s.risk_or_friction) {
-          card.innerHTML += '<div class="map-step-friction">' + escapeHtml(s.risk_or_friction) + '</div>';
-        }
-
-        // Automation chip
-        if (s.automation_opportunity) {
-          const idea = findAutomationFor(s);
-          const label = idea ? idea.title : 'Automation opportunity';
-          card.innerHTML += '<div class="automation-chip">'
-            + '<svg class="logo"><use href="#repeat-logo-symbol"></use></svg>'
-            + '<div class="text"><b>Where AI can help</b>' + escapeHtml(label) + '</div>'
-            + '</div>';
-        }
-
-        // Expandable detail (description, tools)
-        const hasDetail = s.description || s.tools_used;
-        if (hasDetail) {
-          card.innerHTML += '<details class="step-detail">'
-            + '<summary>Details</summary>'
-            + '<div class="step-detail-body">'
-            + (s.description ? '<p>' + escapeHtml(s.description) + '</p>' : '')
-            + (s.tools_used ? '<p><span class="label">Tools:</span>' + escapeHtml(s.tools_used) + '</p>' : '')
-            + '</div>'
-            + '</details>';
-        }
-
-        stepEl.appendChild(card);
-        view.appendChild(stepEl);
-
-        // Branch after this step?
-        const after = branchMap[String(s.step_number)];
-        if (after) {
-          after.forEach((b) => {
-            const br = document.createElement('div');
-            br.className = 'branch';
-            br.innerHTML = '<div class="branch-label">Decision</div>'
-              + '<div class="branch-question">' + escapeHtml(b.condition || '') + '</div>'
-              + '<div class="branch-paths">'
-              +   '<div class="branch-path yes"><div class="branch-path-label">If yes</div><div class="branch-path-text">' + escapeHtml(b.yes_path || '') + '</div></div>'
-              +   '<div class="branch-path no"><div class="branch-path-label">If no</div><div class="branch-path-text">' + escapeHtml(b.no_path || '') + '</div></div>'
-              + '</div>';
-            view.appendChild(br);
-          });
-        }
-      });
-    }
+    // Render functions live in /capture/assets/results-render.js and are
+    // exposed as window.CaptureRender. Both /capture and /capture/results/{slug}
+    // share this code so the experiences stay visually in lockstep.
+    function renderResults() { window.CaptureRender.renderResults(state); }
+    function updateActionBar() { window.CaptureRender.updateActionBar(state); }
 
     // ============================================================
     // Exports (Notion retry / Word download)
@@ -1901,6 +2021,25 @@
         btn.disabled = false;
         btn.textContent = original;
       }
+    });
+
+    // ============================================================
+    // Copy permanent results URL — small UX win for Joe and clients
+    // ============================================================
+    $('copyResultsUrlBtn').addEventListener('click', async () => {
+      const btn = $('copyResultsUrlBtn');
+      const field = $('resultsUrlField');
+      try {
+        await navigator.clipboard.writeText(field.value || '');
+      } catch (_) {
+        // Older browser fallback: select and trust the legacy execCommand path
+        field.select();
+        try { document.execCommand('copy'); } catch (_) {}
+      }
+      const original = btn.textContent;
+      btn.textContent = 'Copied';
+      btn.classList.add('copied');
+      setTimeout(() => { btn.textContent = original; btn.classList.remove('copied'); }, 1600);
     });
 
     // ============================================================
