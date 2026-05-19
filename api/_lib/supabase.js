@@ -95,6 +95,25 @@ async function saveSession({ profile, results, notionUrl, notionError, emailStat
   throw e;
 }
 
+async function listSessions(opts) {
+  const limit = (opts && opts.limit) || 200;
+  const client = getClient();
+  // Deliberately exclude results_json. This endpoint is a link directory only.
+  // The full report stays behind the per-slug URL.
+  const { data, error } = await client
+    .from("capture_sessions")
+    .select("slug, business_name, process_name, client_name, client_email, notion_url, notion_status, email_status, created_at")
+    .order("created_at", { ascending: false })
+    .limit(limit);
+  if (error) {
+    const e = new Error("Supabase list failed: " + error.message);
+    e.code = "SUPABASE_LIST_FAILED";
+    e.details = error;
+    throw e;
+  }
+  return data || [];
+}
+
 async function readSessionBySlug(slug) {
   if (!slug || typeof slug !== "string") return null;
   const client = getClient();
@@ -133,6 +152,7 @@ function buildResultsUrl(req, slug) {
 module.exports = {
   saveSession,
   readSessionBySlug,
+  listSessions,
   generateSlug,
   buildResultsUrl,
   publicBaseUrl,

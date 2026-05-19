@@ -1,0 +1,501 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="robots" content="noindex,nofollow" />
+  <title>Captures &middot; Practical AI Co.</title>
+  <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32.png" />
+  <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16.png" />
+  <link rel="icon" type="image/x-icon" href="/favicon.ico" />
+  <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
+  <meta name="theme-color" content="#2456FF" />
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=Fraunces:opsz,wght@9..144,700;9..144,800&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --ink: #111827; --charcoal: #172033; --blue: #2456FF; --blue-dark: #173BD7;
+      --cream: #FBF5EA; --paper: #FFFDF8; --green: #2F8F5B; --amber: #B45309;
+      --muted: #667085; --muted-2: #8A93A5; --line: #E7DCCB; --white: #FFFFFF;
+    }
+    * { box-sizing: border-box; }
+    [hidden] { display: none !important; }
+    html { scroll-behavior: smooth; }
+    body {
+      margin: 0;
+      font-family: Inter, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      color: var(--charcoal);
+      background: var(--cream);
+      line-height: 1.55;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+    a { color: inherit; text-decoration: none; }
+    .container { width: min(880px, calc(100% - 32px)); margin: 0 auto; }
+
+    /* Nav — homepage logo + lockup */
+    .nav {
+      background: rgba(251, 245, 234, 0.92);
+      backdrop-filter: blur(16px);
+      border-bottom: 1px solid rgba(231, 220, 203, 0.78);
+    }
+    .nav-inner { min-height: 84px; display: flex; align-items: center; justify-content: space-between; gap: 24px; }
+    .brand { display: inline-flex; align-items: center; gap: 12px; }
+    .brand-mark {
+      width: 46px; height: 46px; border-radius: 14px;
+      background: var(--paper);
+      border: 1px solid rgba(23, 32, 51, 0.10);
+      box-shadow: 0 10px 24px rgba(17, 24, 39, 0.08);
+      display: grid; place-items: center;
+      flex: 0 0 auto; overflow: hidden;
+    }
+    .repeat-logo { width: 31px; height: 31px; overflow: visible; }
+    .repeat-logo .arrow-a, .repeat-logo .head-a { stroke: var(--blue); }
+    .repeat-logo .arrow-b, .repeat-logo .head-b { stroke: var(--charcoal); }
+    .repeat-logo .arrow-a, .repeat-logo .arrow-b,
+    .repeat-logo .head-a,  .repeat-logo .head-b {
+      fill: none; stroke-width: 5.6; stroke-linecap: round; stroke-linejoin: round;
+      vector-effect: non-scaling-stroke;
+    }
+    .repeat-logo .top-loop    { transform-origin: 32px 32px; animation: logoNudgeA 3.8s ease-in-out infinite; }
+    .repeat-logo .bottom-loop { transform-origin: 32px 32px; animation: logoNudgeB 3.8s ease-in-out infinite; }
+    @keyframes logoNudgeA { 0%,100% { transform: rotate(0); } 50% { transform: rotate(-3deg); } }
+    @keyframes logoNudgeB { 0%,100% { transform: rotate(0); } 50% { transform: rotate(3deg); } }
+    .wordmark { display: inline-flex; flex-direction: column; gap: 5px; }
+    .wordmark-title {
+      font-family: Fraunces, Georgia, serif; font-weight: 800;
+      letter-spacing: -0.035em; color: var(--charcoal);
+      font-size: 28px; line-height: 1.05;
+    }
+    .wordmark-title .ai { color: var(--blue); }
+    .wordmark-subtitle {
+      color: var(--muted); font-size: 9px; font-weight: 900;
+      text-transform: uppercase; letter-spacing: 0.26em; line-height: 1;
+    }
+    @media (max-width: 540px) { .wordmark-subtitle { display: none; } .wordmark-title { font-size: 22px; } }
+    .nav-tag {
+      font-size: 11px; font-weight: 900; letter-spacing: 0.18em; text-transform: uppercase;
+      color: var(--blue); padding: 6px 12px; border-radius: 999px;
+      background: rgba(36, 86, 255, 0.08);
+    }
+
+    /* Buttons — homepage spec */
+    .button {
+      display: inline-flex; align-items: center; justify-content: center; gap: 8px;
+      min-height: 44px; padding: 0 18px;
+      border-radius: 999px; border: 0;
+      font-family: inherit; font-size: 14px; font-weight: 900;
+      cursor: pointer; white-space: nowrap;
+      transition: transform 180ms ease, background 180ms ease, box-shadow 180ms ease, opacity 180ms ease;
+    }
+    .button:hover { transform: translateY(-2px); }
+    .button:disabled { opacity: 0.5; cursor: not-allowed; transform: none; }
+    .button-primary {
+      background: var(--blue); color: var(--white);
+      box-shadow: 0 14px 30px rgba(36, 86, 255, 0.22);
+    }
+    .button-primary:hover:not(:disabled) { background: var(--blue-dark); }
+    .button-light {
+      background: var(--paper); color: var(--charcoal);
+      border: 1px solid var(--line);
+      box-shadow: 0 10px 22px rgba(17, 24, 39, 0.06);
+    }
+    .button-ghost { background: transparent; color: var(--muted); box-shadow: none; border: 1px solid transparent; }
+    .button-sm { min-height: 36px; padding: 0 12px; font-size: 13px; font-weight: 800; }
+
+    main { flex: 1; padding: 48px 0 80px; }
+
+    /* Password screen */
+    .signin-shell { padding: 56px 0; display: flex; justify-content: center; }
+    .signin-card {
+      width: 100%; max-width: 420px;
+      background: var(--paper);
+      border: 1px solid var(--line);
+      border-radius: 20px;
+      padding: 36px 36px 32px;
+      box-shadow: 0 24px 56px rgba(17, 24, 39, 0.08);
+    }
+    .signin-card h1 {
+      font-family: Fraunces, Georgia, serif;
+      font-weight: 800; letter-spacing: -0.025em;
+      font-size: 26px; color: var(--charcoal);
+      margin: 0 0 6px;
+    }
+    .signin-card .lede { color: var(--muted); font-size: 14.5px; margin: 0 0 22px; line-height: 1.55; }
+    .signin-card label {
+      display: block; font-size: 12px; font-weight: 800;
+      letter-spacing: 0.06em; text-transform: uppercase;
+      color: var(--muted); margin-bottom: 8px;
+    }
+    .signin-card input {
+      width: 100%;
+      font: inherit; font-size: 15px;
+      padding: 12px 14px;
+      background: var(--cream);
+      border: 1px solid var(--line);
+      border-radius: 12px;
+      color: var(--charcoal);
+      outline: none;
+      transition: border-color 160ms ease, box-shadow 160ms ease;
+    }
+    .signin-card input:focus { border-color: var(--blue); box-shadow: 0 0 0 4px rgba(36, 86, 255, 0.10); }
+    .signin-card .actions { display: flex; gap: 10px; margin-top: 18px; align-items: center; }
+    .signin-card .err {
+      margin-top: 14px;
+      padding: 10px 14px;
+      background: rgba(180, 83, 9, 0.07);
+      border: 1px solid rgba(180, 83, 9, 0.22);
+      color: var(--amber);
+      border-radius: 10px;
+      font-size: 13.5px;
+    }
+
+    /* List header */
+    .list-head {
+      display: flex; align-items: baseline; justify-content: space-between;
+      gap: 16px; flex-wrap: wrap;
+      margin-bottom: 24px;
+    }
+    .list-head h1 {
+      font-family: Fraunces, Georgia, serif;
+      font-weight: 800; letter-spacing: -0.028em;
+      font-size: clamp(28px, 3.6vw, 36px); color: var(--charcoal);
+      margin: 0 0 4px; line-height: 1.1;
+    }
+    .list-head .sub { color: var(--muted); font-size: 14.5px; }
+    .list-head .actions { display: inline-flex; gap: 10px; align-items: center; }
+
+    /* List */
+    .list {
+      background: var(--paper);
+      border: 1px solid var(--line);
+      border-radius: 20px;
+      overflow: hidden;
+      box-shadow: 0 14px 36px rgba(17, 24, 39, 0.05);
+    }
+    .row {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) auto;
+      gap: 18px;
+      padding: 20px 24px;
+      border-bottom: 1px solid var(--line);
+      align-items: center;
+    }
+    .row:last-child { border-bottom: 0; }
+    .row .meta {
+      min-width: 0;
+    }
+    .row .biz {
+      font-family: Fraunces, Georgia, serif;
+      font-size: 18px; font-weight: 800; letter-spacing: -0.02em;
+      color: var(--charcoal);
+      margin: 0 0 4px;
+      line-height: 1.2;
+      word-break: break-word;
+    }
+    .row .process {
+      font-size: 14px; color: var(--muted); margin: 0 0 6px;
+      display: inline-flex; align-items: center; gap: 8px;
+    }
+    .row .process .tag {
+      display: inline-block;
+      font-size: 10.5px; font-weight: 900;
+      letter-spacing: 0.08em; text-transform: uppercase;
+      color: var(--blue);
+      background: rgba(36, 86, 255, 0.08);
+      padding: 3px 8px;
+      border-radius: 999px;
+    }
+    .row .client {
+      font-size: 13px; color: var(--muted);
+      display: flex; gap: 10px; flex-wrap: wrap;
+    }
+    .row .client b { color: var(--charcoal); font-weight: 700; }
+    .row .client a { color: var(--blue); }
+    .row .actions {
+      display: inline-flex; gap: 8px; flex-wrap: wrap;
+      justify-content: flex-end;
+    }
+    .row .actions .button.copied { background: var(--green); border-color: var(--green); color: white; }
+    @media (max-width: 640px) {
+      .row { grid-template-columns: 1fr; }
+      .row .actions { justify-content: flex-start; }
+    }
+
+    /* Empty / error states */
+    .empty {
+      padding: 56px 32px;
+      text-align: center;
+      color: var(--muted);
+    }
+    .empty h2 {
+      font-family: Fraunces, Georgia, serif;
+      font-size: 20px;
+      color: var(--charcoal);
+      margin: 0 0 8px;
+    }
+
+    .skeleton {
+      background: linear-gradient(90deg, rgba(23,32,51,0.04) 0%, rgba(23,32,51,0.07) 50%, rgba(23,32,51,0.04) 100%);
+      background-size: 200% 100%;
+      animation: shimmer 1.6s linear infinite;
+      border-radius: 12px;
+    }
+    .skeleton.row-skel { height: 88px; margin-bottom: 1px; border-radius: 0; }
+    @keyframes shimmer { from { background-position: 200% 0; } to { background-position: -200% 0; } }
+
+    footer {
+      background: var(--charcoal);
+      color: rgba(255,255,255,0.6);
+      padding: 28px 0; font-size: 13px;
+    }
+    .footer-inner { display: flex; align-items: center; justify-content: space-between; gap: 14px; flex-wrap: wrap; }
+    footer a { color: rgba(255,255,255,0.85); text-decoration: underline; }
+  </style>
+</head>
+<body>
+  <svg width="0" height="0" style="position:absolute;visibility:hidden" aria-hidden="true" focusable="false">
+    <symbol id="repeat-logo-symbol" viewBox="0 0 64 64">
+      <g class="top-loop">
+        <path class="arrow-a" d="M17 30 C17 20 25 13 35 13 H49" />
+        <path class="head-a"  d="M42 6 L50 13 L42 20" />
+      </g>
+      <g class="bottom-loop">
+        <path class="arrow-b" d="M47 34 C47 44 39 51 29 51 H15" />
+        <path class="head-b"  d="M22 58 L14 51 L22 44" />
+      </g>
+    </symbol>
+  </svg>
+
+  <nav class="nav">
+    <div class="container nav-inner">
+      <a class="brand" href="/" aria-label="Practical AI Co. home">
+        <div class="brand-mark" aria-hidden="true">
+          <svg class="repeat-logo" viewBox="0 0 64 64"><use href="#repeat-logo-symbol"></use></svg>
+        </div>
+        <div class="wordmark">
+          <div class="wordmark-title">Practical <span class="ai">AI</span> Co.</div>
+          <div class="wordmark-subtitle">Systems that run so you can lead</div>
+        </div>
+      </a>
+      <div class="nav-tag">Admin</div>
+    </div>
+  </nav>
+
+  <main>
+    <div class="container">
+
+      <!-- Password screen -->
+      <section id="signinView" class="signin-shell" hidden>
+        <div class="signin-card">
+          <h1>Admin access</h1>
+          <p class="lede">Enter the admin password to see saved captures.</p>
+          <form id="signinForm" autocomplete="off">
+            <label for="adminPasswordInput">Admin password</label>
+            <input id="adminPasswordInput" type="password" autocomplete="current-password" required />
+            <div class="actions">
+              <button type="submit" class="button button-primary" id="signinBtn">Sign in</button>
+            </div>
+            <div id="signinErr" class="err" hidden></div>
+          </form>
+        </div>
+      </section>
+
+      <!-- List view -->
+      <section id="listView" hidden>
+        <div class="list-head">
+          <div>
+            <h1>Captures</h1>
+            <div class="sub"><span id="countLabel">Loading...</span></div>
+          </div>
+          <div class="actions">
+            <a class="button button-light" href="/capture/" target="_blank" rel="noopener">Open /capture</a>
+            <button class="button button-ghost" id="logoutBtn" type="button">Log out</button>
+          </div>
+        </div>
+
+        <div class="list" id="listEl"></div>
+      </section>
+    </div>
+  </main>
+
+  <footer>
+    <div class="container footer-inner">
+      <div>Practical AI Co. &middot; Franklin, TN</div>
+      <div><a href="mailto:joe@thepracticalai.co">joe@thepracticalai.co</a></div>
+    </div>
+  </footer>
+
+  <script>
+    const PW_KEY = 'paic_admin_pw';
+    const $ = (id) => document.getElementById(id);
+
+    function show(view) {
+      $('signinView').hidden = view !== 'signin';
+      $('listView').hidden   = view !== 'list';
+    }
+
+    function escapeHtml(s) {
+      return String(s == null ? '' : s).replace(/[&<>"']/g, (c) =>
+        ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' })[c]
+      );
+    }
+
+    function formatDate(iso) {
+      if (!iso) return '';
+      try {
+        const d = new Date(iso);
+        return d.toLocaleString(undefined, { year: 'numeric', month: 'short', day: 'numeric', hour: 'numeric', minute: '2-digit' });
+      } catch (_) { return iso; }
+    }
+
+    function renderSkeleton() {
+      $('countLabel').textContent = 'Loading...';
+      const html = ['','','','',''].map(() => '<div class="skeleton row-skel"></div>').join('');
+      $('listEl').innerHTML = html;
+    }
+
+    function renderEmpty(message) {
+      $('countLabel').textContent = '0 sessions';
+      $('listEl').innerHTML = '<div class="empty"><h2>No captures yet.</h2><p>Completed capture sessions will show up here.</p></div>';
+    }
+
+    function renderError(message) {
+      $('countLabel').textContent = '';
+      $('listEl').innerHTML = '<div class="empty"><h2>Something went off.</h2><p>' + escapeHtml(message || 'Unable to load sessions.') + '</p></div>';
+    }
+
+    function renderRows(sessions) {
+      $('countLabel').textContent = sessions.length + ' session' + (sessions.length === 1 ? '' : 's') + ' &middot; newest first';
+      if (!sessions.length) { renderEmpty(); return; }
+      $('listEl').innerHTML = sessions.map((s, idx) => {
+        const business = escapeHtml(s.business_name || '(no business name)');
+        const process  = escapeHtml(s.process_name || '');
+        const client   = escapeHtml(s.client_name || '');
+        const email    = escapeHtml(s.client_email || '');
+        const date     = escapeHtml(formatDate(s.created_at));
+        const resultsUrl = escapeHtml(s.results_url || '');
+        const notion   = s.notion_url ? '<a class="button button-light button-sm" target="_blank" rel="noopener" href="' + escapeHtml(s.notion_url) + '">Open Notion</a>' : '';
+        return ''
+          + '<div class="row" data-idx="' + idx + '">'
+          +   '<div class="meta">'
+          +     '<div class="biz">' + business + '</div>'
+          +     '<div class="process"><span class="tag">' + process + '</span></div>'
+          +     '<div class="client">'
+          +       (client ? '<span><b>' + client + '</b></span>' : '')
+          +       (email  ? '<span><a href="mailto:' + email + '">' + email + '</a></span>' : '')
+          +       '<span>' + date + '</span>'
+          +     '</div>'
+          +   '</div>'
+          +   '<div class="actions">'
+          +     '<a class="button button-primary button-sm" target="_blank" rel="noopener" href="' + resultsUrl + '">Open Results</a>'
+          +     '<button class="button button-light button-sm" data-copy="' + resultsUrl + '" type="button">Copy Link</button>'
+          +     notion
+          +   '</div>'
+          + '</div>';
+      }).join('');
+
+      // Wire copy buttons
+      $('listEl').querySelectorAll('button[data-copy]').forEach((btn) => {
+        btn.addEventListener('click', async () => {
+          const url = btn.getAttribute('data-copy') || '';
+          try { await navigator.clipboard.writeText(url); }
+          catch (_) {
+            const ta = document.createElement('textarea');
+            ta.value = url;
+            document.body.appendChild(ta);
+            ta.select();
+            try { document.execCommand('copy'); } catch (_) {}
+            document.body.removeChild(ta);
+          }
+          const orig = btn.textContent;
+          btn.textContent = 'Copied';
+          btn.classList.add('copied');
+          setTimeout(() => { btn.textContent = orig; btn.classList.remove('copied'); }, 1600);
+        });
+      });
+    }
+
+    async function fetchList(password) {
+      const res = await fetch('/api/capture-list', {
+        method: 'GET',
+        headers: { 'Authorization': 'Bearer ' + password },
+      });
+      if (res.status === 401) {
+        sessionStorage.removeItem(PW_KEY);
+        return { ok: false, unauthorized: true };
+      }
+      if (!res.ok) {
+        const body = await res.json().catch(() => ({}));
+        return { ok: false, error: body.error || ('HTTP ' + res.status) };
+      }
+      const body = await res.json();
+      return { ok: true, sessions: body.sessions || [] };
+    }
+
+    async function tryWithStoredPassword() {
+      const pw = sessionStorage.getItem(PW_KEY);
+      if (!pw) return false;
+      show('list');
+      renderSkeleton();
+      const out = await fetchList(pw);
+      if (out.ok) { renderRows(out.sessions); return true; }
+      if (out.unauthorized) {
+        // Token was bad. Drop to sign-in.
+        sessionStorage.removeItem(PW_KEY);
+        show('signin');
+        return false;
+      }
+      renderError(out.error);
+      return true; // we did handle it (just with an error)
+    }
+
+    // Sign-in form
+    $('signinForm').addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const err = $('signinErr');
+      err.hidden = true;
+      const pw = $('adminPasswordInput').value.trim();
+      if (!pw) return;
+      $('signinBtn').disabled = true;
+      $('signinBtn').textContent = 'Signing in...';
+      try {
+        const out = await fetchList(pw);
+        if (out.ok) {
+          sessionStorage.setItem(PW_KEY, pw);
+          show('list');
+          renderRows(out.sessions);
+        } else if (out.unauthorized) {
+          err.hidden = false;
+          err.textContent = 'Incorrect password. Try again.';
+        } else {
+          err.hidden = false;
+          err.textContent = out.error || 'Something went off. Try again.';
+        }
+      } finally {
+        $('signinBtn').disabled = false;
+        $('signinBtn').textContent = 'Sign in';
+      }
+    });
+
+    // Logout
+    $('logoutBtn').addEventListener('click', () => {
+      sessionStorage.removeItem(PW_KEY);
+      $('adminPasswordInput').value = '';
+      show('signin');
+      setTimeout(() => $('adminPasswordInput').focus(), 50);
+    });
+
+    // Boot
+    (async () => {
+      const handled = await tryWithStoredPassword();
+      if (!handled) {
+        show('signin');
+        setTimeout(() => $('adminPasswordInput').focus(), 50);
+      }
+    })();
+  </script>
+</body>
+</html>
