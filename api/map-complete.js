@@ -21,7 +21,7 @@ const { Client: NotionClient } = require("@notionhq/client");
 const { Resend } = require("resend");
 
 const MODEL = "claude-sonnet-4-5";
-const MAX_TOKENS = 16000;
+const MAX_TOKENS = 20000;
 const SOP_LIBRARY_DB_ID = "362567cd-8712-8174-982d-ffa3a95e441c";
 const JOE_EMAIL = "joe@thepracticalai.co";
 const FROM = "Practical AI Co. <joe@thepracticalai.co>";
@@ -54,64 +54,29 @@ IMPORTANT RULES
 OUTPUT FORMAT
 ==========================================================
 
-Output a single JSON object wrapped in <DELIVERABLES></DELIVERABLES> tags. The JSON has this exact shape:
+Output a single JSON object wrapped in <DELIVERABLES></DELIVERABLES> tags. The JSON has exactly two top-level fields: sopData (Deliverable 1) and gameplanData (Deliverable 2). The Markdown versions of both deliverables are derived from this structured data automatically; you do NOT need to produce them.
 
 <DELIVERABLES>
 {
-  "sopMarkdown": "string containing Deliverable 1 in clean Markdown, see format below",
-  "gameplanMarkdown": "string containing Deliverable 2 in clean Markdown, see format below",
-  "gameplanData": {
-    "whatWeHeard": "the warm summary paragraph from the game plan",
-    "bottlenecks": [{ "category": "Getting Customers | Following Up | Delivering the Work | Communicating with Customers | Running the Business", "note": "1 to 2 sentences specific to this client" }],
-    "topThreeOpportunities": [
-      {
-        "name": "short name",
-        "process": "which workflow this connects to",
-        "whatItDoes": "1 to 2 sentences",
-        "whyItMatters": "1 to 2 sentences",
-        "toolsLikelyInvolved": ["tool", "tool"],
-        "difficulty": "Low | Medium | High",
-        "impact": "Low | Medium | High",
-        "confidence": "Low | Medium | High",
-        "suggestedFirstStep": "the first concrete action Practical AI Co. would take, written in first-person plural. WE take this step, not the client. Example: 'We would connect to your ServiceTitan account and map the current lead routing rules' or 'We would draft the Monday morning triage logic and walk through it with you.' Never assign research or homework to the client."
-      }
-    ],
-    "bestFirstBuild": {
-      "name": "the chosen first build",
-      "whyFirst": "why this one comes first",
-      "whatItSolves": "the pain it removes",
-      "whatPaicWillBuild": "what Practical AI Co. would build with the client",
-      "whatsIncluded": "what would be in the first version",
-      "successLooksLike": "what success looks like in plain words"
-    },
-    "whatNotToAutomateYet": "one honest recommendation",
-    "thirtyDayPlan": {
-      "week1": "what we do together in week 1",
-      "week2": "what we build in week 2",
-      "week3": "what we test with real work in week 3",
-      "week4": "what we refine and hand off in week 4"
-    },
-    "recommendedNextStep": "the recommended next step with Practical AI Co. (review the documentation, confirm open questions, scope the first build)"
-  },
   "sopData": {
-    "businessOverview": "2 to 3 sentence plain-English summary of the business",
+    "businessOverview": "3 to 5 sentence plain-English summary of the business: name, industry, team size, primary customer, core services, current tools, main operational pain.",
     "workflows": [
       {
-        "name": "workflow name matching the SOP",
+        "name": "the workflow name as it would appear in a process library",
         "atAGlance": {
-          "purpose": "short phrase: what this workflow is designed to accomplish",
+          "purpose": "1 sentence: what this workflow is designed to accomplish",
           "owner": "primary role who owns this workflow",
           "trigger": "what starts this workflow",
-          "time": "rough estimate of time per occurrence, or omit if unknown",
+          "time": "rough time estimate per occurrence, or omit if unknown",
           "tools": ["specific tool name", "specific tool name"],
-          "output": "what this workflow produces when done correctly",
+          "output": "what this workflow produces when done",
           "successMetric": "how you know this workflow went well"
         },
         "steps": [
           {
             "number": 1,
-            "title": "Short action title (or a yes/no question for decision steps)",
-            "whatToDo": "1 to 2 sentences describing the action. For decision steps, describe what the owner must determine.",
+            "title": "short action title (or a yes/no question for decision steps)",
+            "whatToDo": "1 to 2 sentences describing the action, or what the owner must determine for decision steps",
             "doneWhen": "the completion condition for this step",
             "owner": "role or name",
             "tool": "tool, location, or method used",
@@ -122,163 +87,74 @@ Output a single JSON object wrapped in <DELIVERABLES></DELIVERABLES> tags. The J
             "ifNo": null
           }
         ],
-        "qualityChecks": ["check 1", "check 2"],
+        "qualityChecks": ["check 1", "check 2", "check 3"],
         "commonMistakes": ["mistake or pitfall 1", "mistake or pitfall 2"]
       }
     ]
+  },
+  "gameplanData": {
+    "whatWeHeard": "a warm, accurate 4 to 6 sentence summary paragraph of the business and its operational reality. The client should feel understood.",
+    "bottlenecks": [
+      { "category": "Getting Customers | Following Up | Delivering the Work | Communicating with Customers | Running the Business", "note": "1 to 2 sentences specific to this client" }
+    ],
+    "topThreeOpportunities": [
+      {
+        "name": "short name",
+        "process": "which workflow this connects to",
+        "whatItDoes": "1 to 2 sentences in plain English",
+        "whyItMatters": "1 to 2 sentences about why this is right for THIS business",
+        "toolsLikelyInvolved": ["tool", "tool"],
+        "difficulty": "Low | Medium | High",
+        "impact": "Low | Medium | High",
+        "confidence": "Low | Medium | High",
+        "suggestedFirstStep": "the first concrete action Practical AI Co. would take, written in first-person plural. WE take this step, not the client. Example: 'We would connect to your ServiceTitan account and map the current lead routing rules.' Never assign research or homework to the client."
+      }
+    ],
+    "bestFirstBuild": {
+      "name": "the chosen first build",
+      "whyFirst": "2 to 3 sentences",
+      "whatItSolves": "the pain it removes",
+      "whatPaicWillBuild": "what Practical AI Co. would build with the client, in we language",
+      "whatsIncluded": "brief list of what gets shipped in the first version",
+      "successLooksLike": "plain words describing the change the owner will feel"
+    },
+    "whatNotToAutomateYet": "one honest paragraph picking something that genuinely shouldn't be automated yet (requires judgment, isn't documented enough, volume too low). This builds trust.",
+    "thirtyDayPlan": {
+      "week1": "what we do together in week 1",
+      "week2": "what we build in week 2",
+      "week3": "what we test with real work in week 3",
+      "week4": "what we refine and hand off in week 4"
+    },
+    "recommendedNextStep": "the recommended next step with Practical AI Co.: review the documentation together, confirm open questions, scope the first build. End with the CTA to reply or book another time with Joe."
   }
 }
 </DELIVERABLES>
 
-IMPORTANT rules for sopData:
-- steps should be card-length, not document-length. Full detail lives in sopMarkdown.
+==========================================================
+RULES FOR sopData
+==========================================================
+- Workflows array: one entry per workflow the client walked through. Use the workflow name as it would appear in a process library.
+- Steps are card-length, not document-length. Each step is a single action or decision.
+- PRESERVE THE DETAIL the owner described. If they described 20 sub-steps, produce 20 steps. Do not summarize or consolidate sub-steps that the owner explicitly walked through.
+- Include 8 to 30 steps per workflow depending on what the interview produced.
 - isDecision: true for any step that requires a yes/no choice that changes what happens next. Title must be phrased as a question for decision steps.
-- ifYes and ifNo describe the two paths for decision steps (null for non-decision steps).
-- automatable: true only when AI or automation could genuinely reduce human effort on this specific step.
-- automationNote must use we language: "we would...", "we could build...", "where we'd start...". Never "you should" or "the client should".
-- Include 8 to 20 steps per workflow. Fewer is fine for simpler workflows.
-- qualityChecks: 3 to 5 items. commonMistakes: 2 to 4 items.
+- ifYes and ifNo: short descriptions of the two paths (only set for decision steps, null otherwise).
+- automatable: true only when AI or automation could genuinely reduce human effort on THIS specific step.
+- automationNote: must use we language ("we would...", "we could build...", "where we'd start..."). Never "you should" or "the client should". null when not automatable.
+- qualityChecks: 3 to 5 items. Each is a short sentence describing what done-right looks like.
+- commonMistakes: 2 to 4 items. Real pitfalls or anti-patterns to avoid.
 
 ==========================================================
-DELIVERABLE 1: HERE'S YOUR FIRST PROCESS, MAPPED OUT
+RULES FOR gameplanData
 ==========================================================
+- whatWeHeard: warm, specific, 4 to 6 sentences. The client should feel heard, not lectured.
+- bottlenecks: 3 to 5 items. Only use categories that are relevant. Each note is 1 to 2 sentences and specific to this client.
+- topThreeOpportunities: exactly 3 opportunities. Each suggestedFirstStep MUST use first-person plural and describe what Practical AI Co. does, never what the client should do.
+- bestFirstBuild: must be one of the topThreeOpportunities (pick the highest-impact, lowest-friction one).
+- whatNotToAutomateYet: pick something real. This builds trust by showing restraint.
+- thirtyDayPlan: each week phrased in we language. Week 1 is process finalization and discovery. Week 2 is the first build. Week 3 is testing. Week 4 is refinement and handoff.
 
-The sopMarkdown field contains a complete, Notion-ready Markdown document with this exact structure:
-
-# Business Process Documentation
-
-## Business Overview
-A 3 to 5 sentence summary of: business name, industry, team size, primary customer type, core services, current tools, main operational pain points.
-
-## Workflow Index
-A Markdown table with these columns:
-| Workflow | Owner | Trigger | Tools | Pain Level | Automation Potential | Documentation Completeness |
-
-One row per workflow they walked through. Pain Level, Automation Potential, and Documentation Completeness are each one of: Low / Medium / High.
-
-## SOP: [Workflow Name]
-
-For EACH workflow they walked through, include a full SOP with this structure (replace [Workflow Name] with the actual workflow name):
-
-### Purpose
-What this workflow is designed to accomplish (2 to 3 sentences).
-
-### When This Process Starts
-The trigger.
-
-### When This Process Ends
-The completion point.
-
-### Owner
-Who owns this workflow.
-
-### People Involved
-Roles or names of others.
-
-### Tools and Systems Used
-A bulleted list. Be specific: name actual tools (Gmail, ServiceTitan, QuickBooks, iMessage, a Google Sheet).
-
-### Inputs Needed
-A bulleted list of required information, documents, customer details, forms, approvals.
-
-### Step-by-Step Process
-A numbered list. PRESERVE EVERY SUB-STEP the owner described. Do not summarize. Do not consolidate. Aim for 15 to 30+ steps per workflow if the interview produced that much detail.
-
-Each step should follow this format:
-**Step N: [Action]**
-- Owner: who does it
-- Tool: which tool or location
-- Output: what this step produces
-- Notes: optional one-liner if there's something important
-
-### Decision Points
-Bulleted list. Each one: "If X then Y" or "When X, the owner has to decide Y".
-
-### Handoffs
-Bulleted list. Who passes what to whom, where the handoff happens, what confirms the next person has what they need.
-
-### Exceptions and Edge Cases
-Bulleted list. Common situations that don't follow the normal path.
-
-### Quality Standards
-What "done right" looks like.
-
-### Current Bottlenecks
-Bulleted list. Where the process slows, breaks, or depends too much on memory.
-
-### Risks
-Bulleted list. What can go wrong if the process isn't followed.
-
-### Improvement Opportunities
-NON-AI process improvements first. Bulleted list.
-
-### AI and Automation Opportunities
-Practical places where AI or automation could help. Bulleted list. Phrase each one as something Practical AI Co. could build with the client.
-
-### Open Questions
-Bulleted list of anything still unclear. Use phrases like "(open question, to confirm with Joe)".
-
-==========================================================
-DELIVERABLE 2: YOUR PRACTICAL AI GAME PLAN
-==========================================================
-
-The gameplanMarkdown field contains a Notion-ready Markdown document with this exact structure:
-
-# Your Practical AI Game Plan
-
-## What We Heard
-A warm, accurate summary paragraph of the business and its operational reality. The client should feel understood. 4 to 6 sentences.
-
-## Where Work Is Getting Stuck
-3 to 5 bottlenecks. For each one:
-
-### [Bottleneck category: Getting Customers / Following Up / Delivering the Work / Communicating with Customers / Running the Business]
-1 to 2 sentences describing what's stuck for this specific client.
-
-Only include the categories that are relevant. You don't need to use all of them.
-
-## Top 3 AI Opportunities
-
-For each opportunity (exactly 3):
-
-### Opportunity 1: [Name]
-**Process:** Which workflow this connects to
-**What it does:** 1 to 2 sentences in plain English
-**Why it matters:** 1 to 2 sentences about why this is right for THIS business
-**Tools likely involved:** brief list
-**Difficulty:** Low / Medium / High
-**Impact:** Low / Medium / High
-**Confidence:** Low / Medium / High
-**Suggested first step:** What Practical AI Co. would do first
-
-## Best First Build
-**The chosen build:** [Name]
-
-**Why this comes first:** 2 to 3 sentences.
-
-**What it solves:** the specific pain it removes.
-
-**What we'd build together:** what Practical AI Co. would build with the client. Use "we" language.
-
-**What's included in the first version:** brief list of what gets shipped.
-
-**What success looks like:** plain words describing the change the owner will feel.
-
-## What We Would Not Automate Yet
-One honest paragraph. Pick something that genuinely shouldn't be automated yet (probably requires judgment, isn't documented enough, or volume is too low). This builds trust.
-
-## Suggested 30-Day Plan
-- **Week 1:** Finalize process map and SOP. [add what else is appropriate]
-- **Week 2:** Build first automation. [add what else]
-- **Week 3:** Test with real work. [add what else]
-- **Week 4:** Train the team and refine. [add what else]
-
-## Recommended Next Step
-End with a clear recommendation that Practical AI Co. reviews the documentation, confirms open questions, and scopes the first build. Include the call to action: "Reply to this email or book another time with Joe to scope the first build together."
-
-==========================================================
-
-Output ONLY the JSON in <DELIVERABLES></DELIVERABLES> tags. No other text before or after.`;
+Output ONLY the JSON in <DELIVERABLES></DELIVERABLES> tags. No other text before or after. Do NOT include sopMarkdown or gameplanMarkdown fields. The server derives those from sopData and gameplanData.`;
 
 // ============================================================
 // Generate the deliverables
@@ -598,6 +474,160 @@ function markdownToInlineHtml(md) {
 }
 
 // ============================================================
+// Derive Markdown from structured data (for Notion + email attachment)
+// ============================================================
+function sopDataToMarkdown(sopData) {
+  if (!sopData || !Array.isArray(sopData.workflows)) return "";
+  const out = [];
+  out.push("# Business Process Documentation");
+  out.push("");
+  if (sopData.businessOverview) {
+    out.push("## Business Overview");
+    out.push("");
+    out.push(sopData.businessOverview);
+    out.push("");
+  }
+  if (sopData.workflows.length > 1) {
+    out.push("## Workflow Index");
+    out.push("");
+    out.push("| Workflow | Owner | Trigger | Tools |");
+    out.push("|----------|-------|---------|-------|");
+    sopData.workflows.forEach((w) => {
+      const ag = w.atAGlance || {};
+      const tools = Array.isArray(ag.tools) ? ag.tools.join(", ") : (ag.tools || "");
+      out.push(`| ${w.name || ""} | ${ag.owner || ""} | ${ag.trigger || ""} | ${tools} |`);
+    });
+    out.push("");
+  }
+  for (const w of sopData.workflows) {
+    out.push("---");
+    out.push("");
+    out.push(`## SOP: ${w.name || "Untitled Workflow"}`);
+    out.push("");
+    const ag = w.atAGlance || {};
+    out.push("### At a Glance");
+    out.push("");
+    if (ag.purpose)       out.push(`- **Purpose:** ${ag.purpose}`);
+    if (ag.owner)         out.push(`- **Owner:** ${ag.owner}`);
+    if (ag.trigger)       out.push(`- **Trigger:** ${ag.trigger}`);
+    if (ag.time)          out.push(`- **Time:** ${ag.time}`);
+    if (ag.tools)         out.push(`- **Tools:** ${Array.isArray(ag.tools) ? ag.tools.join(", ") : ag.tools}`);
+    if (ag.output)        out.push(`- **Output:** ${ag.output}`);
+    if (ag.successMetric) out.push(`- **Success Metric:** ${ag.successMetric}`);
+    out.push("");
+    if (Array.isArray(w.steps) && w.steps.length) {
+      out.push("### Step-by-Step Process");
+      out.push("");
+      for (const s of w.steps) {
+        const dec = s.isDecision;
+        const title = dec ? `Decision: ${s.title || ""}` : (s.title || "");
+        out.push(`**Step ${s.number || ""}: ${title}**`);
+        if (s.owner)    out.push(`- Owner: ${s.owner}`);
+        if (s.tool)     out.push(`- Tool: ${s.tool}`);
+        if (s.whatToDo) out.push(`- ${dec ? "What to determine" : "What to do"}: ${s.whatToDo}`);
+        if (s.doneWhen) out.push(`- Done when: ${s.doneWhen}`);
+        if (dec) {
+          if (s.ifYes) out.push(`- If YES: ${s.ifYes}`);
+          if (s.ifNo)  out.push(`- If NO: ${s.ifNo}`);
+        }
+        if (s.automatable && s.automationNote) {
+          out.push(`- Automation opportunity: ${s.automationNote}`);
+        }
+        out.push("");
+      }
+    }
+    if (Array.isArray(w.qualityChecks) && w.qualityChecks.length) {
+      out.push("### Quality Checks");
+      out.push("");
+      w.qualityChecks.forEach((c) => out.push(`- ${c}`));
+      out.push("");
+    }
+    if (Array.isArray(w.commonMistakes) && w.commonMistakes.length) {
+      out.push("### Common Mistakes to Avoid");
+      out.push("");
+      w.commonMistakes.forEach((m) => out.push(`- ${m}`));
+      out.push("");
+    }
+  }
+  return out.join("\n");
+}
+
+function gameplanDataToMarkdown(gp) {
+  if (!gp) return "";
+  const out = [];
+  out.push("# Your Practical AI Game Plan");
+  out.push("");
+  if (gp.whatWeHeard) {
+    out.push("## What We Heard");
+    out.push("");
+    out.push(gp.whatWeHeard);
+    out.push("");
+  }
+  if (Array.isArray(gp.bottlenecks) && gp.bottlenecks.length) {
+    out.push("## Where Work Is Getting Stuck");
+    out.push("");
+    gp.bottlenecks.forEach((b) => {
+      out.push(`### ${b.category || ""}`);
+      out.push("");
+      out.push(b.note || "");
+      out.push("");
+    });
+  }
+  if (Array.isArray(gp.topThreeOpportunities) && gp.topThreeOpportunities.length) {
+    out.push("## Top 3 AI Opportunities");
+    out.push("");
+    gp.topThreeOpportunities.forEach((o, i) => {
+      out.push(`### Opportunity ${i + 1}: ${o.name || ""}`);
+      out.push("");
+      if (o.process)              out.push(`**Process:** ${o.process}`);
+      if (o.whatItDoes)           out.push(`**What it does:** ${o.whatItDoes}`);
+      if (o.whyItMatters)         out.push(`**Why it matters:** ${o.whyItMatters}`);
+      if (Array.isArray(o.toolsLikelyInvolved)) out.push(`**Tools likely involved:** ${o.toolsLikelyInvolved.join(", ")}`);
+      if (o.difficulty)           out.push(`**Difficulty:** ${o.difficulty}`);
+      if (o.impact)               out.push(`**Impact:** ${o.impact}`);
+      if (o.confidence)           out.push(`**Confidence:** ${o.confidence}`);
+      if (o.suggestedFirstStep)   out.push(`**Suggested first step:** ${o.suggestedFirstStep}`);
+      out.push("");
+    });
+  }
+  if (gp.bestFirstBuild) {
+    const b = gp.bestFirstBuild;
+    out.push("## Best First Build");
+    out.push("");
+    if (b.name)              out.push(`**The chosen build:** ${b.name}`);
+    out.push("");
+    if (b.whyFirst)          { out.push(`**Why this comes first:** ${b.whyFirst}`); out.push(""); }
+    if (b.whatItSolves)      { out.push(`**What it solves:** ${b.whatItSolves}`); out.push(""); }
+    if (b.whatPaicWillBuild) { out.push(`**What we'd build together:** ${b.whatPaicWillBuild}`); out.push(""); }
+    if (b.whatsIncluded)     { out.push(`**What's included in the first version:** ${b.whatsIncluded}`); out.push(""); }
+    if (b.successLooksLike)  { out.push(`**What success looks like:** ${b.successLooksLike}`); out.push(""); }
+  }
+  if (gp.whatNotToAutomateYet) {
+    out.push("## What We Would Not Automate Yet");
+    out.push("");
+    out.push(gp.whatNotToAutomateYet);
+    out.push("");
+  }
+  if (gp.thirtyDayPlan) {
+    const p = gp.thirtyDayPlan;
+    out.push("## Suggested 30-Day Plan");
+    out.push("");
+    if (p.week1) out.push(`- **Week 1:** ${p.week1}`);
+    if (p.week2) out.push(`- **Week 2:** ${p.week2}`);
+    if (p.week3) out.push(`- **Week 3:** ${p.week3}`);
+    if (p.week4) out.push(`- **Week 4:** ${p.week4}`);
+    out.push("");
+  }
+  if (gp.recommendedNextStep) {
+    out.push("## Recommended Next Step");
+    out.push("");
+    out.push(gp.recommendedNextStep);
+    out.push("");
+  }
+  return out.join("\n");
+}
+
+// ============================================================
 // SOP visual renderer (table-based for email safety)
 // ============================================================
 function renderSopEmailHtml(sopData) {
@@ -753,8 +783,10 @@ module.exports = async (req, res) => {
     return res.status(500).json({ error: "Generation failed: " + (err.message || "unknown") });
   }
 
-  const sopMarkdown = deliverables.sopMarkdown || "";
-  const gameplanMarkdown = deliverables.gameplanMarkdown || "";
+  const sopData = deliverables.sopData || null;
+  const gameplanData = deliverables.gameplanData || null;
+  const sopMarkdown = sopDataToMarkdown(sopData);
+  const gameplanMarkdown = gameplanDataToMarkdown(gameplanData);
 
   // 2. Notion page (fail soft)
   let notionUrl = null;
@@ -779,7 +811,6 @@ module.exports = async (req, res) => {
     const resend = new Resend(resendKey);
     const subjectClient = `Your Practical AI Co. process map: ${profile.businessName}`;
     const subjectJoe = `New /map session complete: ${profile.businessName}`;
-    const sopData = deliverables.sopData || null;
     const clientHtml = renderEmailHtml({ profile, notionUrl, gameplanMarkdown, sopData, isJoe: false });
     const joeHtml = renderEmailHtml({ profile, notionUrl, gameplanMarkdown, sopData, isJoe: true });
 
