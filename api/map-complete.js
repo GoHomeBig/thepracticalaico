@@ -20,7 +20,7 @@ const Anthropic = require("@anthropic-ai/sdk");
 const { Client: NotionClient } = require("@notionhq/client");
 const { Resend } = require("resend");
 
-const MODEL = "claude-sonnet-4-6";
+const MODEL = "claude-sonnet-4-5";
 const MAX_TOKENS = 16000;
 const SOP_LIBRARY_DB_ID = "362567cd-8712-8174-982d-ffa3a95e441c";
 const JOE_EMAIL = "joe@thepracticalai.co";
@@ -342,7 +342,13 @@ Generate the two deliverables. Output ONLY the JSON wrapped in <DELIVERABLES></D
     .map((b) => b.text)
     .join("");
   const match = text.match(/<DELIVERABLES>([\s\S]*?)<\/DELIVERABLES>/);
-  if (!match) throw new Error("Generation output missing <DELIVERABLES> tags");
+  if (!match) {
+    const stopReason = response.stop_reason || "unknown";
+    const usage = response.usage ? `in=${response.usage.input_tokens} out=${response.usage.output_tokens}` : "no usage";
+    const head = text.slice(0, 400).replace(/\n/g, " ");
+    const tail = text.slice(-400).replace(/\n/g, " ");
+    throw new Error(`Missing tags. stop=${stopReason} (${usage}) len=${text.length}. HEAD: ${head} || TAIL: ${tail}`);
+  }
   return JSON.parse(match[1].trim());
 }
 
