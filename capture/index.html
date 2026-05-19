@@ -1,0 +1,1348 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="robots" content="noindex,nofollow" />
+  <title>Capture &middot; Practical AI Co.</title>
+  <meta name="description" content="A guided session to map one of your business workflows. Practical AI Co. will turn it into a clean SOP and identify where AI can help first." />
+  <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32.png" />
+  <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16.png" />
+  <link rel="icon" type="image/x-icon" href="/favicon.ico" />
+  <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
+  <meta name="theme-color" content="#2456FF" />
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=Fraunces:opsz,wght@9..144,700;9..144,800&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --ink: #111827;
+      --charcoal: #172033;
+      --blue: #2456FF;
+      --blue-dark: #173BD7;
+      --cream: #FBF5EA;
+      --paper: #FFFDF8;
+      --green: #2F8F5B;
+      --amber: #B45309;
+      --muted: #667085;
+      --muted-2: #8A93A5;
+      --line: #E7DCCB;
+      --white: #FFFFFF;
+      --shadow-soft: 0 16px 40px rgba(17, 24, 39, 0.08);
+      --shadow: 0 20px 60px rgba(17, 24, 39, 0.12);
+      --radius: 24px;
+    }
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body {
+      margin: 0;
+      font-family: Inter, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      color: var(--charcoal);
+      background: var(--cream);
+      line-height: 1.55;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+    a { color: inherit; text-decoration: none; }
+    .container { width: min(820px, calc(100% - 32px)); margin: 0 auto; }
+
+    /* Nav */
+    .nav {
+      background: rgba(251, 245, 234, 0.92);
+      backdrop-filter: blur(16px);
+      border-bottom: 1px solid rgba(231, 220, 203, 0.78);
+    }
+    .nav-inner { min-height: 72px; display: flex; align-items: center; justify-content: space-between; gap: 16px; }
+    .brand { display: inline-flex; align-items: center; gap: 12px; }
+    .brand-mark {
+      width: 42px; height: 42px;
+      border-radius: 12px;
+      background: var(--paper);
+      border: 1px solid rgba(23, 32, 51, 0.10);
+      box-shadow: 0 8px 20px rgba(17, 24, 39, 0.06);
+      display: grid;
+      place-items: center;
+      color: var(--blue);
+    }
+    .repeat-logo { width: 26px; height: 26px; }
+    .wordmark-title {
+      font-family: Fraunces, Georgia, serif;
+      font-weight: 800;
+      letter-spacing: -0.03em;
+      color: var(--charcoal);
+      font-size: 22px;
+      line-height: 1;
+    }
+    .wordmark-title .ai { color: var(--blue); }
+    .nav-tag {
+      font-size: 11px;
+      font-weight: 900;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: var(--blue);
+      padding: 6px 12px;
+      border-radius: 999px;
+      background: rgba(36, 86, 255, 0.08);
+    }
+    @media (max-width: 540px) { .nav-tag { display: none; } }
+
+    /* Buttons */
+    .button {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      min-height: 48px;
+      padding: 0 22px;
+      border-radius: 999px;
+      border: 0;
+      font-family: inherit;
+      font-size: 15px;
+      font-weight: 800;
+      cursor: pointer;
+      transition: transform 160ms ease, background 160ms ease, box-shadow 160ms ease, opacity 160ms ease;
+      white-space: nowrap;
+    }
+    .button:hover { transform: translateY(-1px); }
+    .button:disabled { opacity: 0.5; cursor: not-allowed; transform: none; }
+    .button-primary {
+      background: var(--blue);
+      color: var(--white);
+      box-shadow: 0 12px 28px rgba(36, 86, 255, 0.22);
+    }
+    .button-primary:hover:not(:disabled) { background: var(--blue-dark); }
+    .button-light {
+      background: var(--paper);
+      color: var(--charcoal);
+      border: 1px solid var(--line);
+      box-shadow: 0 8px 20px rgba(17, 24, 39, 0.06);
+    }
+    .button-ghost { background: transparent; color: var(--muted); box-shadow: none; }
+    .button-row { display: flex; gap: 10px; flex-wrap: wrap; }
+
+    main { flex: 1; padding: 40px 0 80px; }
+    .screen { animation: fadeIn 320ms ease both; }
+    @keyframes fadeIn { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: translateY(0); } }
+
+    /* Typography */
+    .eyebrow {
+      color: var(--blue);
+      font-size: 12px;
+      font-weight: 900;
+      text-transform: uppercase;
+      letter-spacing: 0.18em;
+      margin-bottom: 12px;
+    }
+    h1 {
+      font-family: Fraunces, Georgia, serif;
+      font-size: clamp(32px, 5vw, 50px);
+      line-height: 1.06;
+      letter-spacing: -0.03em;
+      color: var(--charcoal);
+      margin: 0 0 16px;
+    }
+    h2 {
+      font-family: Fraunces, Georgia, serif;
+      font-size: clamp(24px, 3.4vw, 32px);
+      line-height: 1.12;
+      letter-spacing: -0.025em;
+      color: var(--charcoal);
+      margin: 0 0 12px;
+    }
+    h3 {
+      font-family: Fraunces, Georgia, serif;
+      font-size: 20px;
+      line-height: 1.2;
+      letter-spacing: -0.022em;
+      color: var(--charcoal);
+      margin: 0 0 10px;
+    }
+    .lede { font-size: 17px; color: var(--muted); line-height: 1.6; margin: 0 0 18px; }
+    p { margin: 0 0 12px; }
+
+    /* Resume banner */
+    .resume-banner {
+      background: rgba(36, 86, 255, 0.07);
+      border: 1px solid rgba(36, 86, 255, 0.20);
+      border-radius: 14px;
+      padding: 14px 18px;
+      margin-bottom: 24px;
+      display: flex;
+      gap: 14px;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      font-size: 14.5px;
+    }
+    .resume-banner .actions { display: flex; gap: 8px; }
+    .resume-banner button {
+      background: none;
+      border: 1px solid var(--line);
+      padding: 7px 14px;
+      font-family: inherit;
+      font-size: 13px;
+      font-weight: 700;
+      color: var(--charcoal);
+      border-radius: 999px;
+      cursor: pointer;
+    }
+    .resume-banner button.primary { background: var(--blue); color: white; border-color: var(--blue); }
+
+    /* Welcome */
+    .welcome-prep {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      padding: 7px 14px;
+      border-radius: 999px;
+      background: rgba(36, 86, 255, 0.08);
+      color: var(--blue);
+      font-size: 11.5px;
+      font-weight: 800;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      margin-bottom: 22px;
+    }
+    .welcome-prep .dot { width: 8px; height: 8px; background: var(--blue); border-radius: 999px; animation: pulseDot 1.8s ease-in-out infinite; }
+    @keyframes pulseDot { 0%, 100% { opacity: 0.5; } 50% { opacity: 1; } }
+    .welcome-get {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 14px;
+      margin: 24px 0 32px;
+    }
+    .welcome-get-card {
+      background: var(--paper);
+      border: 1px solid var(--line);
+      border-radius: 16px;
+      padding: 20px 22px;
+      box-shadow: var(--shadow-soft);
+    }
+    .welcome-get-card .num {
+      font-family: Fraunces, Georgia, serif;
+      color: var(--blue);
+      font-size: 24px;
+      font-weight: 800;
+      margin-bottom: 6px;
+    }
+    .welcome-get-card .label { font-weight: 800; color: var(--charcoal); margin-bottom: 4px; }
+    .welcome-get-card .hint { color: var(--muted); font-size: 14px; line-height: 1.5; }
+    @media (max-width: 540px) { .welcome-get { grid-template-columns: 1fr; } }
+
+    /* Form */
+    .form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 14px 18px; margin-top: 24px; }
+    .form-grid label.full { grid-column: 1 / -1; }
+    .form-grid label {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+      font-weight: 700;
+      font-size: 14px;
+      color: var(--charcoal);
+    }
+    .form-grid label small { color: var(--muted); font-weight: 500; font-size: 12.5px; }
+    .form-grid input, .form-grid textarea {
+      font: inherit;
+      padding: 13px 16px;
+      border-radius: 12px;
+      border: 1px solid var(--line);
+      background: var(--paper);
+      color: var(--charcoal);
+      width: 100%;
+      transition: border-color 160ms ease, box-shadow 160ms ease;
+    }
+    .form-grid input:focus, .form-grid textarea:focus {
+      outline: 0;
+      border-color: var(--blue);
+      box-shadow: 0 0 0 4px rgba(36, 86, 255, 0.10);
+    }
+    @media (max-width: 540px) { .form-grid { grid-template-columns: 1fr; } }
+
+    /* Chat */
+    .chat-wrap {
+      background: var(--paper);
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow-soft);
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      min-height: 60vh;
+    }
+    .chat-head {
+      padding: 18px 22px;
+      border-bottom: 1px solid var(--line);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 14px;
+    }
+    .chat-head .label {
+      font-size: 11px;
+      font-weight: 900;
+      text-transform: uppercase;
+      letter-spacing: 0.16em;
+      color: var(--blue);
+    }
+    .chat-head .process { font-family: Fraunces, Georgia, serif; font-weight: 800; font-size: 19px; color: var(--charcoal); }
+    .chat-head button.exit {
+      background: transparent;
+      border: 1px solid var(--line);
+      color: var(--muted);
+      font: inherit;
+      font-size: 12.5px;
+      font-weight: 700;
+      padding: 7px 14px;
+      border-radius: 999px;
+      cursor: pointer;
+    }
+    .chat-log { padding: 22px; flex: 1; overflow-y: auto; max-height: 60vh; min-height: 280px; }
+    .msg { max-width: 80%; padding: 13px 18px; border-radius: 18px; margin-bottom: 12px; font-size: 15.5px; line-height: 1.55; white-space: pre-wrap; }
+    .msg-assistant { background: var(--cream); color: var(--charcoal); border: 1px solid var(--line); border-top-left-radius: 6px; }
+    .msg-user { background: var(--blue); color: var(--white); margin-left: auto; border-top-right-radius: 6px; }
+    .msg-typing { display: inline-flex; gap: 4px; padding: 16px 20px; background: var(--cream); border: 1px solid var(--line); border-radius: 18px; margin-bottom: 12px; }
+    .msg-typing span { width: 7px; height: 7px; background: var(--muted-2); border-radius: 999px; animation: bounce 1.2s infinite ease-in-out; }
+    .msg-typing span:nth-child(2) { animation-delay: 0.18s; }
+    .msg-typing span:nth-child(3) { animation-delay: 0.36s; }
+    @keyframes bounce { 0%, 80%, 100% { transform: translateY(0); opacity: 0.4; } 40% { transform: translateY(-6px); opacity: 1; } }
+    .chat-input-form {
+      border-top: 1px solid var(--line);
+      padding: 16px;
+      display: flex;
+      gap: 12px;
+      align-items: flex-end;
+    }
+    .chat-input-form textarea {
+      flex: 1;
+      padding: 14px 16px;
+      border: 1px solid var(--line);
+      border-radius: 16px;
+      background: var(--cream);
+      font: inherit;
+      font-size: 15.5px;
+      color: var(--charcoal);
+      resize: none;
+      min-height: 56px;
+      max-height: 200px;
+      transition: border-color 160ms ease, box-shadow 160ms ease;
+    }
+    .chat-input-form textarea:focus { outline: 0; border-color: var(--blue); box-shadow: 0 0 0 4px rgba(36, 86, 255, 0.10); }
+    .chat-input-form button { min-height: 56px; }
+
+    /* Processing */
+    .processing {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+      padding: 60px 24px;
+    }
+    .processing-spinner {
+      width: 56px; height: 56px;
+      border: 3px solid var(--line);
+      border-top-color: var(--blue);
+      border-radius: 999px;
+      animation: spin 0.9s linear infinite;
+      margin-bottom: 28px;
+    }
+    @keyframes spin { to { transform: rotate(360deg); } }
+    .processing-checklist { list-style: none; padding: 0; margin: 0 0 0; max-width: 460px; width: 100%; }
+    .processing-checklist li {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      padding: 13px 18px;
+      background: var(--paper);
+      border: 1px solid var(--line);
+      border-radius: 14px;
+      margin: 10px 0;
+      font-size: 15px;
+      color: var(--muted);
+      text-align: left;
+      transition: all 260ms ease;
+    }
+    .processing-checklist li.active { border-color: var(--blue); color: var(--charcoal); box-shadow: 0 0 0 4px rgba(36, 86, 255, 0.08); }
+    .processing-checklist li.done { border-color: rgba(47, 143, 91, 0.35); color: var(--green); background: rgba(47, 143, 91, 0.05); }
+    .processing-checklist .dot {
+      width: 22px; height: 22px;
+      border-radius: 999px;
+      border: 2px solid var(--line);
+      display: grid; place-items: center;
+      flex-shrink: 0;
+      color: transparent;
+      font-size: 12px;
+      font-weight: 900;
+    }
+    .processing-checklist li.active .dot { background: var(--blue); border-color: var(--blue); color: white; }
+    .processing-checklist li.active .dot::after { content: "•"; }
+    .processing-checklist li.done .dot { background: var(--green); border-color: var(--green); color: white; }
+    .processing-checklist li.done .dot::after { content: "✓"; }
+
+    /* Results */
+    .results-hero {
+      background: var(--paper);
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      padding: 32px 36px;
+      margin-bottom: 28px;
+      box-shadow: var(--shadow-soft);
+    }
+    .results-hero .biz { color: var(--muted); font-weight: 700; font-size: 13px; letter-spacing: 0.04em; text-transform: uppercase; margin-bottom: 8px; }
+    .results-hero h1 { margin-bottom: 12px; font-size: clamp(28px, 4vw, 38px); }
+    .results-hero p { color: var(--charcoal); font-size: 16px; line-height: 1.6; margin: 0; }
+
+    .section {
+      background: var(--paper);
+      border: 1px solid var(--line);
+      border-radius: 18px;
+      padding: 28px 30px;
+      margin-bottom: 18px;
+      box-shadow: 0 8px 22px rgba(17, 24, 39, 0.04);
+    }
+    .section h2 { margin: 0 0 6px; font-size: 22px; }
+    .section .subhead { color: var(--muted); font-size: 14px; margin: 0 0 18px; }
+
+    /* Process map */
+    .map { position: relative; }
+    .map-step {
+      display: flex;
+      gap: 14px;
+      align-items: flex-start;
+      margin-bottom: 10px;
+    }
+    .map-step-num {
+      flex-shrink: 0;
+      width: 38px; height: 38px;
+      border-radius: 999px;
+      background: var(--blue);
+      color: white;
+      font-weight: 900;
+      font-size: 14px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-top: 2px;
+    }
+    .map-step-card {
+      flex: 1;
+      background: var(--cream);
+      border: 1px solid var(--line);
+      border-radius: 14px;
+      padding: 16px 18px;
+    }
+    .map-step-title { font-weight: 800; font-size: 16px; color: var(--charcoal); margin-bottom: 6px; }
+    .map-step-desc { font-size: 14.5px; color: var(--charcoal); line-height: 1.55; margin-bottom: 10px; }
+    .map-step-meta { display: grid; gap: 6px; margin-top: 6px; }
+    .map-step-meta div { font-size: 13px; color: var(--muted); }
+    .map-step-meta b { color: var(--charcoal); font-weight: 700; }
+    .map-step-friction {
+      margin-top: 10px;
+      padding: 9px 12px;
+      background: rgba(180, 83, 9, 0.07);
+      border-left: 3px solid var(--amber);
+      border-radius: 0 8px 8px 0;
+      font-size: 13px;
+      color: var(--charcoal);
+    }
+    .map-step-friction b { color: var(--amber); font-weight: 800; text-transform: uppercase; letter-spacing: 0.08em; font-size: 11px; display: block; margin-bottom: 3px; }
+    .map-inputs {
+      margin-bottom: 10px;
+      padding: 9px 12px;
+      background: var(--paper);
+      border: 1px dashed var(--line);
+      border-radius: 8px;
+      font-size: 13px;
+    }
+    .map-inputs b { color: var(--blue); font-weight: 800; text-transform: uppercase; letter-spacing: 0.08em; font-size: 11px; display: block; margin-bottom: 4px; }
+    .map-inputs ul { margin: 0; padding-left: 18px; color: var(--charcoal); }
+    .map-inputs li { margin: 2px 0; }
+    .automation-chip {
+      margin-top: 10px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 10px 14px;
+      background: rgba(36, 86, 255, 0.07);
+      border-left: 3px solid var(--blue);
+      border-radius: 0 10px 10px 0;
+    }
+    .automation-chip .logo {
+      width: 22px; height: 22px;
+      flex-shrink: 0;
+      color: var(--blue);
+    }
+    .automation-chip .text { font-size: 13.5px; color: var(--charcoal); }
+    .automation-chip .text b { color: var(--blue); font-weight: 800; text-transform: uppercase; letter-spacing: 0.08em; font-size: 11px; display: block; margin-bottom: 2px; }
+
+    /* Branch card */
+    .branch {
+      margin: 6px 0 6px 52px;
+      background: rgba(180, 83, 9, 0.05);
+      border: 1px solid rgba(180, 83, 9, 0.25);
+      border-radius: 14px;
+      padding: 14px 16px;
+    }
+    .branch-label { font-size: 10.5px; font-weight: 900; color: var(--amber); text-transform: uppercase; letter-spacing: 0.1em; margin-bottom: 6px; }
+    .branch-question { font-weight: 800; color: var(--charcoal); margin-bottom: 10px; }
+    .branch-paths { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+    @media (max-width: 540px) { .branch-paths { grid-template-columns: 1fr; } }
+    .branch-path { padding: 10px 12px; border-radius: 10px; }
+    .branch-path.yes { background: rgba(47, 143, 91, 0.10); }
+    .branch-path.no  { background: rgba(180, 83, 9, 0.10); }
+    .branch-path-label { font-size: 10.5px; font-weight: 900; text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 4px; }
+    .branch-path.yes .branch-path-label { color: var(--green); }
+    .branch-path.no  .branch-path-label { color: var(--amber); }
+    .branch-path-text { font-size: 13.5px; color: var(--charcoal); }
+
+    /* Generic cards */
+    .stack { display: grid; gap: 14px; }
+    .item-card {
+      background: var(--cream);
+      border: 1px solid var(--line);
+      border-radius: 14px;
+      padding: 16px 18px;
+    }
+    .item-card h4 { margin: 0 0 6px; font-family: Fraunces, Georgia, serif; font-size: 17px; letter-spacing: -0.02em; color: var(--charcoal); font-weight: 800; }
+    .item-card p { margin: 0 0 8px; font-size: 14.5px; color: var(--charcoal); line-height: 1.55; }
+    .item-card .pill { display: inline-block; background: rgba(36,86,255,0.08); color: var(--blue); font-size: 11px; font-weight: 800; padding: 3px 10px; border-radius: 999px; letter-spacing: 0.06em; text-transform: uppercase; margin-right: 6px; margin-bottom: 4px; }
+    .item-card .pill.role { background: rgba(180,83,9,0.10); color: var(--amber); }
+    .item-card .pill.diff { background: rgba(47,143,91,0.10); color: var(--green); }
+    .item-card .meta { font-size: 13px; color: var(--muted); margin-top: 6px; }
+    .item-card .meta b { color: var(--charcoal); font-weight: 700; }
+
+    /* SOP rendering */
+    .sop-block { margin-bottom: 14px; }
+    .sop-block h4 { font-family: Fraunces, Georgia, serif; font-size: 18px; letter-spacing: -0.018em; color: var(--charcoal); margin: 0 0 6px; }
+    .sop-block p { font-size: 15px; line-height: 1.6; margin: 0 0 8px; color: var(--charcoal); }
+
+    /* Recommended first build */
+    .first-build {
+      background: linear-gradient(180deg, rgba(36, 86, 255, 0.07), rgba(36, 86, 255, 0.02));
+      border: 1px solid rgba(36, 86, 255, 0.25);
+    }
+    .first-build .pill-large { display: inline-block; background: var(--blue); color: white; font-size: 11px; font-weight: 900; padding: 5px 12px; border-radius: 999px; letter-spacing: 0.1em; text-transform: uppercase; margin-bottom: 12px; }
+
+    /* Action footer */
+    .actions-footer {
+      background: var(--charcoal);
+      color: var(--white);
+      border-radius: var(--radius);
+      padding: 32px 36px;
+      margin-top: 28px;
+      box-shadow: var(--shadow);
+    }
+    .actions-footer h3 { color: var(--white); font-size: 22px; margin: 0 0 8px; }
+    .actions-footer p { color: rgba(255,255,255,0.78); font-size: 14.5px; margin: 0 0 18px; }
+    .actions-footer .button-row { gap: 12px; }
+    .notion-status {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      margin-top: 14px;
+      padding: 10px 14px;
+      background: rgba(255,255,255,0.08);
+      border-radius: 999px;
+      font-size: 13px;
+      color: rgba(255,255,255,0.85);
+    }
+    .notion-status .dot { width: 8px; height: 8px; border-radius: 999px; background: var(--green); }
+
+    .err {
+      margin-top: 14px;
+      padding: 11px 16px;
+      border-radius: 12px;
+      background: rgba(220, 38, 38, 0.08);
+      color: #B91C1C;
+      border: 1px solid rgba(220, 38, 38, 0.20);
+      font-size: 14px;
+    }
+
+    footer {
+      background: var(--charcoal);
+      color: rgba(255,255,255,0.6);
+      padding: 28px 0;
+      font-size: 13px;
+    }
+    .footer-inner { display: flex; align-items: center; justify-content: space-between; gap: 14px; flex-wrap: wrap; }
+    footer a { color: rgba(255,255,255,0.85); text-decoration: underline; }
+  </style>
+</head>
+<body>
+  <!-- Repeat-arrows logo symbol, used as <use> below -->
+  <svg width="0" height="0" style="position:absolute" aria-hidden="true">
+    <symbol id="repeat-logo-symbol" viewBox="0 0 64 64">
+      <g fill="none" stroke="currentColor" stroke-width="5.6" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M17 30 C17 20 25 13 35 13 H49"/>
+        <path d="M42 6 L50 13 L42 20"/>
+        <path d="M47 34 C47 44 39 51 29 51 H15"/>
+        <path d="M22 58 L14 51 L22 44"/>
+      </g>
+    </symbol>
+  </svg>
+
+  <nav class="nav">
+    <div class="container nav-inner">
+      <a class="brand" href="/">
+        <div class="brand-mark"><svg class="repeat-logo"><use href="#repeat-logo-symbol"></use></svg></div>
+        <div class="wordmark-title">Practical <span class="ai">AI</span> Co.</div>
+      </a>
+      <div class="nav-tag">Capture</div>
+    </div>
+  </nav>
+
+  <main>
+    <div class="container">
+
+      <!-- ============================================================ WELCOME ============================================================ -->
+      <section id="welcomeView" class="screen">
+        <div id="resumeBanner" class="resume-banner" hidden>
+          <div>Welcome back. You have a capture session in progress.</div>
+          <div class="actions">
+            <button id="resumeContinueBtn" type="button" class="primary">Continue</button>
+            <button id="resumeStartOverBtn" type="button">Start over</button>
+          </div>
+        </div>
+
+        <div class="welcome-prep"><span class="dot"></span>Step 1 of 3 &middot; Capture</div>
+        <h1>Let's map one of your processes together.</h1>
+        <p class="lede">Most growing businesses run on conversations, memory, inboxes, spreadsheets, and people stepping in to save the day. That is normal. The work just needs to be visible. We will map one process today and find the smartest place AI can help.</p>
+
+        <div class="welcome-get">
+          <div class="welcome-get-card">
+            <div class="num">01</div>
+            <div class="label">A short conversation</div>
+            <div class="hint">No forms to wrestle with. Just answer in your own words. We adapt based on what you say.</div>
+          </div>
+          <div class="welcome-get-card">
+            <div class="num">02</div>
+            <div class="label">A clean process map</div>
+            <div class="hint">A simple visual of how your work actually happens today, including the branches and handoffs.</div>
+          </div>
+          <div class="welcome-get-card">
+            <div class="num">03</div>
+            <div class="label">A draft SOP</div>
+            <div class="hint">Pushable to Notion or downloadable as Word, ready to share with your team.</div>
+          </div>
+          <div class="welcome-get-card">
+            <div class="num">04</div>
+            <div class="label">A first AI build</div>
+            <div class="hint">One specific, practical place we can start. We do the building. You stay in your business.</div>
+          </div>
+        </div>
+
+        <button id="startBtn" type="button" class="button button-primary">Start mapping</button>
+        <p style="margin-top:14px; color:var(--muted); font-size:13.5px;">No perfect answers required. Just describe how the work happens today.</p>
+      </section>
+
+      <!-- ============================================================ PROFILE ============================================================ -->
+      <section id="profileView" class="screen" hidden>
+        <div class="eyebrow">Step 1 &middot; The basics</div>
+        <h2>Tell us a little about you and the process.</h2>
+        <p class="lede">Four short fields. Then we start the conversation.</p>
+
+        <form id="profileForm" autocomplete="on">
+          <div class="form-grid">
+            <label class="full">
+              <span>Your first name</span>
+              <input type="text" name="firstName" required autocomplete="given-name" />
+            </label>
+            <label class="full">
+              <span>Your email</span>
+              <input type="email" name="email" required autocomplete="email" />
+            </label>
+            <label class="full">
+              <span>Business name</span>
+              <input type="text" name="businessName" required autocomplete="organization" />
+            </label>
+            <label class="full">
+              <span>Process to map</span>
+              <input type="text" name="processName" required placeholder="Examples: Lead intake, Scheduling, Customer onboarding, Invoicing, Hiring" />
+            </label>
+          </div>
+          <div class="button-row" style="margin-top:24px;">
+            <button type="submit" class="button button-primary">Begin the conversation</button>
+            <button type="button" id="profileBackBtn" class="button button-ghost">Back</button>
+          </div>
+          <div id="profileErr" class="err" hidden></div>
+        </form>
+      </section>
+
+      <!-- ============================================================ CHAT ============================================================ -->
+      <section id="chatView" class="screen" hidden>
+        <div class="chat-wrap">
+          <div class="chat-head">
+            <div>
+              <div class="label">Mapping the process</div>
+              <div class="process" id="chatProcessLabel"></div>
+            </div>
+            <button id="chatExitBtn" class="exit" type="button">Save &amp; come back later</button>
+          </div>
+          <div id="chatLog" class="chat-log"></div>
+          <form id="chatForm" class="chat-input-form">
+            <textarea id="chatInput" name="message" rows="2" placeholder="Type your answer. Shift+Enter for a new line. Tap the mic on your phone keyboard to dictate." autocomplete="off" required></textarea>
+            <button type="submit" id="sendBtn" class="button button-primary">Send</button>
+          </form>
+        </div>
+        <div id="chatErr" class="err" hidden></div>
+      </section>
+
+      <!-- ============================================================ PROCESSING ============================================================ -->
+      <section id="processingView" class="screen" hidden>
+        <div class="processing">
+          <div class="processing-spinner"></div>
+          <h2>Putting your map together.</h2>
+          <p class="lede" style="max-width:480px;">This usually takes 20 to 40 seconds. We are reading back through what you said and turning it into something visual and useful.</p>
+          <ul class="processing-checklist" id="processingChecklist">
+            <li><div class="dot"></div>Listening to the whole conversation</li>
+            <li><div class="dot"></div>Drawing the process map</li>
+            <li><div class="dot"></div>Spotting bottlenecks and handoffs</li>
+            <li><div class="dot"></div>Finding the right places for AI to help</li>
+            <li><div class="dot"></div>Drafting your SOP</li>
+          </ul>
+          <div id="processingErr" class="err" hidden style="margin-top:24px;"></div>
+        </div>
+      </section>
+
+      <!-- ============================================================ RESULTS ============================================================ -->
+      <section id="resultsView" class="screen" hidden>
+        <div class="results-hero">
+          <div class="biz" id="resultsBiz"></div>
+          <h1 id="resultsTitle"></h1>
+          <p id="resultsSummary"></p>
+        </div>
+
+        <!-- Process map -->
+        <div class="section">
+          <h2>Your process map</h2>
+          <p class="subhead">How the work actually flows today. Look for the repeat-arrow icon to see where AI can help.</p>
+          <div class="map" id="mapView"></div>
+        </div>
+
+        <!-- Tools & systems -->
+        <div class="section" id="toolsSection" hidden>
+          <h2>Current tools and systems</h2>
+          <p class="subhead">Including the shadow systems that quietly run the business.</p>
+          <div class="stack" id="toolsList"></div>
+        </div>
+
+        <!-- Systems breakdown -->
+        <div class="section" id="breakdownSection" hidden>
+          <h2>Where systems break down</h2>
+          <p class="subhead">The seams between tools where work falls through.</p>
+          <div class="stack" id="breakdownList"></div>
+        </div>
+
+        <!-- Bottlenecks -->
+        <div class="section" id="bottlenecksSection" hidden>
+          <h2>Where work gets stuck</h2>
+          <p class="subhead">The places that consistently slow this process down.</p>
+          <div class="stack" id="bottlenecksList"></div>
+        </div>
+
+        <!-- Owner dependencies -->
+        <div class="section" id="ownerSection" hidden>
+          <h2>Where the owner steps in</h2>
+          <p class="subhead">Moments where everything routes through you.</p>
+          <div class="stack" id="ownerList"></div>
+        </div>
+
+        <!-- Manual work -->
+        <div class="section" id="manualSection" hidden>
+          <h2>Manual work that adds up</h2>
+          <p class="subhead">Repetitive tasks happening today by hand.</p>
+          <div class="stack" id="manualList"></div>
+        </div>
+
+        <!-- Draft SOP -->
+        <div class="section" id="sopSection" hidden>
+          <h2 id="sopTitle">Draft SOP</h2>
+          <p class="subhead">A clean version your team can actually use.</p>
+          <div id="sopBody"></div>
+        </div>
+
+        <!-- AI opportunities -->
+        <div class="section" id="opportunitiesSection" hidden>
+          <h2>AI opportunities</h2>
+          <p class="subhead">Practical places AI can help, sequenced from easy to advanced.</p>
+          <div class="stack" id="opportunitiesList"></div>
+        </div>
+
+        <!-- Recommended first build -->
+        <div class="section first-build" id="firstBuildSection" hidden>
+          <span class="pill-large">Start here</span>
+          <h2 id="firstBuildTitle"></h2>
+          <p id="firstBuildWhy" style="font-size:16px; line-height:1.6;"></p>
+          <p id="firstBuildWhat" style="font-size:15px; color:var(--muted); line-height:1.6;"></p>
+        </div>
+
+        <!-- Actions -->
+        <div class="actions-footer">
+          <h3>Take it with you.</h3>
+          <p>Push the SOP into Notion or download a Word version to share with your team.</p>
+          <div class="button-row">
+            <button id="notionBtn" class="button button-primary" type="button">Push to Notion</button>
+            <a id="notionOpenBtn" class="button button-light" target="_blank" rel="noopener" hidden>Open in Notion</a>
+            <button id="docxBtn" class="button button-light" type="button">Download Word</button>
+            <a class="button button-ghost" href="https://calendar.app.google/SnmSbP7hZCprCZ9B7" target="_blank" rel="noopener">Book a build call with Joe</a>
+          </div>
+          <div id="exportErr" class="err" hidden></div>
+        </div>
+
+      </section>
+
+    </div>
+  </main>
+
+  <footer>
+    <div class="container footer-inner">
+      <div>Practical AI Co. &middot; Franklin, TN</div>
+      <div><a href="mailto:joe@thepracticalai.co">joe@thepracticalai.co</a></div>
+    </div>
+  </footer>
+
+  <script>
+    // ============================================================
+    // State + persistence
+    // ============================================================
+    const STORAGE_KEY = 'capture_session_v1';
+    const $ = (id) => document.getElementById(id);
+
+    const initialState = () => ({
+      step: 'welcome',           // welcome | profile | chat | processing | results
+      profile: null,             // { firstName, email, businessName, processName }
+      conversation: [],          // [{role, content}]
+      interviewComplete: false,
+      results: null,             // structured JSON from /api/capture-complete
+      notionUrl: null,
+    });
+    let state = initialState();
+
+    function saveState() {
+      try { localStorage.setItem(STORAGE_KEY, JSON.stringify(state)); } catch (_) {}
+    }
+    function loadState() {
+      try { const raw = localStorage.getItem(STORAGE_KEY); return raw ? JSON.parse(raw) : null; }
+      catch (_) { return null; }
+    }
+    function clearState() {
+      try { localStorage.removeItem(STORAGE_KEY); } catch (_) {}
+      state = initialState();
+    }
+
+    // ============================================================
+    // Screens
+    // ============================================================
+    const SCREENS = ['welcome', 'profile', 'chat', 'processing', 'results'];
+    const SCREEN_VIEWS = {
+      welcome: 'welcomeView',
+      profile: 'profileView',
+      chat: 'chatView',
+      processing: 'processingView',
+      results: 'resultsView',
+    };
+    function showScreen(name) {
+      state.step = name;
+      saveState();
+      SCREENS.forEach((s) => { $(SCREEN_VIEWS[s]).hidden = s !== name; });
+      window.scrollTo({ top: 0, behavior: 'instant' });
+    }
+
+    function escapeHtml(s) {
+      return String(s == null ? '' : s).replace(/[&<>"']/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' })[c]);
+    }
+    function showError(el, msg) { el.hidden = false; el.textContent = msg; }
+    function hideError(el) { el.hidden = true; el.textContent = ''; }
+
+    // ============================================================
+    // Boot
+    // ============================================================
+    function boot() {
+      const saved = loadState();
+      if (saved) {
+        state = Object.assign(initialState(), saved);
+      }
+      // If we have results, jump straight to results
+      if (state.results) {
+        renderResults();
+        showScreen('results');
+        return;
+      }
+      // If we have a profile + conversation, offer resume from welcome
+      if (state.profile && (state.conversation.length > 0 || state.interviewComplete)) {
+        $('resumeBanner').hidden = false;
+        showScreen('welcome');
+        return;
+      }
+      showScreen('welcome');
+    }
+
+    $('resumeContinueBtn').addEventListener('click', () => {
+      $('resumeBanner').hidden = true;
+      if (state.interviewComplete) { triggerProcessing(); return; }
+      if (state.profile) {
+        prepareChat();
+        showScreen('chat');
+        return;
+      }
+      showScreen('welcome');
+    });
+    $('resumeStartOverBtn').addEventListener('click', () => {
+      if (!confirm('Start over? Your in-progress session will be cleared.')) return;
+      clearState();
+      $('resumeBanner').hidden = true;
+      $('profileForm').reset();
+      showScreen('welcome');
+    });
+
+    // ============================================================
+    // Welcome -> Profile
+    // ============================================================
+    $('startBtn').addEventListener('click', () => {
+      // If we had a partial profile, prefill
+      if (state.profile) {
+        const f = $('profileForm');
+        Object.keys(state.profile).forEach((k) => {
+          if (f.elements[k]) f.elements[k].value = state.profile[k] || '';
+        });
+      }
+      showScreen('profile');
+    });
+    $('profileBackBtn').addEventListener('click', () => showScreen('welcome'));
+
+    $('profileForm').addEventListener('submit', (e) => {
+      e.preventDefault();
+      hideError($('profileErr'));
+      const fd = new FormData(e.target);
+      const profile = {};
+      fd.forEach((v, k) => { profile[k] = (v || '').toString().trim(); });
+      if (!profile.firstName || !profile.email || !profile.businessName || !profile.processName) {
+        return showError($('profileErr'), 'Please fill in all four fields.');
+      }
+      state.profile = profile;
+      state.conversation = [];
+      state.interviewComplete = false;
+      state.results = null;
+      state.notionUrl = null;
+      saveState();
+      prepareChat();
+      showScreen('chat');
+    });
+
+    // ============================================================
+    // Chat
+    // ============================================================
+    function prepareChat() {
+      $('chatProcessLabel').textContent = (state.profile && state.profile.processName) || '';
+      renderChatLog();
+      $('chatInput').value = '';
+      // If no conversation yet, kick off the opener
+      if (state.conversation.length === 0) {
+        callChat();
+      } else {
+        setTimeout(() => $('chatInput').focus(), 100);
+      }
+    }
+    function renderChatLog() {
+      const log = $('chatLog');
+      log.innerHTML = '';
+      state.conversation.forEach((m) => {
+        if (m.role === 'assistant' || m.role === 'user') addMessage(m.role, m.content);
+      });
+      log.scrollTop = log.scrollHeight;
+    }
+    function addMessage(role, text) {
+      const log = $('chatLog');
+      const div = document.createElement('div');
+      div.className = 'msg msg-' + role;
+      div.textContent = text;
+      log.appendChild(div);
+      log.scrollTop = log.scrollHeight;
+    }
+    function addTyping() {
+      const log = $('chatLog');
+      const div = document.createElement('div');
+      div.className = 'msg-typing';
+      div.id = 'typingBubble';
+      div.innerHTML = '<span></span><span></span><span></span>';
+      log.appendChild(div);
+      log.scrollTop = log.scrollHeight;
+    }
+    function removeTyping() {
+      const t = $('typingBubble');
+      if (t) t.remove();
+    }
+
+    async function callChat() {
+      hideError($('chatErr'));
+      $('sendBtn').disabled = true;
+      $('chatInput').disabled = true;
+      addTyping();
+      try {
+        const res = await fetch('/api/capture-chat', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ profile: state.profile, conversation: state.conversation }),
+        });
+        if (!res.ok) {
+          const body = await res.json().catch(() => ({ error: 'Request failed' }));
+          throw new Error(body.error || ('HTTP ' + res.status));
+        }
+        const data = await res.json();
+        removeTyping();
+        const text = (data.message || '').trim();
+
+        if (text.includes('INTERVIEW_COMPLETE')) {
+          const before = text.split('INTERVIEW_COMPLETE')[0].trim();
+          if (before) {
+            state.conversation.push({ role: 'assistant', content: before });
+            addMessage('assistant', before);
+          }
+          state.interviewComplete = true;
+          saveState();
+          // brief pause so user can read the summary, then process
+          setTimeout(() => triggerProcessing(), 2200);
+        } else {
+          state.conversation.push({ role: 'assistant', content: text });
+          saveState();
+          addMessage('assistant', text);
+        }
+      } catch (err) {
+        console.error(err);
+        removeTyping();
+        showError($('chatErr'), 'Connection hiccup. Try sending again. (' + (err.message || 'unknown') + ')');
+      } finally {
+        $('sendBtn').disabled = false;
+        $('chatInput').disabled = false;
+        if (!state.interviewComplete) $('chatInput').focus();
+      }
+    }
+
+    $('chatForm').addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const msg = $('chatInput').value.trim();
+      if (!msg) return;
+      state.conversation.push({ role: 'user', content: msg });
+      $('chatInput').value = '';
+      addMessage('user', msg);
+      saveState();
+      await callChat();
+    });
+    $('chatInput').addEventListener('keydown', (e) => {
+      if (e.key === 'Enter' && !e.shiftKey) {
+        e.preventDefault();
+        $('chatForm').requestSubmit();
+      }
+    });
+    $('chatExitBtn').addEventListener('click', () => {
+      saveState();
+      alert('Saved. Close this tab whenever. When you come back to this URL, we will pick up where you left off.');
+    });
+
+    // ============================================================
+    // Processing -> Complete
+    // ============================================================
+    async function triggerProcessing() {
+      showScreen('processing');
+      hideError($('processingErr'));
+      const items = $('processingChecklist').querySelectorAll('li');
+      items.forEach((li) => li.classList.remove('active', 'done'));
+
+      let idx = 0;
+      const ticker = setInterval(() => {
+        if (idx < items.length) {
+          if (idx > 0) items[idx - 1].classList.remove('active');
+          items[idx].classList.add('active');
+          idx += 1;
+        }
+      }, 900);
+
+      try {
+        const res = await fetch('/api/capture-complete', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ profile: state.profile, conversation: state.conversation }),
+        });
+        if (!res.ok) {
+          const body = await res.json().catch(() => ({ error: 'Generation failed' }));
+          throw new Error(body.error || ('HTTP ' + res.status));
+        }
+        const data = await res.json();
+        state.results = data.results;
+        saveState();
+
+        clearInterval(ticker);
+        items.forEach((li) => { li.classList.remove('active'); li.classList.add('done'); });
+        setTimeout(() => {
+          renderResults();
+          showScreen('results');
+        }, 700);
+      } catch (err) {
+        console.error(err);
+        clearInterval(ticker);
+        showError($('processingErr'), 'Something went wrong putting this together. Your conversation is saved. Try again, or email Joe if it keeps failing. (' + (err.message || 'unknown') + ')');
+      }
+    }
+
+    // ============================================================
+    // Results rendering
+    // ============================================================
+    function renderResults() {
+      const r = state.results;
+      if (!r) return;
+      const p = state.profile || {};
+
+      $('resultsBiz').textContent = [p.businessName, p.processName].filter(Boolean).join(' · ');
+      $('resultsTitle').textContent = r.sop_title || (p.processName + ' SOP');
+      $('resultsSummary').textContent = r.process_summary || '';
+
+      renderMap(r);
+
+      renderList('toolsSection', 'toolsList', r.tools_and_systems, (t) => {
+        const pills = [];
+        if (t.system_role) pills.push('<span class="pill role">' + escapeHtml(t.system_role.replace(/_/g, ' ')) + '</span>');
+        const meta = [];
+        if (t.used_by)     meta.push('<div><b>Used by:</b> ' + escapeHtml(t.used_by) + '</div>');
+        if (t.pain_points) meta.push('<div><b>Pain points:</b> ' + escapeHtml(t.pain_points) + '</div>');
+        return '<h4>' + escapeHtml(t.tool_name || '') + '</h4>'
+          + pills.join('')
+          + (t.purpose ? '<p>' + escapeHtml(t.purpose) + '</p>' : '')
+          + (meta.length ? '<div class="meta">' + meta.join('') + '</div>' : '');
+      });
+
+      renderList('breakdownSection', 'breakdownList', r.systems_breakdown, (b) => {
+        return '<h4>' + escapeHtml(b.title || '') + '</h4>'
+          + (b.description ? '<p>' + escapeHtml(b.description) + '</p>' : '')
+          + (b.impact ? '<div class="meta"><b>Impact:</b> ' + escapeHtml(b.impact) + '</div>' : '');
+      });
+
+      renderList('bottlenecksSection', 'bottlenecksList', r.bottlenecks, (b) => {
+        return '<h4>' + escapeHtml(b.title || '') + '</h4>'
+          + (b.description ? '<p>' + escapeHtml(b.description) + '</p>' : '')
+          + (b.why_it_matters ? '<div class="meta"><b>Why it matters:</b> ' + escapeHtml(b.why_it_matters) + '</div>' : '');
+      });
+
+      renderList('ownerSection', 'ownerList', r.owner_dependencies, (d) => {
+        return '<h4>' + escapeHtml(d.title || '') + '</h4>'
+          + (d.description ? '<p>' + escapeHtml(d.description) + '</p>' : '');
+      });
+
+      renderList('manualSection', 'manualList', r.manual_work, (m) => {
+        return '<h4>' + escapeHtml(m.title || '') + '</h4>'
+          + (m.description ? '<p>' + escapeHtml(m.description) + '</p>' : '');
+      });
+
+      // SOP
+      if (Array.isArray(r.sop_sections) && r.sop_sections.length) {
+        $('sopSection').hidden = false;
+        $('sopTitle').textContent = r.sop_title || 'Draft SOP';
+        const body = $('sopBody');
+        body.innerHTML = r.sop_sections.map((s) => {
+          return '<div class="sop-block">'
+            + '<h4>' + escapeHtml(s.section_title || '') + '</h4>'
+            + (s.content ? '<p>' + escapeHtml(s.content).replace(/\n/g, '<br/>') + '</p>' : '')
+            + '</div>';
+        }).join('');
+      }
+
+      // AI Opportunities
+      renderList('opportunitiesSection', 'opportunitiesList', r.automation_ideas, (a) => {
+        const pills = [];
+        if (a.difficulty) pills.push('<span class="pill diff">' + escapeHtml(a.difficulty) + '</span>');
+        if (a.recommended_process_step) pills.push('<span class="pill">' + escapeHtml(a.recommended_process_step) + '</span>');
+        return '<h4>' + escapeHtml(a.title || '') + '</h4>'
+          + pills.join('')
+          + (a.plain_english_description ? '<p>' + escapeHtml(a.plain_english_description) + '</p>' : '')
+          + (a.why_it_matters ? '<div class="meta"><b>Why it matters:</b> ' + escapeHtml(a.why_it_matters) + '</div>' : '')
+          + (a.practical_ai_build_note ? '<div class="meta"><b>We would build:</b> ' + escapeHtml(a.practical_ai_build_note) + '</div>' : '');
+      });
+
+      // First build
+      if (r.recommended_first_build && r.recommended_first_build.title) {
+        $('firstBuildSection').hidden = false;
+        $('firstBuildTitle').textContent = r.recommended_first_build.title;
+        $('firstBuildWhy').textContent = r.recommended_first_build.why_this_first || '';
+        $('firstBuildWhat').textContent = r.recommended_first_build.what_practical_ai_would_build || '';
+      }
+
+      // Notion link if we already have one
+      if (state.notionUrl) {
+        $('notionBtn').textContent = 'Pushed to Notion';
+        $('notionBtn').disabled = true;
+        $('notionOpenBtn').hidden = false;
+        $('notionOpenBtn').href = state.notionUrl;
+      }
+    }
+
+    function renderList(sectionId, listId, items, itemFn) {
+      if (!Array.isArray(items) || !items.length) return;
+      $(sectionId).hidden = false;
+      $(listId).innerHTML = items.map((x) => '<div class="item-card">' + itemFn(x) + '</div>').join('');
+    }
+
+    function renderMap(r) {
+      const view = $('mapView');
+      view.innerHTML = '';
+      const steps = Array.isArray(r.process_steps) ? r.process_steps : [];
+      const branches = Array.isArray(r.process_branches) ? r.process_branches : [];
+
+      // Index branches by after_step
+      const branchMap = {};
+      branches.forEach((b) => {
+        const key = String(b.after_step || '');
+        if (!branchMap[key]) branchMap[key] = [];
+        branchMap[key].push(b);
+      });
+
+      // Index automation ideas by recommended_process_step (title or number) for badge text
+      const ideas = Array.isArray(r.automation_ideas) ? r.automation_ideas : [];
+      function findAutomationFor(step) {
+        const key = String(step.step_number);
+        const title = (step.title || '').toLowerCase();
+        for (const a of ideas) {
+          const ref = String(a.recommended_process_step || '').toLowerCase();
+          if (ref === key) return a;
+          if (ref && title && ref.includes(title.slice(0, 12))) return a;
+          if (ref && ref.includes('step ' + key)) return a;
+        }
+        return null;
+      }
+
+      steps.forEach((s) => {
+        const stepEl = document.createElement('div');
+        stepEl.className = 'map-step';
+
+        const num = document.createElement('div');
+        num.className = 'map-step-num';
+        num.textContent = String(s.step_number || '');
+        stepEl.appendChild(num);
+
+        const card = document.createElement('div');
+        card.className = 'map-step-card';
+
+        if (Array.isArray(s.inputs_from) && s.inputs_from.length) {
+          card.innerHTML += '<div class="map-inputs"><b>Inputs from</b><ul>'
+            + s.inputs_from.map((i) => '<li>' + escapeHtml(i) + '</li>').join('')
+            + '</ul></div>';
+        }
+
+        card.innerHTML += '<div class="map-step-title">' + escapeHtml(s.title || '') + '</div>';
+        if (s.description) card.innerHTML += '<div class="map-step-desc">' + escapeHtml(s.description) + '</div>';
+
+        const meta = [];
+        if (s.people_involved) meta.push('<div><b>People:</b> ' + escapeHtml(s.people_involved) + '</div>');
+        if (s.tools_used)      meta.push('<div><b>Tools:</b> ' + escapeHtml(s.tools_used) + '</div>');
+        if (meta.length) card.innerHTML += '<div class="map-step-meta">' + meta.join('') + '</div>';
+
+        if (s.risk_or_friction) {
+          card.innerHTML += '<div class="map-step-friction"><b>Friction</b>' + escapeHtml(s.risk_or_friction) + '</div>';
+        }
+
+        if (s.automation_opportunity) {
+          const idea = findAutomationFor(s);
+          const label = idea ? idea.title : 'Automation opportunity';
+          const desc  = idea ? (idea.plain_english_description || '') : '';
+          card.innerHTML += '<div class="automation-chip">'
+            + '<svg class="logo"><use href="#repeat-logo-symbol"></use></svg>'
+            + '<div class="text"><b>Where AI can help</b>' + escapeHtml(label) + (desc ? '. ' + escapeHtml(desc) : '') + '</div>'
+            + '</div>';
+        }
+
+        stepEl.appendChild(card);
+        view.appendChild(stepEl);
+
+        // Branch after this step?
+        const after = branchMap[String(s.step_number)];
+        if (after) {
+          after.forEach((b) => {
+            const br = document.createElement('div');
+            br.className = 'branch';
+            br.innerHTML = '<div class="branch-label">Decision after this step</div>'
+              + '<div class="branch-question">' + escapeHtml(b.condition || '') + '</div>'
+              + '<div class="branch-paths">'
+              +   '<div class="branch-path yes"><div class="branch-path-label">If yes</div><div class="branch-path-text">' + escapeHtml(b.yes_path || '') + '</div></div>'
+              +   '<div class="branch-path no"><div class="branch-path-label">If no</div><div class="branch-path-text">' + escapeHtml(b.no_path || '') + '</div></div>'
+              + '</div>';
+            view.appendChild(br);
+          });
+        }
+      });
+    }
+
+    // ============================================================
+    // Exports (Notion / Word)
+    // ============================================================
+    $('notionBtn').addEventListener('click', async () => {
+      hideError($('exportErr'));
+      const btn = $('notionBtn');
+      const original = btn.textContent;
+      btn.disabled = true;
+      btn.textContent = 'Pushing to Notion...';
+      try {
+        const res = await fetch('/api/capture-export', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ profile: state.profile, results: state.results, format: 'notion' }),
+        });
+        if (!res.ok) {
+          const body = await res.json().catch(() => ({ error: 'Notion push failed' }));
+          throw new Error(body.error || ('HTTP ' + res.status));
+        }
+        const data = await res.json();
+        state.notionUrl = data.url || null;
+        saveState();
+        btn.textContent = 'Pushed to Notion';
+        if (state.notionUrl) {
+          $('notionOpenBtn').hidden = false;
+          $('notionOpenBtn').href = state.notionUrl;
+        }
+      } catch (err) {
+        console.error(err);
+        btn.disabled = false;
+        btn.textContent = original;
+        showError($('exportErr'), 'Could not push to Notion. ' + (err.message || ''));
+      }
+    });
+
+    $('docxBtn').addEventListener('click', async () => {
+      hideError($('exportErr'));
+      const btn = $('docxBtn');
+      const original = btn.textContent;
+      btn.disabled = true;
+      btn.textContent = 'Preparing Word doc...';
+      try {
+        const res = await fetch('/api/capture-export', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ profile: state.profile, results: state.results, format: 'docx' }),
+        });
+        if (!res.ok) {
+          const body = await res.json().catch(() => ({ error: 'Word export failed' }));
+          throw new Error(body.error || ('HTTP ' + res.status));
+        }
+        const blob = await res.blob();
+        const disp = res.headers.get('Content-Disposition') || '';
+        const m = disp.match(/filename="([^"]+)"/);
+        const name = (m && m[1]) || ((state.profile && state.profile.processName) || 'process').toLowerCase().replace(/[^a-z0-9]+/g, '-') + '-sop.docx';
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url; a.download = name;
+        document.body.appendChild(a); a.click();
+        document.body.removeChild(a);
+        setTimeout(() => URL.revokeObjectURL(url), 4000);
+      } catch (err) {
+        console.error(err);
+        showError($('exportErr'), 'Could not download Word doc. ' + (err.message || ''));
+      } finally {
+        btn.disabled = false;
+        btn.textContent = original;
+      }
+    });
+
+    // ============================================================
+    // Boot
+    // ============================================================
+    boot();
+  </script>
+</body>
+</html>
