@@ -368,7 +368,7 @@
     }
 
     function renderRows(sessions) {
-      $('countLabel').textContent = sessions.length + ' session' + (sessions.length === 1 ? '' : 's') + ' &middot; newest first';
+      $('countLabel').textContent = sessions.length + ' session' + (sessions.length === 1 ? '' : 's') + ' · newest first';
       if (!sessions.length) { renderEmpty(); return; }
       $('listEl').innerHTML = sessions.map((s, idx) => {
         const business = escapeHtml(s.business_name || '(no business name)');

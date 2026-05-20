@@ -61,12 +61,15 @@
       }
     }
 
-    // Permanent URL row (live page only — permanent page already IS this URL)
+    // Permanent URL row. On the live /capture page this includes the
+    // big "Open Results" button (openResultsBtn). On the permanent
+    // /capture/results/{slug} page that button doesn't exist (you're
+    // already there), so we guard every element individually.
     if ($("resultsUrlRow")) {
       if (resultsUrl) {
         $("resultsUrlRow").hidden = false;
-        $("resultsUrlField").value = resultsUrl;
-        $("openResultsBtn").href = resultsUrl;
+        if ($("resultsUrlField")) $("resultsUrlField").value = resultsUrl;
+        if ($("openResultsBtn"))  $("openResultsBtn").href = resultsUrl;
       } else {
         $("resultsUrlRow").hidden = true;
       }
