@@ -1192,6 +1192,370 @@
       }
     }
 
+    /* Clarity pass: fewer visible choices, more editorial pacing */
+    .action-bar {
+      background: rgba(255, 253, 248, 0.94);
+      box-shadow: 0 12px 32px rgba(17, 24, 39, 0.06);
+    }
+
+    .action-bar .button {
+      min-height: 40px;
+      padding: 0 15px;
+      border: 1px solid rgba(23, 32, 51, 0.12);
+      box-shadow: none;
+    }
+
+    .results-url-row {
+      flex: 0 0 auto;
+      width: auto;
+      margin-left: auto;
+      padding: 0;
+      border: 0;
+      background: transparent;
+    }
+
+    .results-url-row .label {
+      display: none;
+    }
+
+    .results-url-row input {
+      position: absolute;
+      width: 1px;
+      min-width: 0;
+      opacity: 0;
+      pointer-events: none;
+    }
+
+    .results-url-row button {
+      min-height: 40px;
+      padding: 0 15px;
+      border: 1px solid rgba(23, 32, 51, 0.12);
+      background: var(--paper);
+      color: var(--charcoal);
+      box-shadow: none;
+      font-size: 13px;
+      letter-spacing: 0;
+    }
+
+    .results-hero-wrap {
+      padding: 56px 0 86px;
+      border-bottom: 0;
+      background:
+        linear-gradient(90deg, rgba(23, 32, 51, 0.026) 1px, transparent 1px),
+        linear-gradient(rgba(23, 32, 51, 0.026) 1px, transparent 1px),
+        radial-gradient(circle at 76% 10%, rgba(36, 86, 255, 0.08), transparent 28%),
+        var(--cream);
+      background-size: 56px 56px, 56px 56px, auto, auto;
+    }
+
+    .progress-bar {
+      margin-bottom: 30px;
+    }
+
+    .results-hero h1 {
+      max-width: 860px;
+    }
+
+    #resultsSummary {
+      max-width: 690px;
+    }
+
+    .operational-snapshot {
+      margin-top: -50px;
+    }
+
+    .operational-snapshot .res-section-head {
+      margin-bottom: 18px;
+    }
+
+    .operational-snapshot .subhead {
+      display: none;
+    }
+
+    .exec-grid {
+      gap: 16px;
+    }
+
+    .exec-cell {
+      min-height: 166px;
+      padding: 22px 22px 20px;
+      border-color: rgba(23, 32, 51, 0.08);
+      box-shadow: 0 14px 34px rgba(17, 24, 39, 0.045);
+    }
+
+    .exec-cell-text {
+      -webkit-line-clamp: 3;
+    }
+
+    .impact-section {
+      padding: 0;
+      border: 0;
+      background: transparent;
+      box-shadow: none;
+    }
+
+    .impact-section h2 {
+      max-width: 620px;
+    }
+
+    #impactList .impact-row:nth-child(n+3) {
+      display: none;
+    }
+
+    .start-here {
+      background: linear-gradient(135deg, #F7FAFF 0%, var(--paper) 70%);
+      color: var(--charcoal);
+      border-color: rgba(36, 86, 255, 0.20);
+      box-shadow: 0 24px 60px rgba(36, 86, 255, 0.08);
+    }
+
+    .start-here .badge {
+      background: rgba(36, 86, 255, 0.10);
+      color: var(--blue);
+    }
+
+    .start-here h2,
+    .start-here p,
+    .first-build-detail summary {
+      color: var(--charcoal);
+    }
+
+    .first-build-detail {
+      border-color: rgba(36, 86, 255, 0.16);
+      color: var(--muted);
+    }
+
+    .first-build-detail p {
+      color: var(--muted);
+    }
+
+    .start-here .impact-chip {
+      background: var(--white);
+      border-color: rgba(36, 86, 255, 0.14);
+      color: var(--charcoal);
+    }
+
+    .process-map-section {
+      margin-top: 88px;
+      margin-bottom: 86px;
+      padding-top: 78px;
+      padding-bottom: 82px;
+      overflow: hidden;
+      background:
+        linear-gradient(90deg, rgba(255, 255, 255, 0.040) 1px, transparent 1px),
+        linear-gradient(rgba(255, 255, 255, 0.040) 1px, transparent 1px),
+        var(--charcoal);
+      background-size: 64px 64px, 64px 64px, auto;
+    }
+
+    .process-map-section .res-section-head {
+      display: block;
+      max-width: 620px;
+      border-bottom: 0;
+      padding-bottom: 18px;
+      margin-bottom: 20px;
+    }
+
+    .process-map-section .subhead {
+      max-width: 500px;
+      margin: 12px 0 0;
+      color: rgba(255, 255, 255, 0.58);
+    }
+
+    .map {
+      display: flex;
+      gap: 44px;
+      overflow-x: auto;
+      overscroll-behavior-x: contain;
+      scroll-snap-type: x mandatory;
+      padding: 32px 18vw 34px 0;
+      scrollbar-color: rgba(255, 255, 255, 0.22) transparent;
+    }
+
+    .map-step {
+      flex: 0 0 clamp(310px, 42vw, 460px);
+      scroll-snap-align: start;
+    }
+
+    .map-step::after {
+      top: calc(50% - 14px);
+      right: -33px;
+      color: rgba(126, 160, 255, 0.56);
+      font-size: 24px;
+    }
+
+    .map-step-card {
+      min-height: 292px;
+      padding: 72px 30px 28px;
+      border: 0;
+      border-radius: 28px;
+      box-shadow: 0 28px 70px rgba(0, 0, 0, 0.22);
+    }
+
+    .map-step-num {
+      top: 28px;
+      left: 30px;
+      width: 34px;
+      height: 34px;
+    }
+
+    .map-step-title {
+      max-width: 320px;
+      font-size: 24px;
+      line-height: 1.05;
+      margin-bottom: 18px;
+    }
+
+    .map-pill-row {
+      margin-bottom: 18px;
+    }
+
+    .map-pill-row .map-pill:nth-child(n+4) {
+      display: none;
+    }
+
+    .map-step-friction {
+      margin-top: 10px;
+      white-space: nowrap;
+    }
+
+    .automation-chip {
+      margin-top: 12px;
+    }
+
+    .branch {
+      flex: 0 0 clamp(300px, 36vw, 420px);
+      align-self: center;
+      padding: 24px 26px;
+      border-radius: 24px;
+      scroll-snap-align: start;
+    }
+
+    .branch-paths.is-collapsed {
+      display: none;
+    }
+
+    .branch-detail {
+      margin-top: 14px;
+      border-top: 1px solid rgba(255, 255, 255, 0.12);
+    }
+
+    .branch-detail summary {
+      cursor: pointer;
+      list-style: none;
+      padding-top: 12px;
+      color: rgba(255, 255, 255, 0.72);
+      font-size: 12px;
+      font-weight: 800;
+    }
+
+    .branch-detail summary::-webkit-details-marker {
+      display: none;
+    }
+
+    .branch-detail summary::after {
+      content: "+";
+      margin-left: 8px;
+      color: #7EA0FF;
+    }
+
+    .branch-detail[open] summary::after {
+      content: "-";
+    }
+
+    .branch-detail[open] .branch-paths {
+      display: grid;
+      margin-top: 12px;
+    }
+
+    .res-section.alt {
+      padding: 0;
+      border: 0;
+      background: transparent;
+      box-shadow: none;
+    }
+
+    .opps-grid {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 0 34px;
+    }
+
+    .opp,
+    .bottleneck {
+      padding: 22px 0;
+      border: 0;
+      border-top: 1px solid rgba(23, 32, 51, 0.10);
+      border-radius: 0;
+      background: transparent;
+      box-shadow: none;
+    }
+
+    .overflow-detail {
+      grid-column: 1 / -1;
+      border-top: 1px solid rgba(23, 32, 51, 0.10);
+      padding-top: 18px;
+    }
+
+    .overflow-detail summary {
+      cursor: pointer;
+      list-style: none;
+      color: var(--blue);
+      font-size: 13px;
+      font-weight: 900;
+    }
+
+    .overflow-detail summary::-webkit-details-marker {
+      display: none;
+    }
+
+    .overflow-detail summary::after {
+      content: "+";
+      margin-left: 8px;
+    }
+
+    .overflow-detail[open] summary::after {
+      content: "-";
+    }
+
+    .overflow-detail .overflow-items {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 0 34px;
+      margin-top: 12px;
+    }
+
+    .more-details {
+      padding: 0;
+      border-width: 1px 0 0;
+      border-radius: 0;
+      background: transparent;
+      box-shadow: none;
+    }
+
+    @media (max-width: 780px) {
+      .action-bar-inner {
+        align-items: stretch;
+      }
+
+      .results-url-row {
+        margin-left: 0;
+      }
+
+      .map {
+        padding-right: 24vw;
+      }
+
+      .map-step,
+      .branch {
+        flex-basis: min(82vw, 360px);
+      }
+
+      .opps-grid,
+      .overflow-detail .overflow-items {
+        grid-template-columns: 1fr;
+      }
+    }
+
     @keyframes spin { to { transform: rotate(360deg); } }
   </style>
 </head>
@@ -1253,9 +1617,9 @@
         <button id="gdocsBtn" class="button button-light" type="button">Open in Google Docs</button>
         <a class="button button-light" href="https://calendar.app.google/SBMCxMPv4Sd8VZRW9" target="_blank" rel="noopener">Plan the first build</a>
         <div id="resultsUrlRow" class="results-url-row">
-          <span class="label">Permanent link</span>
+          <span class="label">Share result link</span>
           <input id="resultsUrlField" type="text" readonly />
-          <button id="copyResultsUrlBtn" type="button">Copy</button>
+          <button id="copyResultsUrlBtn" type="button">Copy link</button>
         </div>
       </div>
     </div>
@@ -1402,6 +1766,58 @@
       $("notFound").hidden = false;
     }
 
+    function collapseOverflow(listId, itemSelector, visibleCount, label) {
+      const list = $(listId);
+      if (!list) return;
+      const items = Array.from(list.children).filter((el) => el.matches(itemSelector));
+      const extra = items.slice(visibleCount);
+      if (!extra.length) return;
+
+      const detail = document.createElement("details");
+      detail.className = "overflow-detail";
+      const summary = document.createElement("summary");
+      summary.textContent = label + " (" + extra.length + ")";
+      const wrap = document.createElement("div");
+      wrap.className = "overflow-items";
+      extra.forEach((item) => wrap.appendChild(item));
+      detail.appendChild(summary);
+      detail.appendChild(wrap);
+      list.appendChild(detail);
+    }
+
+    function refineResultsPacing() {
+      document.querySelectorAll(".map-step-card").forEach((card) => {
+        const inputs = card.querySelector(".map-inputs");
+        if (!inputs) return;
+        let detail = card.querySelector(".step-detail");
+        if (!detail) {
+          detail = document.createElement("details");
+          detail.className = "step-detail";
+          detail.innerHTML = "<summary>View details</summary><div class=\"step-detail-body\"></div>";
+          card.appendChild(detail);
+        }
+        const body = detail.querySelector(".step-detail-body");
+        if (body && !body.contains(inputs)) body.prepend(inputs);
+      });
+
+      document.querySelectorAll(".branch").forEach((branch) => {
+        if (branch.querySelector(".branch-detail")) return;
+        const paths = branch.querySelector(".branch-paths");
+        if (!paths) return;
+        paths.classList.add("is-collapsed");
+        const detail = document.createElement("details");
+        detail.className = "branch-detail";
+        const summary = document.createElement("summary");
+        summary.textContent = "View paths";
+        detail.appendChild(summary);
+        detail.appendChild(paths);
+        branch.appendChild(detail);
+      });
+
+      collapseOverflow("opportunitiesList", ".opp", 2, "View more opportunities");
+      collapseOverflow("bottlenecksList", ".bottleneck", 2, "View more bottlenecks");
+    }
+
     async function boot() {
       const slug = getSlug();
       if (!slug) {
@@ -1449,6 +1865,7 @@
         $("resultsUrlField").value = state.resultsUrl;
 
         window.CaptureRender.renderResults(state);
+        refineResultsPacing();
 
         // Wire export buttons
         wireExports(state);
