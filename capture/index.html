@@ -2938,6 +2938,773 @@
       }
     }
 
+    /* Guided operational clarity pass */
+    .progress-supporting {
+      display: none;
+    }
+
+    .results-hero-wrap {
+      padding: 56px 0 44px;
+    }
+
+    .hero-layout {
+      grid-template-columns: minmax(0, 1fr) minmax(176px, 238px);
+      gap: clamp(34px, 8vw, 110px);
+    }
+
+    #resultsSummary {
+      max-width: 610px;
+      -webkit-line-clamp: 2;
+    }
+
+    .good-news-line span:first-child {
+      width: 36px;
+      height: 36px;
+      color: transparent;
+    }
+
+    .good-news-line {
+      display: flex;
+      align-items: flex-start;
+      max-width: 100%;
+      white-space: normal;
+    }
+
+    .good-news-line span:last-child {
+      min-width: 0;
+      overflow-wrap: break-word;
+    }
+
+    .good-news-line span:first-child .repeat-logo {
+      width: 18px;
+      height: 18px;
+    }
+
+    .good-news-line .repeat-logo .arrow-a,
+    .good-news-line .repeat-logo .head-a,
+    .good-news-line .repeat-logo .arrow-b,
+    .good-news-line .repeat-logo .head-b {
+      stroke: var(--blue);
+    }
+
+    .capture-card {
+      align-self: start;
+      margin-top: 6px;
+      padding: 12px 0 0;
+      background: transparent;
+      border: 0;
+      border-top: 1px solid rgba(23, 32, 51, 0.12);
+      border-radius: 0;
+      box-shadow: none;
+      opacity: 0.68;
+    }
+
+    .capture-card summary {
+      list-style: none;
+      cursor: pointer;
+      color: var(--muted);
+      font-size: 11px;
+      font-weight: 900;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+    }
+
+    .capture-card summary::-webkit-details-marker {
+      display: none;
+    }
+
+    .capture-card summary::after {
+      content: "+";
+      margin-left: 8px;
+      color: var(--blue);
+    }
+
+    .capture-card[open] summary::after {
+      content: "-";
+    }
+
+    .capture-card dl {
+      gap: 10px;
+      margin-top: 14px;
+      padding-left: 0;
+    }
+
+    .capture-card div {
+      padding-left: 0;
+    }
+
+    .capture-card div::before {
+      display: none;
+    }
+
+    .capture-card dt {
+      margin-bottom: 2px;
+      color: rgba(23, 32, 51, 0.56);
+      font-size: 10px;
+    }
+
+    .capture-card dd {
+      font-size: 12px;
+    }
+
+    .results-container {
+      padding-bottom: 96px;
+    }
+
+    .res-section {
+      margin: clamp(58px, 7vw, 86px) 0;
+    }
+
+    .operational-snapshot {
+      margin-top: 18px;
+    }
+
+    .operational-snapshot .res-section-head {
+      display: flex;
+      align-items: end;
+      justify-content: space-between;
+      gap: 24px;
+      max-width: none;
+      margin-bottom: 22px;
+      padding-bottom: 22px;
+      border-bottom: 1px solid rgba(23, 32, 51, 0.10);
+    }
+
+    .operational-snapshot .res-section-head h2 {
+      font-size: 34px;
+    }
+
+    .operational-snapshot .subhead {
+      max-width: 340px;
+      margin: 0;
+      color: var(--muted);
+      font-size: 14px;
+    }
+
+    .exec-grid {
+      display: grid;
+      grid-template-columns: minmax(0, 1.18fr) minmax(260px, 0.82fr);
+      gap: 0 48px;
+      align-items: stretch;
+    }
+
+    .exec-cell {
+      display: block;
+      min-height: 0;
+      padding: 0;
+      background: transparent;
+      border: 0;
+      border-radius: 0;
+      box-shadow: none;
+    }
+
+    #execBottleneck {
+      grid-row: 1 / 4;
+      padding: 28px 36px 30px 0;
+      border-top: 1px solid rgba(23, 32, 51, 0.14);
+      border-bottom: 1px solid rgba(23, 32, 51, 0.14);
+    }
+
+    #execTimeDrain,
+    #execOwner {
+      padding: 22px 0;
+      border-top: 1px solid rgba(23, 32, 51, 0.10);
+    }
+
+    #execAi {
+      margin-top: 0;
+      padding: 22px 22px 24px;
+      border: 1px solid rgba(36, 86, 255, 0.16);
+      border-radius: 20px;
+      background:
+        radial-gradient(circle at 92% 16%, rgba(36, 86, 255, 0.16), transparent 34%),
+        rgba(244, 248, 255, 0.78);
+      box-shadow: 0 22px 58px rgba(36, 86, 255, 0.08);
+    }
+
+    .exec-cell-label {
+      flex-direction: row;
+      align-items: center;
+      gap: 9px;
+      margin: 0 0 10px;
+      color: rgba(23, 32, 51, 0.66);
+      font-size: 11px;
+      font-weight: 900;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+    }
+
+    .exec-cell-label .dot,
+    .exec-cell.red .dot,
+    .exec-cell.amber .dot,
+    .exec-cell.ink .dot,
+    .exec-cell.blue .dot {
+      width: 8px;
+      height: 8px;
+      border: 0;
+      background: var(--blue);
+    }
+
+    .exec-cell-label .dot::before {
+      display: none;
+      content: "";
+    }
+
+    .exec-cell-text {
+      display: block;
+      font-family: Inter, system-ui, sans-serif;
+      font-size: 14px;
+      font-weight: 500;
+      line-height: 1.5;
+      -webkit-line-clamp: unset;
+    }
+
+    .exec-cell-text .insight-takeaway {
+      display: block;
+      font-family: Fraunces, Georgia, serif;
+      color: var(--navy);
+      font-size: 38px;
+      font-weight: 800;
+      line-height: 1.05;
+      overflow-wrap: break-word;
+    }
+
+    .exec-cell:not(#execBottleneck) .insight-takeaway {
+      font-size: 21px;
+      line-height: 1.14;
+    }
+
+    .exec-cell-text .insight-support {
+      display: block;
+      max-width: 480px;
+      margin-top: 10px;
+      color: #536071;
+      font-family: Inter, system-ui, sans-serif;
+      font-size: 14px;
+      font-weight: 500;
+      line-height: 1.48;
+      overflow-wrap: break-word;
+    }
+
+    .process-map-section {
+      position: relative;
+      margin: clamp(72px, 8vw, 104px) 0;
+      padding: clamp(38px, 5vw, 58px);
+      color: var(--white);
+      background:
+        radial-gradient(circle at 82% 18%, rgba(36, 86, 255, 0.42), transparent 30%),
+        linear-gradient(135deg, #071735 0%, #0A1F4D 54%, #102F72 100%);
+      border: 0;
+      border-radius: 28px;
+      box-shadow: 0 34px 88px rgba(6, 18, 47, 0.24);
+      overflow: hidden;
+    }
+
+    .process-map-section .res-section-head {
+      display: block;
+      max-width: 650px;
+      margin-bottom: 30px;
+      padding: 0;
+    }
+
+    .process-map-section .res-section-head::before {
+      content: "Process map";
+      display: block;
+      margin-bottom: 12px;
+      color: #8DB2FF;
+      font-size: 12px;
+      font-weight: 900;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+    }
+
+    .process-map-section h2 {
+      color: var(--white);
+      font-size: 42px;
+      line-height: 1.02;
+    }
+
+    .process-map-section .subhead {
+      max-width: 520px;
+      margin-top: 12px;
+      color: rgba(255, 255, 255, 0.68);
+      font-size: 15px;
+      line-height: 1.6;
+    }
+
+    .map.is-phase-journey {
+      display: flex;
+      grid-template-columns: none;
+      gap: 38px;
+      overflow-x: auto;
+      overflow-y: visible;
+      padding: 20px 4px 30px;
+      scroll-snap-type: x proximity;
+    }
+
+    .map.is-phase-journey::before {
+      display: none;
+    }
+
+    .phase-group {
+      position: relative;
+      flex: 0 0 clamp(210px, 22vw, 262px);
+      min-width: 0;
+      scroll-snap-align: start;
+    }
+
+    .phase-group:not(:last-child)::after {
+      content: "";
+      position: absolute;
+      top: 43px;
+      right: -28px;
+      width: 18px;
+      height: 1px;
+      background: rgba(141, 178, 255, 0.58);
+    }
+
+    .phase-header {
+      min-height: 74px;
+    }
+
+    .phase-kicker {
+      margin-bottom: 8px;
+      color: rgba(255, 255, 255, 0.46);
+      font-size: 11px;
+      font-weight: 900;
+      letter-spacing: 0.10em;
+      text-transform: uppercase;
+    }
+
+    .phase-title {
+      margin: 0;
+      color: var(--white);
+      font-family: Fraunces, Georgia, serif;
+      font-size: 23px;
+      line-height: 1.08;
+    }
+
+    .phase-steps {
+      display: grid;
+      gap: 0;
+    }
+
+    .phase-group .map-step {
+      display: block;
+      min-width: 0;
+    }
+
+    .phase-group .map-step::after,
+    .phase-group .map-step-num {
+      display: none;
+    }
+
+    .phase-group .map-step-card {
+      position: relative;
+      min-height: 0;
+      padding: 0 0 20px 22px;
+      text-align: left;
+      color: var(--white);
+      background: transparent;
+      border: 0;
+      border-left: 1px solid rgba(255, 255, 255, 0.15);
+      border-radius: 0;
+      box-shadow: none;
+    }
+
+    .phase-group .map-step-card::before {
+      content: "";
+      position: absolute;
+      top: 4px;
+      left: -5px;
+      width: 9px;
+      height: 9px;
+      margin: 0;
+      border-radius: 999px;
+      background: #8DB2FF;
+      box-shadow: 0 0 0 7px rgba(36, 86, 255, 0.18);
+    }
+
+    .phase-group .map-step.has-auto .map-step-card::before {
+      background: var(--white);
+      box-shadow: 0 0 0 7px rgba(82, 142, 255, 0.26), 0 0 32px rgba(82, 142, 255, 0.56);
+    }
+
+    .phase-group .map-step-title {
+      max-width: 100%;
+      margin: 0 0 7px;
+      color: var(--white);
+      font-size: 15px;
+      line-height: 1.24;
+      text-align: left;
+    }
+
+    .phase-group .step-glance {
+      margin: 0;
+      color: rgba(255, 255, 255, 0.63);
+      font-size: 12px;
+      line-height: 1.48;
+      -webkit-line-clamp: 2;
+    }
+
+    .phase-group .map-step-friction {
+      display: inline-flex;
+      max-width: 100%;
+      margin: 10px 0 0;
+      padding: 5px 8px;
+      color: #FFD4B8;
+      background: rgba(245, 124, 0, 0.13);
+      border-color: rgba(255, 180, 118, 0.22);
+      font-size: 10px;
+      text-align: left;
+    }
+
+    .phase-group .automation-chip {
+      display: inline-flex;
+      align-items: center;
+      max-width: 100%;
+      gap: 8px;
+      margin-top: 9px;
+      padding: 7px 10px;
+      color: #E8F0FF;
+      background: rgba(82, 142, 255, 0.18);
+      border: 1px solid rgba(141, 178, 255, 0.30);
+      border-radius: 999px;
+      box-shadow: 0 0 34px rgba(82, 142, 255, 0.16);
+    }
+
+    .phase-group .automation-chip .logo {
+      width: 15px;
+      height: 15px;
+      flex: 0 0 auto;
+    }
+
+    .phase-group .automation-chip .logo .arrow-a,
+    .phase-group .automation-chip .logo .head-a,
+    .phase-group .automation-chip .logo .arrow-b,
+    .phase-group .automation-chip .logo .head-b {
+      stroke: #BFD2FF;
+    }
+
+    .phase-group .automation-chip .text {
+      min-width: 0;
+      color: rgba(255, 255, 255, 0.82);
+      font-size: 11px;
+      line-height: 1.2;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .phase-group .automation-chip .text b {
+      display: none;
+    }
+
+    .phase-group .step-detail {
+      margin-top: 9px;
+      padding-top: 0;
+      border-top: 0;
+    }
+
+    .phase-group .step-detail summary,
+    .phase-more summary,
+    .branch-detail summary {
+      list-style: none;
+      cursor: pointer;
+      color: rgba(191, 210, 255, 0.86);
+      font-size: 12px;
+      font-weight: 800;
+    }
+
+    .phase-group .step-detail summary::-webkit-details-marker,
+    .phase-more summary::-webkit-details-marker,
+    .branch-detail summary::-webkit-details-marker {
+      display: none;
+    }
+
+    .phase-group .step-detail-body {
+      margin-top: 10px;
+      color: rgba(255, 255, 255, 0.66);
+      font-size: 12px;
+    }
+
+    .phase-group .step-detail-body .map-pill-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+      margin-top: 10px;
+    }
+
+    .phase-group .step-detail-body .map-pill {
+      background: rgba(255, 255, 255, 0.10);
+      border-color: rgba(255, 255, 255, 0.14);
+      color: rgba(255, 255, 255, 0.78);
+    }
+
+    .phase-more {
+      margin: -4px 0 0 22px;
+    }
+
+    .phase-more .phase-more-body {
+      margin-top: 14px;
+    }
+
+    .phase-group .branch {
+      grid-column: auto;
+      margin: 0;
+      padding: 0 0 18px 22px;
+      color: var(--white);
+      background: transparent;
+      border: 0;
+      border-left: 1px solid rgba(255, 255, 255, 0.15);
+      border-radius: 0;
+      box-shadow: none;
+    }
+
+    .phase-group .branch-label {
+      color: rgba(255, 255, 255, 0.42);
+    }
+
+    .phase-group .branch-question {
+      color: rgba(255, 255, 255, 0.80);
+      font-size: 13px;
+    }
+
+    .phase-group .branch-path {
+      background: rgba(255, 255, 255, 0.08);
+      border-color: rgba(255, 255, 255, 0.12);
+    }
+
+    .phase-group .branch-path-text {
+      color: rgba(255, 255, 255, 0.70);
+    }
+
+    .map-legend {
+      display: none;
+    }
+
+    #opportunitiesSection .res-section-head,
+    #bottlenecksSection .res-section-head {
+      max-width: 580px;
+      margin-bottom: 24px;
+    }
+
+    .opps-grid {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      max-width: 890px;
+      gap: 18px;
+    }
+
+    .opp {
+      min-height: 0;
+      padding: 24px;
+      border-color: rgba(36, 86, 255, 0.12);
+      border-radius: 18px;
+      background: rgba(255, 253, 248, 0.76);
+      box-shadow: none;
+    }
+
+    .opps-grid .overflow-detail {
+      grid-column: 1 / -1;
+      margin-top: 4px;
+    }
+
+    .opps-grid .overflow-detail .overflow-items {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+    #startHereSection {
+      margin-top: clamp(76px, 8vw, 108px);
+    }
+
+    .start-here {
+      padding: clamp(34px, 5vw, 58px);
+      border: 1px solid rgba(36, 86, 255, 0.18);
+      border-radius: 26px;
+      box-shadow: 0 30px 78px rgba(36, 86, 255, 0.10);
+    }
+
+    .start-here .button-primary {
+      min-height: 48px;
+      padding-inline: 24px;
+      font-size: 15px;
+    }
+
+    .impact-list {
+      gap: 10px;
+    }
+
+    .impact-chip {
+      background: rgba(255, 255, 255, 0.68);
+      border-color: rgba(36, 86, 255, 0.12);
+    }
+
+    .mini-node {
+      font-size: 0;
+    }
+
+    .mini-node::before,
+    .mini-node::after {
+      content: "";
+      display: block;
+      position: absolute;
+    }
+
+    .mini-node.mail::before {
+      width: 24px;
+      height: 17px;
+      border: 2px solid var(--charcoal);
+      border-radius: 5px;
+    }
+
+    .mini-node.mail::after {
+      width: 13px;
+      height: 13px;
+      border-left: 2px solid var(--charcoal);
+      border-bottom: 2px solid var(--charcoal);
+      transform: translateY(-2px) rotate(-45deg);
+    }
+
+    .mini-node.doc::before {
+      width: 19px;
+      height: 25px;
+      border: 2px solid var(--charcoal);
+      border-radius: 4px;
+    }
+
+    .mini-node.doc::after {
+      top: 18px;
+      width: 10px;
+      height: 2px;
+      background: var(--charcoal);
+      box-shadow: 0 6px 0 var(--charcoal);
+    }
+
+    .mini-node.check::before {
+      width: 20px;
+      height: 11px;
+      border-left: 3px solid var(--charcoal);
+      border-bottom: 3px solid var(--charcoal);
+      transform: translateY(-2px) rotate(-45deg);
+    }
+
+    @media (max-width: 980px) {
+      .hero-layout {
+        grid-template-columns: 1fr;
+        gap: 28px;
+      }
+
+      .capture-card {
+        max-width: none;
+      }
+
+      .exec-grid {
+        grid-template-columns: 1fr;
+        gap: 0;
+      }
+
+      #execBottleneck {
+        grid-row: auto;
+        padding: 24px 0;
+      }
+
+      #execTimeDrain,
+      #execOwner {
+        padding: 20px 0;
+      }
+
+      #execAi {
+        margin-top: 18px;
+      }
+
+      .phase-group {
+        flex-basis: min(76vw, 340px);
+      }
+    }
+
+    @media (max-width: 680px) {
+      .results-hero-wrap {
+        padding: 42px 0 30px;
+      }
+
+      #resultsSummary {
+        -webkit-line-clamp: 3;
+      }
+
+      .capture-card {
+        display: block;
+      }
+
+      .operational-snapshot .res-section-head {
+        display: block;
+      }
+
+      .operational-snapshot .subhead {
+        margin-top: 8px;
+      }
+
+      .operational-snapshot .res-section-head h2 {
+        font-size: 28px;
+      }
+
+      .good-news-line {
+        font-size: 16px;
+      }
+
+      .good-news-line span:last-child {
+        max-width: calc(100% - 76px);
+      }
+
+      .exec-cell-text .insight-takeaway {
+        max-width: 320px;
+        font-size: 24px;
+      }
+
+      .exec-cell:not(#execBottleneck) .insight-takeaway {
+        font-size: 20px;
+      }
+
+      .process-map-section {
+        margin: 66px 0;
+        padding: 32px 20px;
+        border-radius: 22px;
+      }
+
+      .process-map-section h2 {
+        font-size: 32px;
+      }
+
+      .map.is-phase-journey {
+        display: flex;
+        gap: 24px;
+        padding: 16px 2px 24px;
+        overflow-x: auto;
+      }
+
+      .map.is-phase-journey::before {
+        display: none;
+        min-width: 0;
+      }
+
+      .phase-group {
+        flex: 0 0 min(82vw, 330px);
+      }
+
+      .phase-group:not(:last-child)::after {
+        right: -19px;
+        width: 13px;
+      }
+
+      .opps-grid,
+      .opps-grid .overflow-detail .overflow-items {
+        grid-template-columns: 1fr;
+      }
+
+      .start-here {
+        padding: 30px 22px;
+      }
+    }
+
     /* Friendly retry banner (chat overload UX) */
     .retry-banner {
       margin-top: 14px;
@@ -3176,17 +3943,17 @@
             <h1 id="resultsTitle"></h1>
             <p class="mapped-line" id="mappedLine"></p>
             <p id="resultsSummary"></p>
-            <p class="good-news-line"><span aria-hidden="true">✦</span><span id="goodNewsLine">The good news: the biggest bottlenecks are very solvable.</span></p>
+            <p class="good-news-line"><span aria-hidden="true"><svg class="repeat-logo" viewBox="0 0 64 64"><use href="#repeat-logo-symbol"></use></svg></span><span id="goodNewsLine">The good news: the biggest bottlenecks are very solvable.</span></p>
           </div>
-          <aside class="capture-card" aria-label="About this capture">
-            <h2>About this capture</h2>
+          <details class="capture-card" aria-label="About this capture">
+            <summary>Capture details</summary>
             <dl>
               <div><dt>Business</dt><dd id="captureBusinessLabel"></dd></div>
               <div><dt>Captured by</dt><dd id="capturePersonLabel"></dd></div>
               <div><dt>Process</dt><dd id="captureProcessLabel"></dd></div>
               <div><dt>Date</dt><dd id="captureDateMeta"></dd></div>
             </dl>
-          </aside>
+          </details>
         </div>
       </div>
     </div>
@@ -3197,8 +3964,8 @@
         <!-- Executive summary -->
         <div class="res-section operational-snapshot" id="execSection" hidden>
           <div class="res-section-head">
-            <h2>Operational snapshot</h2>
-            <p class="subhead">Four signals that explain where the work is getting heavy.</p>
+            <h2>The four things that matter</h2>
+            <p class="subhead">Read this first. Everything else supports these signals.</p>
           </div>
           <div class="exec-grid">
             <div class="exec-cell red"   id="execBottleneck"   hidden><div class="exec-cell-label"><span class="dot"></span>Biggest bottleneck</div><div class="exec-cell-text"></div></div>
@@ -3220,8 +3987,8 @@
         <!-- Process map -->
         <div class="res-section process-map-section">
           <div class="res-section-head">
-            <h2>Your Process Map</h2>
-            <p class="subhead">We mapped the key steps in your process. Open any step for details, friction, and AI opportunities.</p>
+            <h2>Where the work gets stuck</h2>
+            <p class="subhead">Follow the journey in phases. Open a step only when you need the detail.</p>
           </div>
           <div class="map" id="mapView"></div>
           <div class="map-legend" aria-hidden="true">
@@ -3262,9 +4029,9 @@
                 <strong>Submit details</strong>
               </div>
               <div class="automation-node"><svg class="repeat-logo" viewBox="0 0 64 64"><use href="#repeat-logo-symbol"></use></svg></div>
-              <div class="mini-node mail">✉</div>
-              <div class="mini-node doc">□</div>
-              <div class="mini-node check">✓</div>
+              <div class="mini-node mail"></div>
+              <div class="mini-node doc"></div>
+              <div class="mini-node check"></div>
             </div>
           </div>
         </div>
@@ -3746,10 +4513,171 @@
       list.appendChild(detail);
     }
 
+    function clampWords(value, maxWords) {
+      const words = String(value || '').trim().split(/\s+/).filter(Boolean);
+      if (words.length <= maxWords) return words.join(' ');
+      return words.slice(0, maxWords).join(' ').replace(/[.,;:]+$/, '');
+    }
+
+    function splitInsightText(value, fallbackSupport) {
+      const clean = String(value || '').replace(/\s+/g, ' ').trim();
+      if (!clean) return { takeaway: '', support: '' };
+
+      const sentences = clean.match(/[^.!?]+[.!?]?/g) || [clean];
+      let first = (sentences[0] || clean).trim();
+      let rest = clean.slice(first.length).trim();
+      if (first.length > 72) {
+        const cuts = [',', ' because ', ' that ', ' which ', ' by ', ' when ', ' where '];
+        for (const cut of cuts) {
+          const index = first.toLowerCase().indexOf(cut);
+          if (index > 24 && index < 86) {
+            rest = first.slice(index).trim() + ' ' + rest;
+            first = first.slice(0, index).trim();
+            break;
+          }
+        }
+      }
+
+      const takeaway = clampWords(first.replace(/[.!?]+$/, ''), 6);
+      let support = rest.replace(/^[,.;:\s-]+/, '');
+      if (!support || support.length < 12) support = fallbackSupport || '';
+      return {
+        takeaway: takeaway,
+        support: shortText(support, 92),
+      };
+    }
+
+    function refineInsightCards() {
+      const fallbacks = {
+        execBottleneck: 'This is the constraint to relieve first.',
+        execTimeDrain: 'This is where repeated handwork is concentrated.',
+        execOwner: 'This is where too much depends on memory.',
+        execAi: 'This is the clearest place for AI to lift the burden.',
+      };
+      document.querySelectorAll('.exec-cell').forEach((cell) => {
+        const text = cell.querySelector('.exec-cell-text');
+        if (!text || text.querySelector('.insight-takeaway')) return;
+        const original = text.textContent.trim();
+        if (!original) return;
+        const parts = splitInsightText(original, fallbacks[cell.id]);
+        text.innerHTML = '';
+        const takeaway = document.createElement('strong');
+        takeaway.className = 'insight-takeaway';
+        takeaway.textContent = parts.takeaway;
+        text.appendChild(takeaway);
+        if (parts.support) {
+          const support = document.createElement('span');
+          support.className = 'insight-support';
+          support.textContent = parts.support;
+          text.appendChild(support);
+        }
+      });
+    }
+
+    const PROCESS_PHASES = [
+      { name: 'Intake', match: /lead|inquiry|intake|arriv|qualif|submit|request|new/i },
+      { name: 'Coordination', match: /assign|affiliate|contact|coordinate|schedule|review|follow/i },
+      { name: 'Trip execution', match: /trip|service|perform|deliver|execute|travel|appointment|confirm/i },
+      { name: 'Close-out', match: /close|complete|approval|status|final|hours|collect|check/i },
+      { name: 'Invoicing', match: /invoice|billing|payment|paid|receipt|bookkeep/i },
+    ];
+
+    function phaseIndexForStep(stepEl, index, total) {
+      const titleEl = stepEl.querySelector('.map-step-title');
+      const title = titleEl ? titleEl.textContent : '';
+      for (let i = 0; i < PROCESS_PHASES.length; i += 1) {
+        if (PROCESS_PHASES[i].match.test(title)) return i;
+      }
+      if (total <= 1) return 0;
+      return Math.min(PROCESS_PHASES.length - 1, Math.floor((index / total) * PROCESS_PHASES.length));
+    }
+
+    function groupProcessJourney() {
+      const view = $('mapView');
+      if (!view) return;
+      if (view.classList.contains('is-phase-journey') && view.querySelector('.phase-group')) return;
+
+      const children = Array.from(view.children);
+      const steps = children.filter((el) => el.matches('.map-step'));
+      if (!steps.length) return;
+
+      const groups = PROCESS_PHASES.map((phase) => ({ name: phase.name, packets: [] }));
+      let stepIndex = -1;
+      let currentPacket = null;
+
+      children.forEach((node) => {
+        if (node.matches('.map-step')) {
+          stepIndex += 1;
+          const phaseIndex = phaseIndexForStep(node, stepIndex, steps.length);
+          currentPacket = { nodes: [node] };
+          groups[phaseIndex].packets.push(currentPacket);
+          return;
+        }
+        if (node.matches('.branch') && currentPacket) {
+          currentPacket.nodes.push(node);
+        }
+      });
+
+      view.innerHTML = '';
+      view.classList.add('is-phase-journey');
+
+      groups.forEach((group, index) => {
+        if (!group.packets.length) return;
+        const phase = document.createElement('section');
+        phase.className = 'phase-group';
+        phase.innerHTML = '<div class="phase-header"><div class="phase-kicker">Phase '
+          + String(index + 1).padStart(2, '0')
+          + '</div><h3 class="phase-title">'
+          + group.name
+          + '</h3></div>';
+
+        const visible = document.createElement('div');
+        visible.className = 'phase-steps';
+
+        const more = document.createElement('details');
+        more.className = 'phase-more';
+        const summary = document.createElement('summary');
+        const moreBody = document.createElement('div');
+        moreBody.className = 'phase-more-body';
+
+        group.packets.forEach((packet, packetIndex) => {
+          const target = packetIndex < 2 ? visible : moreBody;
+          packet.nodes.forEach((node) => target.appendChild(node));
+        });
+
+        phase.appendChild(visible);
+        if (moreBody.children.length) {
+          summary.textContent = 'View ' + moreBody.querySelectorAll('.map-step').length + ' more steps';
+          more.appendChild(summary);
+          more.appendChild(moreBody);
+          phase.appendChild(more);
+        }
+        view.appendChild(phase);
+      });
+    }
+
+    function refineAutomationChips(card) {
+      const chip = card.querySelector('.automation-chip');
+      if (!chip) return;
+      const text = chip.querySelector('.text');
+      if (!text || text.querySelector('span')) return;
+      const original = Array.from(text.childNodes)
+        .filter((node) => node.nodeType === Node.TEXT_NODE)
+        .map((node) => node.textContent)
+        .join(' ')
+        .trim();
+      text.innerHTML = '';
+      const label = document.createElement('span');
+      label.textContent = shortText(original || 'AI can lift this', 42);
+      text.appendChild(label);
+    }
+
     function refineResultsPacing(currentState) {
       populateDashboardDetails(currentState);
+      refineInsightCards();
       document.querySelectorAll('.map-step-card').forEach((card) => {
         const inputs = card.querySelector('.map-inputs');
+        const pills = card.querySelector('.map-pill-row');
         let detail = card.querySelector('.step-detail');
         if (!detail) {
           detail = document.createElement('details');
@@ -3759,6 +4687,11 @@
         }
         const body = detail.querySelector('.step-detail-body');
         if (inputs && body && !body.contains(inputs)) body.prepend(inputs);
+        if (pills && body && !body.contains(pills)) body.appendChild(pills);
+
+        const friction = card.querySelector('.map-step-friction');
+        if (friction) friction.textContent = shortText(friction.textContent, 46);
+        refineAutomationChips(card);
 
         if (!card.querySelector('.step-glance')) {
           const detailText = body && body.querySelector('p') ? body.querySelector('p').textContent : '';
@@ -3786,7 +4719,8 @@
         branch.appendChild(detail);
       });
 
-      collapseOverflow('opportunitiesList', '.opp', 4, 'View all opportunities');
+      groupProcessJourney();
+      collapseOverflow('opportunitiesList', '.opp', 2, 'View remaining AI opportunities');
       collapseOverflow('bottlenecksList', '.bottleneck', 2, 'View more bottlenecks');
     }
 
