@@ -16,7 +16,7 @@
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=Fraunces:opsz,wght@9..144,700;9..144,800&display=swap" rel="stylesheet">
   <style>
     :root {
-      --ink: #111827; --charcoal: #172033; --blue: #2456FF; --blue-dark: #173BD7;
+      --ink: #111827; --navy: #111827; --charcoal: #172033; --blue: #2456FF; --blue-dark: #173BD7;
       --cream: #FBF5EA; --paper: #FFFDF8; --green: #2F8F5B; --amber: #B45309;
       --muted: #667085; --muted-2: #8A93A5; --line: #E7DCCB; --white: #FFFFFF;
       --shadow-soft: 0 16px 40px rgba(17, 24, 39, 0.08);
@@ -3041,6 +3041,459 @@
       }
     }
 
+    /* Content display system pass */
+    #resultsBody {
+      counter-reset: disclosure;
+    }
+
+    #resultsSummary,
+    .mapped-line,
+    .first-build-why,
+    .step-glance,
+    .impact-row,
+    .insight-support {
+      text-wrap: pretty;
+    }
+
+    .system-level-one {
+      position: relative;
+    }
+
+    .system-level-one + .system-level-one {
+      margin-top: 46px;
+    }
+
+    .exec-cell-label .dot {
+      display: none;
+    }
+
+    .exec-cell-label {
+      color: rgba(23, 32, 51, 0.54);
+    }
+
+    #impactSection:not([hidden]) {
+      display: block !important;
+    }
+
+    #impactSection {
+      margin: 48px 0 0;
+    }
+
+    .impact-section {
+      display: grid;
+      grid-template-columns: minmax(220px, 0.8fr) minmax(0, 1.2fr);
+      gap: 28px;
+      align-items: start;
+      padding: 26px 0;
+      background: transparent;
+      border: 0;
+      border-top: 1px solid rgba(23, 32, 51, 0.10);
+      border-bottom: 1px solid rgba(23, 32, 51, 0.10);
+      border-radius: 0;
+      box-shadow: none;
+    }
+
+    .impact-section .impact-label {
+      margin: 0 0 9px;
+      color: var(--blue);
+      font-size: 11px;
+      font-weight: 900;
+      letter-spacing: 0.11em;
+      text-transform: uppercase;
+    }
+
+    .impact-section h2 {
+      max-width: 340px;
+      color: var(--navy);
+      font-family: Fraunces, Georgia, serif;
+      font-size: 25px;
+      line-height: 1.12;
+    }
+
+    #impactList {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      align-items: flex-start;
+    }
+
+    .impact-row {
+      min-height: 38px;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 9px 12px;
+      color: #334155;
+      background: rgba(255, 253, 248, 0.78);
+      border: 1px solid rgba(36, 86, 255, 0.12);
+      border-radius: 999px;
+      font-size: 13px;
+      font-weight: 800;
+      line-height: 1.25;
+    }
+
+    .impact-tick {
+      width: 17px;
+      height: 17px;
+      display: inline-grid;
+      place-items: center;
+      border-radius: 999px;
+      background: rgba(36, 86, 255, 0.10);
+      color: var(--blue);
+      font-size: 11px;
+      flex: 0 0 auto;
+    }
+
+    #impactList .overflow-detail {
+      flex-basis: 100%;
+      padding-top: 2px;
+    }
+
+    #impactList .overflow-items {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-top: 10px;
+    }
+
+    #startHereSection {
+      margin: clamp(58px, 7vw, 90px) 0;
+    }
+
+    .start-here {
+      grid-template-columns: 1fr;
+      max-width: 940px;
+      padding: clamp(34px, 5vw, 54px);
+      background:
+        radial-gradient(circle at 88% 16%, rgba(36, 86, 255, 0.14), transparent 34%),
+        linear-gradient(135deg, #F5F8FF 0%, #FFFDF8 74%);
+    }
+
+    .start-copy {
+      max-width: 700px;
+    }
+
+    .first-build-why {
+      max-width: 620px;
+      font-size: 15px;
+      line-height: 1.55;
+    }
+
+    .first-build-art {
+      display: none !important;
+    }
+
+    .system-level-two {
+      margin-top: clamp(76px, 8vw, 112px);
+    }
+
+    .map.is-phase-journey {
+      display: grid;
+      grid-template-columns: repeat(5, minmax(0, 1fr));
+      gap: 0;
+      overflow: visible;
+      padding: 34px 0 22px;
+    }
+
+    .phase-group {
+      flex: initial;
+      padding-right: 20px;
+    }
+
+    .phase-group:not(:last-child)::after {
+      top: 49px;
+      right: 16px;
+      width: calc(100% - 44px);
+      height: 1px;
+      background: linear-gradient(90deg, rgba(141, 178, 255, 0.62), rgba(141, 178, 255, 0.08));
+      transform: translateX(50%);
+      z-index: 0;
+    }
+
+    .phase-header {
+      position: relative;
+      z-index: 1;
+      min-height: 86px;
+    }
+
+    .phase-kicker {
+      color: rgba(255, 255, 255, 0.42);
+    }
+
+    .phase-group .map-step-card {
+      padding-bottom: 24px;
+    }
+
+    .phase-group .step-glance {
+      max-width: 190px;
+      -webkit-line-clamp: 2;
+    }
+
+    .phase-group .map-step-friction {
+      max-width: 178px;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .phase-group .map-step-friction.is-detail-only {
+      display: none;
+    }
+
+    .phase-group .automation-chip {
+      padding: 6px 9px;
+      border: 0;
+      background: rgba(109, 157, 255, 0.18);
+      box-shadow: 0 0 28px rgba(82, 142, 255, 0.14);
+    }
+
+    .phase-group .automation-chip .text span {
+      color: #EAF1FF;
+      font-weight: 800;
+    }
+
+    .phase-group .step-detail-body .system-detail-note {
+      margin: 9px 0 0;
+      color: rgba(255, 255, 255, 0.66);
+    }
+
+    .phase-group .step-detail-body .system-detail-note .label {
+      color: rgba(191, 210, 255, 0.86);
+      font-weight: 900;
+    }
+
+    .phase-group .branch {
+      padding-bottom: 16px;
+    }
+
+    .phase-group .branch > .branch-label,
+    .phase-group .branch > .branch-question,
+    .phase-group .branch > .branch-paths {
+      display: none;
+    }
+
+    .phase-group .branch-detail {
+      margin-top: 0;
+    }
+
+    .phase-group .branch-detail-body {
+      margin-top: 10px;
+    }
+
+    .system-detail-heading {
+      margin: clamp(72px, 8vw, 104px) 0 8px;
+      padding-top: 28px;
+      border-top: 1px solid rgba(23, 32, 51, 0.10);
+    }
+
+    .system-detail-heading h2 {
+      margin: 0;
+      color: var(--navy);
+      font-family: Fraunces, Georgia, serif;
+      font-size: 31px;
+      line-height: 1.1;
+    }
+
+    .system-detail-heading p {
+      max-width: 540px;
+      margin: 8px 0 0;
+      color: var(--muted);
+      font-size: 14px;
+      line-height: 1.55;
+    }
+
+    .level-three-disclosure,
+    .more-details > details {
+      border-bottom: 1px solid rgba(23, 32, 51, 0.10);
+    }
+
+    .level-three-disclosure {
+      margin: 0;
+      padding: 0;
+    }
+
+    .level-three-disclosure > summary,
+    .more-details > details > summary {
+      min-height: 66px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 18px;
+      list-style: none;
+      cursor: pointer;
+      color: var(--charcoal);
+      font-size: 15px;
+      font-weight: 900;
+    }
+
+    .level-three-disclosure > summary::-webkit-details-marker,
+    .more-details > details > summary::-webkit-details-marker {
+      display: none;
+    }
+
+    .level-three-disclosure > summary::after,
+    .more-details > details > summary::after {
+      content: "+";
+      width: 28px;
+      height: 28px;
+      display: inline-grid;
+      place-items: center;
+      border-radius: 999px;
+      background: rgba(36, 86, 255, 0.08);
+      color: var(--blue);
+      font-size: 16px;
+      transition: transform 160ms ease;
+      flex: 0 0 auto;
+    }
+
+    .level-three-disclosure[open] > summary::after,
+    .more-details > details[open] > summary::after {
+      content: "-";
+      transform: none;
+    }
+
+    .level-three-summary-main {
+      display: grid;
+      gap: 3px;
+    }
+
+    .level-three-summary-main small {
+      color: var(--muted);
+      font-size: 12px;
+      font-weight: 600;
+      line-height: 1.35;
+    }
+
+    .level-three-count,
+    .more-details .count {
+      color: var(--muted);
+      font-size: 12px;
+      font-weight: 800;
+      white-space: nowrap;
+    }
+
+    .level-three-body {
+      padding: 0 0 28px;
+    }
+
+    .level-three-body .res-section {
+      margin: 0;
+      padding: 0;
+      background: transparent;
+    }
+
+    .level-three-body .res-section-head {
+      display: none;
+    }
+
+    .level-three-body .opps-grid,
+    .level-three-body .overflow-detail .overflow-items {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+    .level-three-body .opp,
+    .level-three-body .bottleneck {
+      background: rgba(255, 253, 248, 0.72);
+      border-color: rgba(23, 32, 51, 0.08);
+      box-shadow: none;
+    }
+
+    .more-details {
+      margin-top: 0;
+      padding-top: 0;
+      border-top: 0;
+    }
+
+    .more-details-body {
+      padding-bottom: 28px;
+    }
+
+    @media (max-width: 980px) {
+      .impact-section {
+        grid-template-columns: 1fr;
+      }
+
+      .map.is-phase-journey {
+        display: flex;
+        gap: 28px;
+        overflow-x: auto;
+        padding-right: 12vw;
+        scroll-snap-type: x proximity;
+      }
+
+      .phase-group {
+        flex: 0 0 min(76vw, 344px);
+        padding-right: 0;
+        scroll-snap-align: start;
+      }
+
+      .phase-group:not(:last-child)::after {
+        right: -22px;
+        width: 16px;
+        transform: none;
+      }
+
+      .phase-group .step-glance {
+        max-width: 260px;
+      }
+    }
+
+    @media (max-width: 680px) {
+      .system-level-one + .system-level-one {
+        margin-top: 34px;
+      }
+
+      #impactSection {
+        margin-top: 36px;
+      }
+
+      .impact-section {
+        gap: 18px;
+        padding: 22px 0;
+      }
+
+      .impact-section h2 {
+        font-size: 22px;
+      }
+
+      #impactList {
+        display: grid;
+        grid-template-columns: 1fr;
+      }
+
+      .impact-row {
+        width: 100%;
+        justify-content: flex-start;
+        border-radius: 14px;
+      }
+
+      #startHereSection {
+        margin: 48px 0 64px;
+      }
+
+      .start-here {
+        padding: 28px 20px;
+      }
+
+      .map.is-phase-journey {
+        gap: 22px;
+        padding-right: 16vw;
+      }
+
+      .phase-group {
+        flex-basis: min(82vw, 330px);
+      }
+
+      .level-three-body .opps-grid,
+      .level-three-body .overflow-detail .overflow-items {
+        grid-template-columns: 1fr;
+      }
+
+      .system-detail-heading h2 {
+        font-size: 27px;
+      }
+    }
+
     @keyframes spin { to { transform: rotate(360deg); } }
   </style>
 </head>
@@ -3362,6 +3815,28 @@
       };
     }
 
+    function firstSentence(value, maxLength) {
+      const clean = String(value || "").replace(/\s+/g, " ").trim();
+      if (!clean) return "";
+      const match = clean.match(/^[^.!?]+[.!?]?/);
+      const sentence = (match ? match[0] : clean).trim();
+      return shortText(sentence, maxLength || 120);
+    }
+
+    function addDetailNote(body, key, label, value) {
+      const text = firstSentence(value, 150);
+      if (!body || !text || body.querySelector("[data-system-note=\"" + key + "\"]")) return;
+      const note = document.createElement("p");
+      note.className = "system-detail-note";
+      note.setAttribute("data-system-note", key);
+      const labelEl = document.createElement("span");
+      labelEl.className = "label";
+      labelEl.textContent = label + ":";
+      note.appendChild(labelEl);
+      note.appendChild(document.createTextNode(" " + text));
+      body.appendChild(note);
+    }
+
     function refineInsightCards() {
       const fallbacks = {
         execBottleneck: "This is the constraint to relieve first.",
@@ -3387,6 +3862,22 @@
           text.appendChild(support);
         }
       });
+    }
+
+    function compressInstantLayer() {
+      const summary = $("resultsSummary");
+      if (summary) summary.textContent = firstSentence(summary.textContent, 138);
+
+      const why = $("startHereWhy");
+      if (why) why.textContent = firstSentence(why.textContent, 132);
+
+      const impactHeading = document.querySelector("#impactSection h2");
+      if (impactHeading) impactHeading.textContent = firstSentence(impactHeading.textContent, 92);
+
+      document.querySelectorAll("#impactList .impact-row span:last-child").forEach((row) => {
+        row.textContent = firstSentence(row.textContent, 58);
+      });
+      collapseOverflow("impactList", ".impact-row", 3, "More impact");
     }
 
     const PROCESS_PHASES = [
@@ -3483,13 +3974,106 @@
         .trim();
       text.innerHTML = "";
       const label = document.createElement("span");
-      label.textContent = shortText(original || "AI can lift this", 42);
+      label.textContent = "AI can lift this";
       text.appendChild(label);
+      chip.setAttribute("data-ai-title", original || "Automation opportunity");
+      const detail = card.querySelector(".step-detail-body");
+      addDetailNote(detail, "ai-opportunity", "AI suggestion", original || "Automation opportunity");
+    }
+
+    function refineBranchDisclosure(branch) {
+      let detail = branch.querySelector(".branch-detail");
+      if (!detail) {
+        detail = document.createElement("details");
+        detail.className = "branch-detail";
+        branch.appendChild(detail);
+      }
+
+      let summary = detail.querySelector("summary");
+      if (!summary) {
+        summary = document.createElement("summary");
+        detail.prepend(summary);
+      }
+      summary.textContent = "Decision path";
+
+      let body = detail.querySelector(".branch-detail-body");
+      if (!body) {
+        body = document.createElement("div");
+        body.className = "branch-detail-body";
+        detail.appendChild(body);
+      }
+
+      const question = branch.querySelector(":scope > .branch-question");
+      const paths = branch.querySelector(":scope > .branch-paths");
+      if (question && !body.contains(question)) body.appendChild(question);
+      if (paths && !body.contains(paths)) body.appendChild(paths);
+    }
+
+    function convertSectionToDisclosure(sectionId, title, helper, itemSelector) {
+      const section = $(sectionId);
+      if (!section) return;
+      let disclosure = section.closest(".level-three-disclosure");
+      if (!disclosure) {
+        disclosure = document.createElement("details");
+        disclosure.className = "level-three-disclosure";
+        const summary = document.createElement("summary");
+        summary.innerHTML = "<span class=\"level-three-summary-main\"><span></span><small></small></span><span class=\"level-three-count\"></span>";
+        const body = document.createElement("div");
+        body.className = "level-three-body";
+        section.before(disclosure);
+        disclosure.appendChild(summary);
+        disclosure.appendChild(body);
+        body.appendChild(section);
+      }
+
+      disclosure.hidden = section.hidden;
+      section.classList.add("system-level-three");
+      const summaryTitle = disclosure.querySelector(".level-three-summary-main span");
+      const summaryHelper = disclosure.querySelector(".level-three-summary-main small");
+      const count = disclosure.querySelector(".level-three-count");
+      if (summaryTitle) summaryTitle.textContent = title;
+      if (summaryHelper) summaryHelper.textContent = helper;
+      if (count && itemSelector) {
+        const total = section.querySelectorAll(itemSelector).length;
+        count.textContent = total ? total + " item" + (total === 1 ? "" : "s") : "";
+      }
+    }
+
+    function arrangeContentLevels() {
+      const body = $("resultsBody");
+      const exec = $("execSection");
+      const impact = $("impactSection");
+      const start = $("startHereSection");
+      const process = document.querySelector(".process-map-section");
+      const more = document.querySelector(".more-details");
+      if (!body || !process) return;
+
+      [exec, impact, start].forEach((section) => {
+        if (section) section.classList.add("system-level-one");
+      });
+      process.classList.add("system-level-two");
+
+      if (start && start.parentElement === body && process.parentElement === body) {
+        body.insertBefore(start, process);
+      }
+
+      convertSectionToDisclosure("opportunitiesSection", "AI opportunities", "Build ideas, rationale, and implementation notes.", ".opp");
+      convertSectionToDisclosure("bottlenecksSection", "Bottlenecks", "Supporting detail on where work slows down.", ".bottleneck");
+
+      if (more && !document.querySelector(".system-detail-heading")) {
+        const heading = document.createElement("div");
+        heading.className = "system-detail-heading";
+        heading.innerHTML = "<h2>Operational detail</h2><p>Open these only when you want the supporting systems, people, and SOP detail behind the map.</p>";
+        const firstDisclosure = document.querySelector(".level-three-disclosure") || more;
+        firstDisclosure.before(heading);
+      }
+      if (more) more.classList.add("system-detail-library");
     }
 
     function refineResultsPacing(state) {
       populateDashboardDetails(state);
       refineInsightCards();
+      compressInstantLayer();
       document.querySelectorAll(".map-step-card").forEach((card) => {
         const inputs = card.querySelector(".map-inputs");
         const pills = card.querySelector(".map-pill-row");
@@ -3505,7 +4089,14 @@
         if (pills && body && !body.contains(pills)) body.appendChild(pills);
 
         const friction = card.querySelector(".map-step-friction");
-        if (friction) friction.textContent = shortText(friction.textContent, 46);
+        const automation = card.querySelector(".automation-chip");
+        if (friction) {
+          friction.textContent = firstSentence(friction.textContent, 44);
+          if (automation) {
+            addDetailNote(body, "friction", "Friction", friction.textContent);
+            friction.classList.add("is-detail-only");
+          }
+        }
         refineAutomationChips(card);
 
         if (!card.querySelector(".step-glance")) {
@@ -3513,7 +4104,7 @@
           if (detailText) {
             const glance = document.createElement("p");
             glance.className = "step-glance";
-            glance.textContent = shortText(detailText, 86);
+            glance.textContent = firstSentence(detailText, 74);
             const title = card.querySelector(".map-step-title");
             if (title) title.insertAdjacentElement("afterend", glance);
           }
@@ -3521,20 +4112,11 @@
       });
 
       document.querySelectorAll(".branch").forEach((branch) => {
-        if (branch.querySelector(".branch-detail")) return;
-        const paths = branch.querySelector(".branch-paths");
-        if (!paths) return;
-        paths.classList.add("is-collapsed");
-        const detail = document.createElement("details");
-        detail.className = "branch-detail";
-        const summary = document.createElement("summary");
-        summary.textContent = "View paths";
-        detail.appendChild(summary);
-        detail.appendChild(paths);
-        branch.appendChild(detail);
+        refineBranchDisclosure(branch);
       });
 
       groupProcessJourney();
+      arrangeContentLevels();
       collapseOverflow("opportunitiesList", ".opp", 2, "View remaining AI opportunities");
       collapseOverflow("bottlenecksList", ".bottleneck", 2, "View more bottlenecks");
     }
