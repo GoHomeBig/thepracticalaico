@@ -2220,6 +2220,724 @@
       }
     }
 
+    /* Dashboard mockup alignment */
+    body {
+      background:
+        radial-gradient(circle at 74% 12%, rgba(36, 86, 255, 0.055), transparent 24%),
+        var(--cream);
+    }
+
+    .nav .container,
+    .results-hero-wrap .container,
+    .action-bar .container,
+    .results-container {
+      width: min(1120px, calc(100% - 56px));
+    }
+
+    .nav {
+      position: relative;
+      background: rgba(255, 253, 248, 0.88);
+    }
+
+    .nav-inner {
+      min-height: 74px;
+    }
+
+    .brand-mark {
+      width: 42px;
+      height: 42px;
+      border-radius: 13px;
+    }
+
+    .repeat-logo {
+      width: 28px;
+      height: 28px;
+    }
+
+    .wordmark-title {
+      font-size: 24px;
+    }
+
+    .action-bar {
+      position: relative;
+      top: auto;
+      padding: 16px 0;
+      background: rgba(255, 253, 248, 0.72);
+      border-bottom: 1px solid rgba(231, 220, 203, 0.70);
+      box-shadow: none;
+    }
+
+    .action-bar-inner {
+      justify-content: flex-end;
+    }
+
+    .results-url-row {
+      margin-left: 0;
+    }
+
+    .action-bar .button,
+    .results-url-row button {
+      min-height: 38px;
+      padding: 0 16px;
+      border-radius: 9px;
+      background: rgba(255, 253, 248, 0.86);
+      border-color: rgba(23, 32, 51, 0.14);
+      color: var(--charcoal);
+      font-size: 13px;
+      font-weight: 800;
+    }
+
+    #notionOpenBtn.button-primary {
+      background: var(--blue);
+      color: var(--white);
+      border-color: var(--blue);
+    }
+
+    .results-hero-wrap {
+      padding: 42px 0 30px;
+      background:
+        radial-gradient(circle at 78% 2%, rgba(36, 86, 255, 0.07), transparent 28%),
+        linear-gradient(180deg, rgba(255, 253, 248, 0.88), rgba(251, 245, 234, 0.70));
+    }
+
+    .hero-layout {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) 300px;
+      gap: 72px;
+      align-items: start;
+    }
+
+    .hero-copy {
+      min-width: 0;
+    }
+
+    .progress-bar {
+      display: inline-flex;
+      gap: 14px;
+      padding: 0;
+      margin-bottom: 16px;
+      background: transparent;
+      border: 0;
+      box-shadow: none;
+    }
+
+    .progress-step {
+      color: var(--charcoal);
+      font-size: 12px;
+      font-weight: 900;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+    }
+
+    .progress-step.done {
+      color: var(--charcoal);
+    }
+
+    .progress-step .dot,
+    .progress-step.done .dot {
+      width: 22px;
+      height: 22px;
+      background: transparent;
+      border: 1.5px solid var(--charcoal);
+      color: var(--charcoal);
+    }
+
+    .progress-date {
+      align-self: center;
+      color: var(--muted);
+      font-size: 13px;
+      font-weight: 500;
+    }
+
+    .results-hero .biz {
+      display: none;
+    }
+
+    .results-hero h1 {
+      max-width: 760px;
+      margin-bottom: 8px;
+      font-size: clamp(42px, 5.6vw, 58px);
+      line-height: 1.02;
+    }
+
+    .mapped-line {
+      margin: 0 0 26px;
+      color: #667085;
+      font-size: clamp(19px, 2.3vw, 24px);
+      line-height: 1.35;
+    }
+
+    #resultsSummary {
+      max-width: 660px;
+      margin-bottom: 18px;
+      color: var(--charcoal);
+      font-size: 17px;
+      line-height: 1.55;
+      -webkit-line-clamp: 3;
+    }
+
+    .good-news-line {
+      display: inline-flex;
+      align-items: center;
+      gap: 11px;
+      margin: 0;
+      color: var(--blue);
+      font-size: 17px;
+      font-weight: 800;
+    }
+
+    .good-news-line span:first-child {
+      width: 34px;
+      height: 34px;
+      display: inline-grid;
+      place-items: center;
+      border-radius: 999px;
+      background: rgba(36, 86, 255, 0.10);
+    }
+
+    .capture-card {
+      padding: 24px;
+      background: rgba(255, 253, 248, 0.70);
+      border: 1px solid rgba(23, 32, 51, 0.10);
+      border-radius: 16px;
+      box-shadow: 0 18px 50px rgba(17, 24, 39, 0.055);
+    }
+
+    .capture-card h2 {
+      margin: 0 0 18px;
+      font-family: Inter, system-ui, sans-serif;
+      font-size: 14px;
+      letter-spacing: 0;
+    }
+
+    .capture-card dl {
+      display: grid;
+      gap: 18px;
+      margin: 0;
+    }
+
+    .capture-card div {
+      position: relative;
+      padding-left: 28px;
+    }
+
+    .capture-card div::before {
+      content: "□";
+      position: absolute;
+      top: 1px;
+      left: 0;
+      color: var(--charcoal);
+      font-size: 13px;
+    }
+
+    .capture-card div:nth-child(2)::before { content: "○"; }
+    .capture-card div:nth-child(3)::before { content: "◉"; }
+    .capture-card div:nth-child(4)::before { content: "▣"; }
+
+    .capture-card dt {
+      margin-bottom: 4px;
+      color: var(--charcoal);
+      font-size: 11px;
+      font-weight: 900;
+    }
+
+    .capture-card dd {
+      margin: 0;
+      color: var(--charcoal);
+      font-size: 13px;
+      line-height: 1.35;
+    }
+
+    .operational-snapshot {
+      margin-top: 28px;
+    }
+
+    .operational-snapshot .res-section-head {
+      display: none;
+    }
+
+    .exec-grid {
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 18px;
+    }
+
+    .exec-cell {
+      min-height: 228px;
+      padding: 24px;
+      border-radius: 15px;
+      background: rgba(255, 253, 248, 0.78);
+      border-color: rgba(23, 32, 51, 0.10);
+      box-shadow: 0 18px 48px rgba(17, 24, 39, 0.045);
+    }
+
+    .exec-cell-label {
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 16px;
+      margin: 0 0 12px;
+      color: #344054;
+      font-size: 14px;
+      font-weight: 800;
+      letter-spacing: 0;
+      text-transform: none;
+    }
+
+    .exec-cell-label .dot {
+      width: 54px;
+      height: 54px;
+      border-radius: 999px;
+      background: rgba(36, 86, 255, 0.09);
+      border: 1px solid rgba(36, 86, 255, 0.18);
+      display: grid;
+      place-items: center;
+    }
+
+    .exec-cell.red .dot,
+    .exec-cell.amber .dot,
+    .exec-cell.ink .dot,
+    .exec-cell.blue .dot {
+      background: rgba(36, 86, 255, 0.09);
+      border-color: rgba(36, 86, 255, 0.18);
+    }
+
+    .exec-cell-label .dot::before {
+      color: var(--blue);
+      font-size: 25px;
+      line-height: 1;
+    }
+
+    .exec-cell.red .dot::before { content: "◷"; }
+    .exec-cell.amber .dot::before { content: "☰"; }
+    .exec-cell.ink .dot::before { content: "♙"; }
+    .exec-cell.blue .dot::before { content: "✦"; }
+
+    .exec-cell-text {
+      font-family: Fraunces, Georgia, serif;
+      font-size: 20px;
+      font-weight: 800;
+      line-height: 1.15;
+      -webkit-line-clamp: 3;
+    }
+
+    #impactSection {
+      display: none !important;
+    }
+
+    .process-map-section {
+      margin: 24px 0 28px;
+      padding: 28px 22px 22px;
+      color: var(--charcoal);
+      background: rgba(255, 253, 248, 0.82);
+      border: 1px solid rgba(23, 32, 51, 0.10);
+      border-radius: 18px;
+      box-shadow: 0 18px 48px rgba(17, 24, 39, 0.045);
+      overflow: visible;
+    }
+
+    .process-map-section .res-section-head {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      max-width: none;
+      margin-bottom: 24px;
+      padding: 0;
+    }
+
+    .process-map-section h2 {
+      color: var(--charcoal);
+      font-size: 24px;
+      line-height: 1.1;
+    }
+
+    .process-map-section .subhead {
+      max-width: 720px;
+      margin: 8px 0 0;
+      color: #475467;
+      font-size: 14px;
+    }
+
+    .map {
+      position: relative;
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(112px, 1fr));
+      gap: 18px;
+      overflow: visible;
+      padding: 58px 0 16px;
+      scroll-snap-type: none;
+    }
+
+    .map::before {
+      content: "";
+      display: block;
+      position: absolute;
+      top: 19px;
+      left: 58px;
+      right: 58px;
+      height: 2px;
+      background: var(--blue);
+      z-index: 0;
+    }
+
+    .map-step {
+      position: relative;
+      display: block;
+      min-width: 0;
+      scroll-snap-align: none;
+    }
+
+    .map-step::after {
+      content: "›";
+      top: 82px;
+      right: -13px;
+      color: rgba(36, 86, 255, 0.26);
+      font-size: 24px;
+      font-weight: 700;
+    }
+
+    .map-step-num {
+      top: -50px;
+      left: 50%;
+      width: 25px;
+      height: 25px;
+      transform: translateX(-50%);
+      background: var(--blue);
+      color: var(--white);
+      border: 0;
+      box-shadow: 0 8px 18px rgba(36, 86, 255, 0.25);
+    }
+
+    .map-step-card {
+      min-height: 184px;
+      padding: 20px 12px 14px;
+      text-align: center;
+      border: 1px solid rgba(23, 32, 51, 0.10);
+      border-radius: 14px;
+      background: rgba(255, 253, 248, 0.86);
+      box-shadow: none;
+    }
+
+    .map-step-card::before {
+      content: "◎";
+      width: 50px;
+      height: 50px;
+      display: grid;
+      place-items: center;
+      margin: 0 auto 14px;
+      border-radius: 999px;
+      background: rgba(36, 86, 255, 0.08);
+      color: var(--blue);
+      font-size: 25px;
+    }
+
+    .map-step.has-auto .map-step-card {
+      border-color: rgba(36, 86, 255, 0.22);
+      box-shadow: 0 0 0 1px rgba(36, 86, 255, 0.04);
+    }
+
+    .map-step-title {
+      max-width: none;
+      margin: 0 auto 10px;
+      font-size: 15px;
+      line-height: 1.2;
+      -webkit-line-clamp: 2;
+    }
+
+    .step-glance {
+      margin: 0;
+      color: #344054;
+      font-size: 12px;
+      line-height: 1.45;
+      display: -webkit-box;
+      -webkit-line-clamp: 3;
+      -webkit-box-orient: vertical;
+      overflow: hidden;
+    }
+
+    .map-pill-row,
+    .automation-chip {
+      display: none;
+    }
+
+    .map-step-friction {
+      max-width: calc(100% - 8px);
+      margin: 12px auto 0;
+      padding: 6px 9px;
+      border-color: rgba(245, 124, 0, 0.22);
+      background: #FFF4E8;
+      color: #C2410C;
+      font-size: 10.5px;
+      justify-content: center;
+    }
+
+    .step-detail {
+      border-top: 0;
+      padding-top: 10px;
+    }
+
+    .branch {
+      grid-column: 1 / -1;
+      color: var(--charcoal);
+      background: rgba(36, 86, 255, 0.045);
+      border-color: rgba(36, 86, 255, 0.12);
+      box-shadow: none;
+    }
+
+    .branch-question {
+      color: var(--charcoal);
+    }
+
+    .branch-detail summary {
+      color: var(--blue);
+    }
+
+    .branch-path {
+      background: var(--paper);
+    }
+
+    .branch-path-text {
+      color: var(--charcoal);
+    }
+
+    .map-legend {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      padding-top: 8px;
+    }
+
+    .map-legend span {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 8px 12px;
+      border-radius: 999px;
+      background: rgba(23, 32, 51, 0.045);
+      color: var(--charcoal);
+      font-size: 12px;
+      font-weight: 700;
+    }
+
+    .map-legend b {
+      width: 10px;
+      height: 10px;
+      border-radius: 999px;
+      display: inline-block;
+    }
+
+    .map-legend .high { background: #FB7185; }
+    .map-legend .medium { background: #F97316; }
+    .map-legend .low { background: #7EA0FF; }
+    .map-legend .ai { background: var(--blue); }
+
+    .opps-grid {
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 16px;
+    }
+
+    .opp {
+      min-height: 164px;
+      padding: 20px;
+      border: 1px solid rgba(23, 32, 51, 0.10);
+      border-radius: 14px;
+      background: rgba(255, 253, 248, 0.82);
+      box-shadow: 0 12px 32px rgba(17, 24, 39, 0.035);
+    }
+
+    .opp h3 {
+      font-size: 15px;
+      line-height: 1.25;
+    }
+
+    .opp-head::before {
+      content: "✦";
+      width: 28px;
+      height: 28px;
+      display: inline-grid;
+      place-items: center;
+      border-radius: 999px;
+      background: rgba(36, 86, 255, 0.08);
+      color: var(--blue);
+      flex: 0 0 auto;
+    }
+
+    .opp .pill {
+      order: 3;
+    }
+
+    .opp > .impact-list {
+      display: none;
+    }
+
+    .overflow-detail {
+      padding-top: 12px;
+    }
+
+    .overflow-detail .overflow-items {
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 16px;
+    }
+
+    .start-here {
+      display: grid;
+      grid-template-columns: minmax(0, 1.08fr) minmax(300px, 0.92fr);
+      gap: 34px;
+      align-items: center;
+      padding: 34px 26px;
+      border-radius: 16px;
+      background:
+        radial-gradient(circle at 74% 50%, rgba(36, 86, 255, 0.15), transparent 30%),
+        linear-gradient(135deg, #F4F8FF 0%, #FFFDF8 72%);
+    }
+
+    .start-copy {
+      min-width: 0;
+    }
+
+    .start-here h2 {
+      font-size: clamp(28px, 3.2vw, 36px);
+    }
+
+    .first-build-art {
+      position: relative;
+      min-height: 260px;
+      display: grid;
+      place-items: center;
+    }
+
+    .message-card {
+      position: absolute;
+      left: 0;
+      top: 58px;
+      width: 196px;
+      padding: 18px;
+      border-radius: 14px;
+      background: var(--white);
+      box-shadow: 0 22px 54px rgba(17, 24, 39, 0.14);
+      z-index: 2;
+    }
+
+    .message-card span,
+    .message-card p {
+      color: var(--charcoal);
+      font-size: 13px;
+      line-height: 1.45;
+    }
+
+    .message-card strong {
+      display: block;
+      margin-top: 12px;
+      padding: 10px 12px;
+      border-radius: 8px;
+      background: var(--blue);
+      color: var(--white);
+      text-align: center;
+      font-size: 12px;
+    }
+
+    .automation-node {
+      width: 76px;
+      height: 76px;
+      display: grid;
+      place-items: center;
+      border-radius: 999px;
+      background: var(--blue);
+      box-shadow: 0 18px 44px rgba(36, 86, 255, 0.28);
+    }
+
+    .automation-node .repeat-logo .arrow-a,
+    .automation-node .repeat-logo .head-a,
+    .automation-node .repeat-logo .arrow-b,
+    .automation-node .repeat-logo .head-b {
+      stroke: var(--white);
+    }
+
+    .mini-node {
+      position: absolute;
+      right: 38px;
+      width: 56px;
+      height: 56px;
+      display: grid;
+      place-items: center;
+      border-radius: 13px;
+      background: var(--white);
+      border: 1px solid rgba(23, 32, 51, 0.08);
+      box-shadow: 0 18px 42px rgba(17, 24, 39, 0.10);
+      color: var(--charcoal);
+      font-size: 24px;
+    }
+
+    .mini-node.mail { top: 36px; }
+    .mini-node.doc { top: 122px; }
+    .mini-node.check { top: 208px; }
+
+    .dark-cta {
+      display: none;
+    }
+
+    @media (max-width: 980px) {
+      .hero-layout,
+      .start-here {
+        grid-template-columns: 1fr;
+      }
+
+      .capture-card {
+        max-width: 420px;
+      }
+
+      .exec-grid,
+      .opps-grid,
+      .overflow-detail .overflow-items {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+    }
+
+    @media (max-width: 680px) {
+      .nav .container,
+      .results-hero-wrap .container,
+      .action-bar .container,
+      .results-container {
+        width: min(100% - 28px, 1120px);
+      }
+
+      .action-bar-inner {
+        justify-content: flex-start;
+      }
+
+      .results-hero h1 {
+        font-size: clamp(36px, 12vw, 48px);
+      }
+
+      .capture-card {
+        display: none;
+      }
+
+      .exec-grid,
+      .opps-grid,
+      .overflow-detail .overflow-items {
+        grid-template-columns: 1fr;
+      }
+
+      .map {
+        display: flex;
+        overflow-x: auto;
+        padding-right: 24vw;
+      }
+
+      .map::before {
+        left: 56px;
+        right: 56px;
+        min-width: 720px;
+      }
+
+      .map-step {
+        flex: 0 0 142px;
+      }
+
+      .first-build-art {
+        display: none;
+      }
+    }
+
     /* Friendly retry banner (chat overload UX) */
     .retry-banner {
       margin-top: 14px;
@@ -2427,8 +3145,7 @@
         <a id="notionOpenBtn" class="button button-light" target="_blank" rel="noopener" hidden>Open in Notion</a>
         <button id="notionBtn" class="button button-light" type="button" hidden>Push to Notion</button>
         <button id="gdocsBtn" class="button button-light" type="button">Open in Google Docs</button>
-        <button id="docxBtn" class="button button-light" type="button">Download Word</button>
-        <a class="button button-light" href="https://calendar.app.google/SBMCxMPv4Sd8VZRW9" target="_blank" rel="noopener">Plan the first build</a>
+        <button id="docxBtn" class="button button-light" type="button">Download full report</button>
         <div id="emailStatus" class="email-status" hidden>
           <span class="dot"></span>
           <span id="emailStatusText"></span>
@@ -2436,7 +3153,7 @@
         <div id="resultsUrlRow" class="results-url-row" hidden>
           <span class="label">Share result link</span>
           <input id="resultsUrlField" type="text" readonly />
-          <button id="copyResultsUrlBtn" type="button">Copy link</button>
+          <button id="copyResultsUrlBtn" type="button">Share this results page</button>
         </div>
         <div id="gdocsHint" class="action-bar-hint" hidden>
           Your Word file is downloading. Google Docs is opening in a new tab. Use File &rarr; Open and drag the file in to keep editing.
@@ -2447,19 +3164,29 @@
     <!-- Hero wrapper with the layered grid + radial background -->
     <div id="resultsHeroWrap" class="results-hero-wrap" hidden>
       <div class="container">
-        <div class="results-hero">
-          <div class="progress-bar" aria-label="Workshop progress">
-            <span class="progress-step done"><span class="dot">✓</span>Capture complete</span>
-            <span class="progress-arrow">&rarr;</span>
-            <span class="progress-step current"><span class="dot"></span>Plan first build</span>
-            <span class="progress-arrow">&rarr;</span>
-            <span class="progress-step"><span class="dot"></span>Automate</span>
-          </div>
-          <p class="progress-supporting">You completed the Capture phase. Next, we review the findings together and decide what Practical AI Co. should build first.</p>
+        <div class="results-hero hero-layout">
+          <div class="hero-copy">
+            <div class="progress-bar" aria-label="Workshop progress">
+              <span class="progress-step done"><span class="dot">✓</span>Capture complete</span>
+              <span class="progress-date" id="captureDateLabel"></span>
+            </div>
+            <p class="progress-supporting">You completed the Capture phase. Next, we review the findings together and decide what Practical AI Co. should build first.</p>
 
-          <div class="biz" id="resultsBiz"></div>
-          <h1 id="resultsTitle"></h1>
-          <p id="resultsSummary"></p>
+            <div class="biz" id="resultsBiz"></div>
+            <h1 id="resultsTitle"></h1>
+            <p class="mapped-line" id="mappedLine"></p>
+            <p id="resultsSummary"></p>
+            <p class="good-news-line"><span aria-hidden="true">✦</span><span id="goodNewsLine">The good news: the biggest bottlenecks are very solvable.</span></p>
+          </div>
+          <aside class="capture-card" aria-label="About this capture">
+            <h2>About this capture</h2>
+            <dl>
+              <div><dt>Business</dt><dd id="captureBusinessLabel"></dd></div>
+              <div><dt>Captured by</dt><dd id="capturePersonLabel"></dd></div>
+              <div><dt>Process</dt><dd id="captureProcessLabel"></dd></div>
+              <div><dt>Date</dt><dd id="captureDateMeta"></dd></div>
+            </dl>
+          </aside>
         </div>
       </div>
     </div>
@@ -2490,28 +3217,19 @@
           </div>
         </div>
 
-        <!-- Start Here -->
-        <div class="res-section" id="startHereSection" hidden>
-          <div class="start-here">
-            <div class="badge">Recommended first build</div>
-            <h2 id="startHereTitle"></h2>
-            <p id="startHereWhy" class="first-build-why"></p>
-            <details class="first-build-detail">
-              <summary>Build notes</summary>
-              <p id="startHereWhat"></p>
-            </details>
-            <div class="impact-list" id="startHereImpact"></div>
-            <a class="button button-primary" href="https://calendar.app.google/SBMCxMPv4Sd8VZRW9" target="_blank" rel="noopener">Plan the first build</a>
-          </div>
-        </div>
-
         <!-- Process map -->
         <div class="res-section process-map-section">
           <div class="res-section-head">
-            <h2>The journey your work takes today.</h2>
-            <p class="subhead">Scan the handoffs, friction, and AI openings in seconds.</p>
+            <h2>Your Process Map</h2>
+            <p class="subhead">We mapped the key steps in your process. Open any step for details, friction, and AI opportunities.</p>
           </div>
           <div class="map" id="mapView"></div>
+          <div class="map-legend" aria-hidden="true">
+            <span><b class="high"></b>High friction</span>
+            <span><b class="medium"></b>Medium friction</span>
+            <span><b class="low"></b>Low friction</span>
+            <span><b class="ai"></b>AI opportunity</span>
+          </div>
         </div>
 
         <!-- AI opportunities -->
@@ -2521,6 +3239,34 @@
             <p class="subhead">Where AI can take work off your plate. Tap any card for more.</p>
           </div>
           <div class="opps-grid" id="opportunitiesList"></div>
+        </div>
+
+        <!-- Start Here -->
+        <div class="res-section" id="startHereSection" hidden>
+          <div class="start-here">
+            <div class="start-copy">
+              <div class="badge">Recommended first build</div>
+              <h2 id="startHereTitle"></h2>
+              <p id="startHereWhy" class="first-build-why"></p>
+              <details class="first-build-detail">
+                <summary>Build notes</summary>
+                <p id="startHereWhat"></p>
+              </details>
+              <div class="impact-list" id="startHereImpact"></div>
+              <a class="button button-primary" href="https://calendar.app.google/SBMCxMPv4Sd8VZRW9" target="_blank" rel="noopener">Plan the first build</a>
+            </div>
+            <div class="first-build-art" aria-hidden="true">
+              <div class="message-card">
+                <span>Hi there,</span>
+                <p>This is a friendly reminder to send the missing details.</p>
+                <strong>Submit details</strong>
+              </div>
+              <div class="automation-node"><svg class="repeat-logo" viewBox="0 0 64 64"><use href="#repeat-logo-symbol"></use></svg></div>
+              <div class="mini-node mail">✉</div>
+              <div class="mini-node doc">□</div>
+              <div class="mini-node check">✓</div>
+            </div>
+          </div>
         </div>
 
         <!-- Bottlenecks -->
@@ -2951,6 +3697,36 @@
     // Render functions live in /capture/assets/results-render.js and are
     // exposed as window.CaptureRender. Both /capture and /capture/results/{slug}
     // share this code so the experiences stay visually in lockstep.
+    function formatCaptureDate(value) {
+      const date = value ? new Date(value) : new Date();
+      if (Number.isNaN(date.getTime())) return '';
+      return date.toLocaleDateString(undefined, { month: 'long', day: 'numeric', year: 'numeric' });
+    }
+
+    function shortText(value, max) {
+      const text = String(value || '').trim();
+      if (!text || text.length <= max) return text;
+      return text.slice(0, max - 1).trim().replace(/[.,;:]+$/, '') + '...';
+    }
+
+    function populateDashboardDetails(currentState) {
+      const profile = (currentState && currentState.profile) || {};
+      const results = (currentState && currentState.results) || {};
+      const business = profile.businessName || 'Your business';
+      const businessDisplay = business.replace(/\.+$/, '');
+      const process = profile.processName || results.sop_title || 'Captured process';
+      const capturedBy = profile.firstName || 'Your team';
+      const dateText = formatCaptureDate(currentState && (currentState.createdAt || currentState.completedAt));
+
+      if ($('mappedLine')) $('mappedLine').textContent = 'Mapped and analyzed for ' + businessDisplay + '.';
+      if ($('captureBusinessLabel')) $('captureBusinessLabel').textContent = business;
+      if ($('capturePersonLabel')) $('capturePersonLabel').textContent = capturedBy;
+      if ($('captureProcessLabel')) $('captureProcessLabel').textContent = process;
+      if ($('captureDateMeta')) $('captureDateMeta').textContent = dateText;
+      if ($('captureDateLabel')) $('captureDateLabel').textContent = dateText;
+      if ($('goodNewsLine')) $('goodNewsLine').textContent = 'The good news: the biggest bottlenecks are very solvable.';
+    }
+
     function collapseOverflow(listId, itemSelector, visibleCount, label) {
       const list = $(listId);
       if (!list) return;
@@ -2970,10 +3746,10 @@
       list.appendChild(detail);
     }
 
-    function refineResultsPacing() {
+    function refineResultsPacing(currentState) {
+      populateDashboardDetails(currentState);
       document.querySelectorAll('.map-step-card').forEach((card) => {
         const inputs = card.querySelector('.map-inputs');
-        if (!inputs) return;
         let detail = card.querySelector('.step-detail');
         if (!detail) {
           detail = document.createElement('details');
@@ -2982,7 +3758,18 @@
           card.appendChild(detail);
         }
         const body = detail.querySelector('.step-detail-body');
-        if (body && !body.contains(inputs)) body.prepend(inputs);
+        if (inputs && body && !body.contains(inputs)) body.prepend(inputs);
+
+        if (!card.querySelector('.step-glance')) {
+          const detailText = body && body.querySelector('p') ? body.querySelector('p').textContent : '';
+          if (detailText) {
+            const glance = document.createElement('p');
+            glance.className = 'step-glance';
+            glance.textContent = shortText(detailText, 86);
+            const title = card.querySelector('.map-step-title');
+            if (title) title.insertAdjacentElement('afterend', glance);
+          }
+        }
       });
 
       document.querySelectorAll('.branch').forEach((branch) => {
@@ -2999,13 +3786,13 @@
         branch.appendChild(detail);
       });
 
-      collapseOverflow('opportunitiesList', '.opp', 2, 'View more opportunities');
+      collapseOverflow('opportunitiesList', '.opp', 4, 'View all opportunities');
       collapseOverflow('bottlenecksList', '.bottleneck', 2, 'View more bottlenecks');
     }
 
     function renderResults() {
       window.CaptureRender.renderResults(state);
-      refineResultsPacing();
+      refineResultsPacing(state);
     }
     function updateActionBar() { window.CaptureRender.updateActionBar(state); }
 
