@@ -2237,6 +2237,213 @@
       .step-outcome { max-width: none; margin: 0 0 4px; }
       .roadmap-step .button { align-self: flex-start; margin-top: 14px; }
     }
+
+    /* ============================================================
+       Homepage overhaul additions
+       Situation copy, approach callout, AI team grid, performance-pricing work flow
+       All colors pulled from existing brand tokens. No new design system.
+       ============================================================ */
+
+    .situation-copy {
+      max-width: 720px;
+      margin: 0 auto 36px;
+      text-align: center;
+    }
+    .situation-copy p {
+      font-size: 17px;
+      line-height: 1.65;
+      color: var(--charcoal);
+      margin: 0 0 14px;
+    }
+    .situation-copy p:last-child { margin-bottom: 0; }
+
+    .how-callout {
+      max-width: 720px;
+      margin: 32px auto 0;
+      padding: 22px 28px;
+      background: var(--paper);
+      border: 1px solid var(--line);
+      border-left: 4px solid var(--blue);
+      border-radius: 14px;
+      box-shadow: 0 10px 28px rgba(17, 24, 39, 0.05);
+    }
+    .how-callout p {
+      margin: 0;
+      font-size: 16px;
+      line-height: 1.6;
+      color: var(--charcoal);
+    }
+
+    /* AI Team grid */
+    .team-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 18px;
+      margin-top: 8px;
+    }
+    @media (max-width: 980px) { .team-grid { grid-template-columns: repeat(2, 1fr); } }
+    @media (max-width: 600px) { .team-grid { grid-template-columns: 1fr; } }
+
+    .team-card {
+      background: var(--paper);
+      border: 1px solid var(--line);
+      border-radius: 18px;
+      padding: 24px 26px 22px;
+      box-shadow: 0 12px 28px rgba(17, 24, 39, 0.05);
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+      transition: transform 180ms ease, box-shadow 180ms ease;
+    }
+    .team-card:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 18px 36px rgba(17, 24, 39, 0.08);
+    }
+
+    .team-avatar {
+      width: 64px;
+      height: 64px;
+      border-radius: 999px;
+      display: grid;
+      place-items: center;
+      font-family: Fraunces, Georgia, serif;
+      font-weight: 800;
+      font-size: 28px;
+      letter-spacing: -0.02em;
+      margin-bottom: 16px;
+    }
+    .team-name {
+      font-family: Fraunces, Georgia, serif;
+      font-weight: 800;
+      font-size: 22px;
+      letter-spacing: -0.022em;
+      color: var(--charcoal);
+      line-height: 1.1;
+      margin-bottom: 4px;
+    }
+    .team-title {
+      font-size: 13.5px;
+      font-weight: 700;
+      color: var(--muted);
+      margin-bottom: 12px;
+    }
+    .team-dept {
+      display: inline-block;
+      font-size: 10.5px;
+      font-weight: 900;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      padding: 4px 10px;
+      border-radius: 999px;
+      margin-bottom: 14px;
+    }
+    .team-task {
+      font-size: 14.5px;
+      line-height: 1.55;
+      color: var(--charcoal);
+      margin: 0;
+    }
+
+    /* Department color variants. All pull from existing brand tokens. */
+    .team-dept-blue .team-avatar  { background: rgba(36, 86, 255, 0.10); color: var(--blue); }
+    .team-dept-blue .team-dept    { background: rgba(36, 86, 255, 0.10); color: var(--blue); }
+    .team-dept-green .team-avatar { background: rgba(47, 143, 91, 0.10); color: var(--green); }
+    .team-dept-green .team-dept   { background: rgba(47, 143, 91, 0.10); color: var(--green); }
+    .team-dept-amber .team-avatar { background: rgba(180, 83, 9, 0.10); color: var(--amber); }
+    .team-dept-amber .team-dept   { background: rgba(180, 83, 9, 0.10); color: var(--amber); }
+    .team-dept-ink .team-avatar   { background: rgba(23, 32, 51, 0.08); color: var(--charcoal); }
+    .team-dept-ink .team-dept     { background: rgba(23, 32, 51, 0.08); color: var(--charcoal); }
+
+    .team-callout {
+      margin-top: 36px;
+      padding: 24px 28px;
+      background: var(--paper);
+      border: 1px solid var(--line);
+      border-radius: 18px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 20px;
+      flex-wrap: wrap;
+      box-shadow: 0 10px 24px rgba(17, 24, 39, 0.04);
+    }
+    .team-callout p {
+      margin: 0;
+      color: var(--charcoal);
+      font-size: 15.5px;
+      line-height: 1.55;
+      max-width: 560px;
+    }
+
+    /* How we work together. Performance-based 4-step grid. */
+    .work-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 20px;
+      margin-top: 8px;
+    }
+    @media (max-width: 720px) { .work-grid { grid-template-columns: 1fr; } }
+
+    .work-card {
+      background: var(--paper);
+      border: 1px solid var(--line);
+      border-radius: 18px;
+      padding: 28px 30px;
+      box-shadow: 0 12px 28px rgba(17, 24, 39, 0.05);
+      display: flex;
+      flex-direction: column;
+    }
+    .work-num {
+      font-family: Fraunces, Georgia, serif;
+      font-weight: 800;
+      color: var(--blue);
+      font-size: 32px;
+      letter-spacing: -0.025em;
+      line-height: 1;
+      margin-bottom: 14px;
+    }
+    .work-phase {
+      font-family: Fraunces, Georgia, serif;
+      font-weight: 800;
+      font-size: 22px;
+      letter-spacing: -0.022em;
+      color: var(--charcoal);
+      line-height: 1.15;
+      margin-bottom: 6px;
+    }
+    .work-meta {
+      font-size: 12px;
+      font-weight: 900;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--green);
+      margin-bottom: 14px;
+    }
+    .work-card p {
+      font-size: 15px;
+      line-height: 1.6;
+      color: var(--charcoal);
+      margin: 0;
+    }
+
+    .work-callout {
+      margin-top: 32px;
+      padding: 28px 32px;
+      background: var(--charcoal);
+      color: var(--white);
+      border-radius: 20px;
+      box-shadow: 0 20px 48px rgba(23, 32, 51, 0.18);
+      text-align: center;
+    }
+    .work-callout p {
+      margin: 0;
+      font-family: Fraunces, Georgia, serif;
+      font-size: clamp(20px, 2.4vw, 24px);
+      letter-spacing: -0.02em;
+      line-height: 1.3;
+      color: var(--white);
+    }
+    .work-callout b { color: var(--blue); font-weight: 800; }
   </style>
 </head>
 <body>
@@ -2267,13 +2474,14 @@
         </a>
 
         <nav class="nav-links" aria-label="Main navigation">
-          <a href="#problem">Problem</a>
+          <a href="#situation">The situation</a>
           <a href="#how">Our approach</a>
-          <a href="#pricing">Pricing</a>
+          <a href="#team">Your AI team</a>
+          <a href="#work">How we work</a>
           <a href="#about">About Joe</a>
         </nav>
 
-        <a class="button button-primary" href="https://calendar.app.google/SnmSbP7hZCprCZ9B7" target="_blank" rel="noopener">Book a Call</a>
+        <a class="button button-primary" href="https://calendar.app.google/SBMCxMPv4Sd8VZRW9" target="_blank" rel="noopener">Book a free call</a>
       </div>
     </header>
 
@@ -2285,13 +2493,13 @@
         </div>
         <div class="container">
           <div class="hero-center">
-            <h1>Stop running your business from memory.</h1>
-            <p class="hero-copy">We document how your business works, build the systems, and deploy the AI agents that handle the repetitive work, so you can lead instead of just manage.</p>
+            <h1>You built something real. Let&rsquo;s make it run faster.</h1>
+            <p class="hero-copy">You&rsquo;ve got the clients, the crew, and the momentum. We come in, clear the bottlenecks, and put AI to work on the repeat tasks slowing you down, so you can focus on the next level.</p>
             <div class="hero-actions">
-              <a class="button button-primary" href="https://calendar.app.google/SnmSbP7hZCprCZ9B7" target="_blank" rel="noopener">Book a free discovery call</a>
+              <a class="button button-primary" href="https://calendar.app.google/SBMCxMPv4Sd8VZRW9" target="_blank" rel="noopener">Book a free discovery call</a>
               <a class="button button-light" href="#how">See how it works</a>
             </div>
-            <p class="hero-note">Franklin, TN &middot; Working remotely with owners across the U.S.</p>
+            <p class="hero-note">Franklin, TN &middot; Working with owners across the U.S.</p>
           </div>
 
           <div class="trust-strip reveal" aria-label="What our clients say">
@@ -2307,26 +2515,31 @@
         </div>
       </section>
 
-      <section class="section reveal" id="problem">
+      <section class="section reveal" id="situation">
         <div class="container">
           <div class="section-head centered">
-            <div class="kicker">The Problem</div>
-            <h2>Your business is trapped in your head.</h2>
-            <p class="lede">Most small businesses don&rsquo;t stall because of the work. They stall because the owner is the only one who knows how it all fits together.</p>
+            <div class="kicker">The situation</div>
+            <h2>You&rsquo;re not stuck. You&rsquo;re just spending time in the wrong place.</h2>
+          </div>
+
+          <div class="situation-copy">
+            <p>You didn&rsquo;t build a $2M or $3M business by accident. That took hustle, judgment, and showing up every single day.</p>
+            <p>Somewhere along the way, the business started running on you, not on systems. Every new hire takes months to ramp. The same tasks eat the same hours every week. Growth feels close but the ceiling keeps moving.</p>
+            <p>You don&rsquo;t need someone to redesign your business. You need a few of the right automations to clear the runway so you can scale into what you&rsquo;re already building.</p>
           </div>
 
           <div class="ceiling-grid">
             <article class="ceiling-card">
-              <div class="ceiling-tag tag-blue">Mental Load</div>
-              <p>You&rsquo;re the only one who knows how we do things here.</p>
+              <div class="ceiling-tag tag-blue">Hours lost</div>
+              <p>The same repeat tasks eating the same hours every week.</p>
             </article>
             <article class="ceiling-card">
-              <div class="ceiling-tag tag-green">Time Leak</div>
-              <p>Hours a day go to tasks a system could do in seconds.</p>
+              <div class="ceiling-tag tag-green">Slow ramp</div>
+              <p>New hires take months to come up to speed.</p>
             </article>
             <article class="ceiling-card">
-              <div class="ceiling-tag tag-amber">Scale Gap</div>
-              <p>Hiring stalls because training takes everything you have.</p>
+              <div class="ceiling-tag tag-amber">Stalled growth</div>
+              <p>Growth feels close, but you keep hitting the same ceiling.</p>
             </article>
           </div>
         </div>
@@ -2336,120 +2549,148 @@
         <div class="container">
           <div class="section-head centered">
             <div class="kicker">Our approach</div>
-            <h2>From mess in your head to systems that run.</h2>
-            <p class="lede">Three steps. No jargon. No new software to learn.</p>
+            <h2>We come in, we move fast, and we get it done.</h2>
           </div>
 
           <div class="steps-grid">
             <article class="step-card">
               <div class="step-num">01</div>
               <h3>Capture</h3>
-              <p>We document how your business actually works: the standards, the judgment calls, the exceptions only you know.</p>
+              <p>We map how your business actually works. The real process. The way things actually get done, not the way they&rsquo;re supposed to on paper.</p>
             </article>
             <article class="step-card">
               <div class="step-num">02</div>
               <h3>Build</h3>
-              <p>We design the systems and wiki your business will run on, built around the tools you already use.</p>
+              <p>We identify the two or three tasks eating the most time and build the automations to handle them. You keep your existing tools.</p>
             </article>
             <article class="step-card">
               <div class="step-num">03</div>
-              <h3>Automate</h3>
-              <p>AI agents take over the repeat work (emails, follow-ups, scheduling, reporting). Quietly, in the background.</p>
+              <h3>Hand off</h3>
+              <p>Your AI employees clock in. The repetitive work moves off your plate. You stay focused on the things only you can do.</p>
             </article>
           </div>
 
-          <div style="text-align:center; margin-top:36px;">
+          <div class="how-callout">
+            <p>We move fast because your time is already stretched. Most clients see their first automation running within a week.</p>
+          </div>
+
+          <div style="text-align:center; margin-top:32px;">
             <a class="button button-primary" href="/capture">Start with Capture</a>
             <p style="margin-top:12px; color:var(--muted); font-size:14px;">A guided session that maps one of your processes in about 20 minutes.</p>
           </div>
         </div>
       </section>
 
-      <section class="section reveal" id="examples">
+      <section class="section reveal" id="team">
         <div class="container">
           <div class="section-head centered">
-            <div class="kicker">Automation &amp; Agent Library</div>
-            <h2>If it repeats, we can automate it.</h2>
-            <p class="lede">A few of the patterns we see most. Search for yours, or see more below.</p>
+            <div class="kicker">Your AI team</div>
+            <h2>Meet your new hires.</h2>
+            <p class="lede">Purpose-built for the repeat work your team should not have to chase manually.</p>
           </div>
 
-          <div class="library-shell collapsed" id="libraryShell">
-            <div class="library-controls">
-              <input class="library-search" id="automationSearch" type="search" placeholder="Search e.g. inbox, invoices, scheduling" aria-label="Search automation library" />
-            </div>
+          <div class="team-grid">
+            <article class="team-card team-dept-blue">
+              <div class="team-avatar"><span>M</span></div>
+              <div class="team-name">Maya</div>
+              <div class="team-title">Inbox Manager</div>
+              <div class="team-dept">Sales &amp; Admin</div>
+              <p class="team-task">Sorts, summarizes, and drafts replies. Flags what actually needs your attention.</p>
+            </article>
 
-            <div class="automation-library-grid" id="popularGrid"></div>
-            <div id="expandedLibrary" hidden></div>
-            <div class="library-empty" id="libraryEmpty" hidden>No matches. Try a different word.</div>
+            <article class="team-card team-dept-green">
+              <div class="team-avatar"><span>C</span></div>
+              <div class="team-name">Carlos</div>
+              <div class="team-title">Follow-Up Specialist</div>
+              <div class="team-dept">Sales &amp; Leads</div>
+              <p class="team-task">Finds every stale lead, forgotten quote, and unanswered message. Drafts the next touchpoint.</p>
+            </article>
 
-            <div class="library-actions">
-              <button class="button button-light" id="seeMoreBtn" type="button">See more examples</button>
-              <button class="button button-light" id="showLessBtn" type="button" hidden>Show less</button>
-            </div>
+            <article class="team-card team-dept-amber">
+              <div class="team-avatar"><span>D</span></div>
+              <div class="team-name">Diane</div>
+              <div class="team-title">Books &amp; Reconciliation</div>
+              <div class="team-dept">Finance</div>
+              <p class="team-task">Reviews transactions, flags uncategorized items, builds your month-end checklist.</p>
+            </article>
+
+            <article class="team-card team-dept-amber">
+              <div class="team-avatar"><span>M</span></div>
+              <div class="team-name">Marcus</div>
+              <div class="team-title">Collections Agent</div>
+              <div class="team-dept">Finance</div>
+              <p class="team-task">Tracks overdue invoices, sends reminders, escalates aging balances before they disappear.</p>
+            </article>
+
+            <article class="team-card team-dept-green">
+              <div class="team-avatar"><span>J</span></div>
+              <div class="team-name">Jordan</div>
+              <div class="team-title">CRM Operator</div>
+              <div class="team-dept">Sales &amp; Leads</div>
+              <p class="team-task">Creates contacts, logs notes, updates deals from email and calendar automatically.</p>
+            </article>
+
+            <article class="team-card team-dept-ink">
+              <div class="team-avatar"><span>R</span></div>
+              <div class="team-name">Riley</div>
+              <div class="team-title">Customer Pulse Analyst</div>
+              <div class="team-dept">Customer Service</div>
+              <p class="team-task">Reads reviews, tickets, and emails. Surfaces what customers are saying before it becomes a problem.</p>
+            </article>
+          </div>
+
+          <div class="team-callout">
+            <p>Don&rsquo;t see your situation? Every business is different. Tell us what&rsquo;s slowing you down and we&rsquo;ll tell you if there&rsquo;s an automation for it.</p>
+            <a class="button button-light" href="https://calendar.app.google/SBMCxMPv4Sd8VZRW9" target="_blank" rel="noopener">Book a free call &rarr;</a>
           </div>
         </div>
       </section>
 
-                  <section class="section alt reveal" id="pricing">
+      <section class="section alt reveal" id="work">
         <div class="container">
           <div class="section-head centered">
             <div class="kicker">How we work together</div>
-            <h2>A simple path to practical AI.</h2>
-            <p class="lede">We start with a conversation, map how your business actually works, build the first useful systems, and support them over time if needed.</p>
+            <h2>Start with one bottleneck. Prove it works. Then decide what comes next.</h2>
           </div>
 
-          <div class="roadmap" aria-label="Three-step engagement journey">
-            <div class="roadmap-line" aria-hidden="true"></div>
-            <div class="roadmap-arrow roadmap-arrow-1" aria-hidden="true"><svg viewBox="0 0 40 40" xmlns="http://www.w3.org/2000/svg" fill="none" aria-hidden="true">
-              <path d="M14 10 L26 20 L14 30" stroke="currentColor" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"/>
-            </svg></div>
-            <div class="roadmap-arrow roadmap-arrow-2" aria-hidden="true"><svg viewBox="0 0 40 40" xmlns="http://www.w3.org/2000/svg" fill="none" aria-hidden="true">
-              <path d="M14 10 L26 20 L14 30" stroke="currentColor" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"/>
-            </svg></div>
-
-            <article class="roadmap-step">
-              <div class="step-node" aria-hidden="true"><span class="step-node-num">1</span></div>
-              <div class="step-content">
-                <div class="step-phase">Step 01 <span class="step-phase-sep">/</span> Talk</div>
-                <h3>Discovery Call</h3>
-                <div class="step-price">Free <span class="step-dot">&middot;</span> <span class="step-price-meta">45 minutes</span></div>
-                <p class="step-body">A focused conversation to understand your business, identify bottlenecks, and see where AI and automation could save you time.</p>
-                <a class="button button-primary" href="https://calendar.app.google/SnmSbP7hZCprCZ9B7" target="_blank" rel="noopener">Book a 45-minute discovery call</a>
-              </div>
+          <div class="work-grid">
+            <article class="work-card">
+              <div class="work-num">01</div>
+              <div class="work-phase">Talk</div>
+              <div class="work-meta">Free &middot; 45 minutes</div>
+              <p>We learn how your business works, where time is getting lost, and which repeat tasks are worth solving first. You leave with clarity whether we work together or not.</p>
             </article>
 
-            <article class="roadmap-step">
-              <div class="step-node" aria-hidden="true"><span class="step-node-num">2</span></div>
-              <div class="step-content">
-                <div class="step-phase">Step 02 <span class="step-phase-sep">/</span> Map + Build</div>
-                <h3>AI Systems Map + Buildout</h3>
-                <div class="step-price">$3,000 to $5,000</div>
-                <div class="step-support">Strategy + implementation</div>
-                <p class="step-body">We map how your business runs, identify the highest-value automation opportunities, and build your first practical automations and AI agents.</p>
-                <p class="step-outcome">You leave with working systems, not just ideas.</p>
-              </div>
+            <article class="work-card">
+              <div class="work-num">02</div>
+              <div class="work-phase">Build the first system</div>
+              <p>We map the workflow, document the process, and build the first practical AI employee around one real business problem. You keep your existing tools. We handle the technical side.</p>
             </article>
 
-            <article class="roadmap-step roadmap-step-optional">
-              <div class="step-node step-node-optional" aria-hidden="true"><span class="step-node-num">3</span></div>
-              <div class="step-content">
-                <div class="step-phase">Step 03 <span class="step-phase-sep">/</span> Maintain <span class="step-phase-sep">&middot;</span> <span class="step-phase-tag">Optional</span></div>
-                <h3>Ongoing Support</h3>
-                <div class="step-price">$1,500<span class="step-price-meta">/month</span></div>
-                <div class="step-support">Maintenance + optimization</div>
-                <p class="step-body">After launch, we maintain, improve, and support your systems so they stay useful, reliable, and aligned with how your business evolves.</p>
-                <p class="step-outcome">Your systems keep improving as your business changes.</p>
-              </div>
+            <article class="work-card">
+              <div class="work-num">03</div>
+              <div class="work-phase">Measure what changed</div>
+              <p>Before anything gets bigger, we look at what the system is actually doing. Time saved. Follow-ups completed. Admin reduced. Work moved off your plate.</p>
             </article>
+
+            <article class="work-card">
+              <div class="work-num">04</div>
+              <div class="work-phase">Create a fair arrangement</div>
+              <p>Once the system is working, we decide together what ongoing support, expansion, or performance-based payment should look like.</p>
+            </article>
+          </div>
+
+          <div class="work-callout">
+            <p><b>No big upfront project fee.</b> We get paid when the system is creating real value.</p>
           </div>
         </div>
       </section>
 
-            <section class="section alt reveal" id="about">
+      <section class="section alt reveal" id="about">
         <div class="container">
           <div class="section-head">
-            <div class="kicker">About Joe Robinson, Founder</div>
-            <h2>Built by an operator.</h2>
+            <div class="kicker">About the founder</div>
+            <h2>Built by someone who knows what it costs to grow.</h2>
           </div>
 
           <div class="about-wrap">
@@ -2458,7 +2699,7 @@
             </div>
 
             <div class="about-panel">
-              <p>Joe scaled companies from $10M to $100M before he ever installed an AI agent. He knows the tool does not matter if the underlying process is broken. Practical AI Co. starts with the process, not the software.</p>
+              <p>Joe scaled businesses from $10M to $100M before he ever installed an AI tool. He knows the problem isn&rsquo;t the technology. The problem is always the process buried underneath it. That&rsquo;s where we start.</p>
 
               <div class="about-quote">
                 <p>&ldquo;Every business I&rsquo;ve scaled had one thing in common: someone sat down and wrote the process down. AI just makes that moment faster than it&rsquo;s ever been.&rdquo;</p>
@@ -2487,26 +2728,30 @@
       <section class="section alt reveal" id="faq">
         <div class="container">
           <div class="section-head">
-            <div class="kicker">FAQ</div>
-            <h2>Common questions.</h2>
+            <div class="kicker">Common questions</div>
+            <h2>Things owners ask before we start.</h2>
           </div>
 
           <div class="faq-grid">
             <details class="faq-item">
               <summary>Do I need to understand AI first?</summary>
-              <p>No. You need to understand your business. We handle the AI side and translate it into practical systems you can actually use.</p>
+              <p>No. We handle all of it. You tell us where the friction is, we build the solution.</p>
             </details>
             <details class="faq-item">
               <summary>What if my business is messy and undocumented?</summary>
-              <p>That&rsquo;s exactly where this starts. Most small businesses come to us with tribal knowledge, inconsistent steps, and process gaps. That&rsquo;s normal.</p>
+              <p>That&rsquo;s exactly who we work with. Undocumented is normal. We build from what&rsquo;s actually happening, not from a clean org chart.</p>
             </details>
             <details class="faq-item">
-              <summary>Will this fit my existing tools?</summary>
-              <p>Usually yes. We build around your process, your team, and your current stack whenever possible, rather than forcing a brand-new system on you.</p>
+              <summary>Will this disrupt how my team works?</summary>
+              <p>No. We build into your existing tools and workflow. The repetitive work just stops landing on a human.</p>
             </details>
             <details class="faq-item">
-              <summary>What happens on the discovery call?</summary>
-              <p>20 minutes learning how your business works, 25 minutes showing you where AI can help. You leave with a clear picture of what is possible, whether we work together or not.</p>
+              <summary>What does it cost?</summary>
+              <p>The discovery call is free. From there, we start with one clear bottleneck and build around that. We are moving to a performance-based model, which means we define what success looks like first and create a fair arrangement once the system is working.</p>
+            </details>
+            <details class="faq-item">
+              <summary>How fast can we get started?</summary>
+              <p>Most clients see their first automation live within a week of our first call.</p>
             </details>
           </div>
         </div>
@@ -2522,12 +2767,12 @@
         <div class="container">
           <div class="cta-inner">
             <div>
-              <h2>Stop being the engine. Start being the pilot.</h2>
-              <p>In 45 minutes we map out your first three automation wins. You leave with a blueprint for a business that runs without you, whether you work with us or not.</p>
+              <h2>You&rsquo;ve got the business. We&rsquo;ll help you build the system around it.</h2>
+              <p>A free 45-minute call. We map your biggest bottleneck and show you where practical AI can take work off your plate. No obligation. No sales deck.</p>
             </div>
             <div class="cta-actions">
-              <a class="button button-primary" href="https://calendar.app.google/SnmSbP7hZCprCZ9B7" target="_blank" rel="noopener">Claim Your Free 45-Minute Blueprint</a>
-              <span class="cta-note">Franklin, TN and remote.</span>
+              <a class="button button-primary" href="https://calendar.app.google/SBMCxMPv4Sd8VZRW9" target="_blank" rel="noopener">Book a free discovery call</a>
+              <span class="cta-note">Franklin, TN and remote. No commitment required.</span>
             </div>
           </div>
         </div>
@@ -2561,92 +2806,6 @@
       });
     }, { threshold: 0.12 });
     revealEls.forEach((el) => observer.observe(el));
-
-    const automationData = [{"n": "Email Autopilot", "d": "Sales & Admin", "t": ["Gmail", "Outlook", "Slack"], "p": "Too many emails, too little time.", "a": "Sorts, summarizes, drafts replies, flags urgent messages, and creates follow-up tasks from your inbox.", "f": true}, {"n": "Missed Follow-Up Agent", "d": "Sales & Leads", "t": ["Gmail", "HubSpot", "Calendar"], "p": "Leads and customers fall through the cracks.", "a": "Finds unanswered emails, stale deals, and forgotten conversations, then drafts or schedules the next touchpoint.", "f": true}, {"n": "QuickBooks Month-End Agent", "d": "Finance & Admin", "t": ["QuickBooks", "Gmail", "Drive"], "p": "Month-end reconciliation is always a scramble.", "a": "Reviews transactions, flags uncategorized items, matches receipts, prepares reconciliation notes, and builds a month-end checklist.", "f": true}, {"n": "Invoice Chase Agent", "d": "Finance & Admin", "t": ["QuickBooks", "Stripe", "PayPal", "Gmail"], "p": "Unpaid invoices quietly hurt cash flow.", "a": "Tracks overdue invoices, drafts polite payment reminders, escalates aging balances, and creates a weekly collections summary.", "f": true}, {"n": "CRM Autopilot", "d": "Sales & Leads", "t": ["HubSpot", "Gmail", "Calendar"], "p": "CRM data entry never stays current.", "a": "Creates and updates contacts and deals from email and calendar context, logs notes, and flags stale records.", "f": true}, {"n": "Customer Pulse Agent", "d": "Customer Service", "t": ["Gmail", "HubSpot", "Reviews"], "p": "You do not know what customers are really saying.", "a": "Aggregates tickets, reviews, emails, and customer sentiment into themes and response templates.", "f": true}, {"n": "Content Strategy Agent", "d": "Marketing", "t": ["Canva", "Gmail", "QuickBooks"], "p": "You do not know what to promote or post.", "a": "Analyzes sales, seasonality, and customer questions, then creates a prioritized content brief.", "f": true}, {"n": "Service Scheduling Agent", "d": "Operations", "t": ["Calendar", "Gmail", "CRM"], "p": "Scheduling eats up hours every week.", "a": "Finds openings, matches jobs to availability, drafts customer confirmations, and updates the calendar.", "f": true}, {"n": "Daily Owner Briefing", "d": "Owner / Leadership", "t": ["Gmail", "Calendar", "Slack", "QuickBooks"], "p": "You start the day already behind.", "a": "Builds a daily summary of urgent emails, calendar items, open tasks, cash alerts, and customer issues.", "f": true}, {"n": "SOP Builder", "d": "Systems & Knowledge", "t": ["Docs", "Drive", "Notion"], "p": "Your business lives in your head.", "a": "Turns rough notes, videos, and recurring tasks into clean standard operating procedures.", "f": true}, {"n": "Review Request Agent", "d": "Customer Service", "t": ["Gmail", "CRM", "Google Business"], "p": "Happy customers rarely leave reviews unless asked.", "a": "Identifies completed jobs, sends review requests, and follows up with customers who had a great experience.", "f": true}, {"n": "Owner Decision Brief", "d": "Owner / Leadership", "t": ["Docs", "Sheets", "Gmail"], "p": "You get asked to make decisions without the full picture.", "a": "Pulls context, options, pros and cons, costs, and risks into a one-page decision brief.", "f": true}, {"n": "Lead Intake Agent", "d": "Sales & Leads", "t": ["Gmail", "Forms", "CRM"], "p": "New leads arrive from too many places.", "a": "Captures leads from forms, email, texts, and calls, then organizes them by urgency, source, and next step.", "f": false}, {"n": "Lead Qualification Agent", "d": "Sales & Leads", "t": ["CRM", "Gmail", "Sheets"], "p": "Not every lead is worth the same amount of time.", "a": "Scores leads based on budget, location, timeline, service fit, and likelihood to close.", "f": false}, {"n": "Quote Follow-Up Agent", "d": "Sales & Leads", "t": ["Gmail", "CRM", "Calendar"], "p": "You send quotes and never hear back.", "a": "Tracks open quotes, sends follow-up emails, updates deal status, and alerts you when a quote needs a personal call.", "f": false}, {"n": "Estimate Builder", "d": "Sales & Leads", "t": ["Docs", "Sheets", "CRM"], "p": "Building estimates takes too long.", "a": "Pulls customer details, previous pricing, service rules, and job notes into a draft estimate for approval.", "f": false}, {"n": "Sales Call Prep Agent", "d": "Sales & Leads", "t": ["Gmail", "Calendar", "CRM"], "p": "You walk into calls without enough context.", "a": "Pulls recent emails, customer history, past quotes, notes, and open issues into a prep brief.", "f": false}, {"n": "Sales Proposal Agent", "d": "Sales & Leads", "t": ["Docs", "Gmail", "CRM"], "p": "Proposals take too long to write.", "a": "Builds custom proposal drafts from discovery notes, pricing, case studies, and service options.", "f": false}, {"n": "Proposal-to-Invoice Agent", "d": "Sales & Leads", "t": ["Docs", "QuickBooks", "Stripe"], "p": "Sold work does not always turn into clean billing.", "a": "Converts accepted proposals into invoices, payment links, job notes, and internal handoff tasks.", "f": false}, {"n": "Customer Support Triage Agent", "d": "Customer Service", "t": ["Gmail", "HubSpot", "Slack"], "p": "Support requests are not all equal.", "a": "Categorizes requests, flags urgent issues, drafts replies, and routes items to the right person.", "f": false}, {"n": "Customer Onboarding Agent", "d": "Customer Service", "t": ["Gmail", "Docs", "Calendar"], "p": "New customers need clear expectations.", "a": "Sends welcome emails, collects missing details, shares next steps, and creates internal setup tasks.", "f": false}, {"n": "Job Completion Agent", "d": "Customer Service", "t": ["Gmail", "CRM", "Drive"], "p": "Customers do not always know what was done.", "a": "Turns job notes into polished customer updates, next steps, photos, and payment links.", "f": false}, {"n": "Appointment Reminder Agent", "d": "Customer Service", "t": ["Calendar", "Gmail", "SMS"], "p": "Customers forget appointments.", "a": "Sends reminders, confirms arrival windows, collects prep instructions, and flags customers who do not respond.", "f": false}, {"n": "Customer Delay Agent", "d": "Customer Service", "t": ["Calendar", "Gmail", "CRM"], "p": "Delays create frustration fast.", "a": "Detects schedule changes and drafts proactive customer updates before customers have to ask.", "f": false}, {"n": "Bad Review Response Agent", "d": "Customer Service", "t": ["Google Business", "Gmail", "Docs"], "p": "Negative reviews are stressful and time-sensitive.", "a": "Drafts calm, professional responses and creates an internal task to resolve the issue.", "f": false}, {"n": "Refund and Dispute Agent", "d": "Customer Service", "t": ["PayPal", "Stripe", "Gmail"], "p": "Disputes take time and attention.", "a": "Gathers payment records, customer history, emails, and policies into a clean response packet.", "f": false}, {"n": "Client Renewal Agent", "d": "Customer Service", "t": ["CRM", "Calendar", "Gmail"], "p": "Renewals sneak up on you.", "a": "Tracks contract dates, service anniversaries, renewal windows, and drafts renewal outreach.", "f": false}, {"n": "Social Post Agent", "d": "Marketing", "t": ["Canva", "Gmail", "Reviews"], "p": "Posting online is always last on the list.", "a": "Turns customer questions, reviews, photos, and seasonal promotions into social content drafts.", "f": false}, {"n": "Newsletter Agent", "d": "Marketing", "t": ["Gmail", "Docs", "CRM"], "p": "You know you should email your customers, but never do.", "a": "Creates monthly newsletter drafts using offers, updates, FAQs, reviews, and seasonal reminders.", "f": false}, {"n": "Website FAQ Agent", "d": "Marketing", "t": ["Docs", "Gmail", "Website"], "p": "Customers ask the same questions over and over.", "a": "Finds repeated questions from email and calls, then creates clear website FAQ copy.", "f": false}, {"n": "Local SEO Agent", "d": "Marketing", "t": ["Google Business", "Docs", "Reviews"], "p": "You need more local visibility, but SEO feels confusing.", "a": "Creates location pages, service FAQs, review themes, and local content ideas from real customer demand.", "f": false}, {"n": "Competitor Watch Agent", "d": "Marketing", "t": ["Web", "Sheets", "Docs"], "p": "You do not know what competitors are doing.", "a": "Tracks competitor offers, pricing signals, reviews, and positioning, then summarizes opportunities.", "f": false}, {"n": "Reputation Monitor", "d": "Marketing", "t": ["Reviews", "Gmail", "Slack"], "p": "Reviews, comments, and mentions are easy to miss.", "a": "Monitors new reviews and customer feedback, then drafts responses and escalates issues.", "f": false}, {"n": "Customer Win-Back Agent", "d": "Marketing", "t": ["CRM", "Gmail", "Sheets"], "p": "Past customers go cold.", "a": "Finds inactive customers, segments them by service history, and drafts personalized reactivation campaigns.", "f": false}, {"n": "Referral Ask Agent", "d": "Marketing", "t": ["Gmail", "CRM", "Reviews"], "p": "You get referrals by accident instead of by system.", "a": "Identifies happy customers and drafts simple referral requests at the right moment.", "f": false}, {"n": "Upsell Opportunity Agent", "d": "Marketing", "t": ["CRM", "QuickBooks", "Gmail"], "p": "You miss chances to sell more to existing customers.", "a": "Reviews customer history and suggests logical next services, bundles, or add-ons.", "f": false}, {"n": "Receipt Wrangler", "d": "Finance & Admin", "t": ["Gmail", "Drive", "QuickBooks"], "p": "Receipts live in email, texts, photos, and gloveboxes.", "a": "Collects receipts, matches them to transactions, labels expenses, and prepares clean handoff folders.", "f": false}, {"n": "Tax Season Organizer", "d": "Finance & Admin", "t": ["QuickBooks", "Stripe", "PayPal"], "p": "Tax prep becomes a scramble.", "a": "Prepares quarterly estimated-tax or 1099 handoff materials for your accountant.", "f": false}, {"n": "Margin and Price Check Agent", "d": "Finance & Admin", "t": ["QuickBooks", "Sheets", "PayPal"], "p": "You are busy but unsure if you are making enough.", "a": "Shows margin by product or service and models pricing scenarios before you make a decision.", "f": false}, {"n": "Cash Flow Watchdog", "d": "Finance & Admin", "t": ["QuickBooks", "Stripe", "Calendar"], "p": "You do not see cash issues early enough.", "a": "Monitors receivables, upcoming bills, subscriptions, payroll, and cash trends, then flags concerns.", "f": false}, {"n": "Subscription Audit Agent", "d": "Finance & Admin", "t": ["QuickBooks", "Gmail", "Sheets"], "p": "You are paying for tools you forgot about.", "a": "Reviews recurring charges, identifies duplicates, and prepares a cancellation or downgrade list.", "f": false}, {"n": "Expense Policy Agent", "d": "Finance & Admin", "t": ["QuickBooks", "Gmail", "Slack"], "p": "Expenses get messy as the team grows.", "a": "Flags questionable expenses, missing receipts, and transactions that need owner review.", "f": false}, {"n": "Payroll Prep Agent", "d": "Finance & Admin", "t": ["Sheets", "QuickBooks", "Calendar"], "p": "Payroll takes too much manual cleanup.", "a": "Collects hours, flags missing time, organizes reimbursements, and prepares payroll notes.", "f": false}, {"n": "Purchase Order Agent", "d": "Finance & Admin", "t": ["Sheets", "Gmail", "QuickBooks"], "p": "Ordering materials is repetitive and error-prone.", "a": "Creates draft purchase orders based on job details, inventory levels, and vendor rules.", "f": false}, {"n": "Daily Field Team Agent", "d": "Operations", "t": ["Calendar", "Docs", "Slack"], "p": "Field teams need the right information before the day starts.", "a": "Sends daily job packets with addresses, customer notes, photos, special instructions, and timing.", "f": false}, {"n": "Job Profitability Agent", "d": "Operations", "t": ["QuickBooks", "Sheets", "CRM"], "p": "You do not know which jobs actually made money.", "a": "Compares estimate, labor, materials, travel time, and final invoice to show true profitability.", "f": false}, {"n": "Vendor Follow-Up Agent", "d": "Operations", "t": ["Gmail", "Sheets", "Calendar"], "p": "Vendors slow things down.", "a": "Tracks outstanding vendor replies, purchase orders, delivery dates, and missing documents.", "f": false}, {"n": "Inventory Alert Agent", "d": "Operations", "t": ["Sheets", "QuickBooks", "Slack"], "p": "You find out you are low on supplies too late.", "a": "Tracks usage patterns, flags low inventory, and drafts reorder recommendations.", "f": false}, {"n": "Project Status Agent", "d": "Operations", "t": ["Docs", "Gmail", "Slack"], "p": "Projects get messy across emails, texts, and spreadsheets.", "a": "Tracks milestones, blockers, overdue items, and next actions in one weekly update.", "f": false}, {"n": "Internal Task Router", "d": "Operations", "t": ["Gmail", "Slack", "Tasks"], "p": "Small tasks float around with no owner.", "a": "Turns emails, notes, and meeting items into assigned tasks with deadlines.", "f": false}, {"n": "Contract Review Agent", "d": "Operations", "t": ["Docs", "Gmail", "Drive"], "p": "Contracts are hard to read when you do not have legal on staff.", "a": "Flags unusual terms, explains risks in plain English, and creates suggested redlines for review.", "f": false}, {"n": "Hiring Pipeline Agent", "d": "People & Hiring", "t": ["Gmail", "Calendar", "Sheets"], "p": "Applicants are hard to track.", "a": "Screens resumes, summarizes candidates, schedules interviews, and updates hiring stages.", "f": false}, {"n": "Candidate Follow-Up Agent", "d": "People & Hiring", "t": ["Gmail", "Calendar", "Docs"], "p": "Hiring communication is inconsistent.", "a": "Drafts interview invites, rejection notes, next-step emails, and reminders for hiring managers.", "f": false}, {"n": "New Hire Onboarding Agent", "d": "People & Hiring", "t": ["Docs", "Drive", "Calendar"], "p": "New employees get inconsistent training.", "a": "Creates onboarding checklists, training schedules, document packets, and manager reminders.", "f": false}, {"n": "Training Manual Agent", "d": "People & Hiring", "t": ["Docs", "Notion", "Drive"], "p": "Training new people takes too much owner time.", "a": "Converts SOPs into role-specific training guides, quizzes, and checklists.", "f": false}, {"n": "Weekly Business Review Agent", "d": "Owner / Leadership", "t": ["QuickBooks", "Gmail", "Calendar"], "p": "You do not have a clean pulse on the business.", "a": "Creates a weekly report with sales, cash, leads, customer issues, overdue tasks, and blockers.", "f": false}, {"n": "Annual Planning Agent", "d": "Owner / Leadership", "t": ["Sheets", "Docs", "QuickBooks"], "p": "Planning stays stuck in your head.", "a": "Reviews performance, customer trends, margins, and bottlenecks to create planning prompts and priorities.", "f": false}, {"n": "Owner Time Audit Agent", "d": "Owner / Leadership", "t": ["Calendar", "Gmail", "Tasks"], "p": "You do not know where your time is really going.", "a": "Reviews calendar, email, tasks, and recurring work to identify what should be automated, delegated, or deleted.", "f": false}, {"n": "Meeting Notes Agent", "d": "Systems & Knowledge", "t": ["Docs", "Calendar", "Slack"], "p": "Meetings happen, but action items disappear.", "a": "Summarizes meetings, captures decisions, creates tasks, and sends follow-up notes.", "f": false}, {"n": "Customer Data Cleanup Agent", "d": "Systems & Knowledge", "t": ["CRM", "Sheets", "Gmail"], "p": "Customer records are messy and duplicated.", "a": "Finds duplicate contacts, missing fields, stale records, and inconsistent naming.", "f": false}, {"n": "Document Organizer", "d": "Systems & Knowledge", "t": ["Drive", "Docs", "Gmail"], "p": "Files are scattered across email, desktop, and shared drives.", "a": "Sorts documents into clean folders, renames files, and creates searchable summaries.", "f": false}, {"n": "Knowledge Base Agent", "d": "Systems & Knowledge", "t": ["Notion", "Docs", "Drive"], "p": "Your team keeps asking the same internal questions.", "a": "Turns SOPs, policies, FAQs, and past answers into a searchable internal knowledge base.", "f": false}];
-    const departments = ['Sales & Leads','Customer Service','Marketing','Finance & Admin','Operations','People & Hiring','Owner / Leadership','Systems & Knowledge'];
-    const dotClasses = ['', 'green', 'dark', 'gold', 'red', 'purple'];
-
-    function esc(str) {
-      return String(str).replace(/[&<>"']/g, s => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[s]));
-    }
-
-    function chip(tool, idx) {
-      return `<span class="tool-chip"><span class="tool-dot ${dotClasses[idx % dotClasses.length]}"></span>${esc(tool)}</span>`;
-    }
-
-    function card(item, idx) {
-      const search = [item.n, item.d, item.p, item.a, ...(item.t || [])].join(' ').toLowerCase();
-      return `<article class="automation-lib-card" data-department="${esc(item.d)}" data-featured="${item.f ? 'true' : 'false'}" data-search="${esc(search)}">
-        <div class="automation-card-top">
-          <div class="automation-num">${String(idx + 1).padStart(2, '0')}</div>
-          <div class="department-tag">${esc(item.d)}</div>
-        </div>
-        <h3>${esc(item.n)}</h3>
-        <div class="tool-chips">${(item.t || []).map(chip).join('')}</div>
-        <p class="automation-text"><strong>Problem:</strong> ${esc(item.p)}</p>
-        <p class="automation-text"><strong>Automation:</strong> ${esc(item.a)}</p>
-      </article>`;
-    }
-
-    const popularGrid = document.getElementById('popularGrid');
-    const expandedLibrary = document.getElementById('expandedLibrary');
-    const libraryShell = document.getElementById('libraryShell');
-
-    if (popularGrid && expandedLibrary) {
-      popularGrid.innerHTML = automationData.filter(x => x.f).map(card).join('');
-      expandedLibrary.innerHTML = departments.map(dept => {
-        const cards = automationData.filter(x => !x.f && x.d === dept).map(card).join('');
-        return `<div class="library-group" data-group="${esc(dept)}">
-          <div class="group-heading"><h3>${esc(dept)}</h3><div class="group-line"></div></div>
-          <div class="automation-library-grid">${cards}</div>
-        </div>`;
-      }).join('');
-    }
-
-    const searchInput = document.getElementById('automationSearch');
-    const seeMoreBtn = document.getElementById('seeMoreBtn');
-    const showLessBtn = document.getElementById('showLessBtn');
-    const libraryEmpty = document.getElementById('libraryEmpty');
-    let expanded = false;
-
-    function allCards() { return Array.from(document.querySelectorAll('.automation-lib-card')); }
-    function groups() { return Array.from(document.querySelectorAll('.library-group')); }
-
-    function applyLibraryState() {
-      const query = (searchInput?.value || '').trim().toLowerCase();
-      const shouldExpand = expanded || query.length > 0;
-
-      if (libraryShell) libraryShell.classList.toggle('collapsed', !shouldExpand);
-      if (expandedLibrary) expandedLibrary.hidden = !shouldExpand;
-
-      let visibleCount = 0;
-      allCards().forEach(card => {
-        const haystack = card.dataset.search || '';
-        const matches = !query || haystack.includes(query);
-        card.style.display = matches ? '' : 'none';
-        if (matches) visibleCount += 1;
-      });
-
-      groups().forEach(group => {
-        const anyVisible = Array.from(group.querySelectorAll('.automation-lib-card')).some(c => c.style.display !== 'none');
-        group.style.display = (shouldExpand && anyVisible) ? 'block' : 'none';
-      });
-
-      if (libraryEmpty) libraryEmpty.hidden = visibleCount > 0;
-      if (seeMoreBtn) seeMoreBtn.hidden = shouldExpand;
-      if (showLessBtn) showLessBtn.hidden = !shouldExpand;
-    }
-
-    searchInput?.addEventListener('input', applyLibraryState);
-    seeMoreBtn?.addEventListener('click', () => { expanded = true; applyLibraryState(); });
-    showLessBtn?.addEventListener('click', () => {
-      expanded = false;
-      if (searchInput) searchInput.value = '';
-      applyLibraryState();
-      document.getElementById('examples')?.scrollIntoView({ behavior: 'smooth', block: 'start' });
-    });
-
-    applyLibraryState();
   </script>
 
 </body>
